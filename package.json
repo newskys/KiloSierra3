@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config config/webpack.local.config.js",
-    "build": "webpack --config config/webpack.dev.config.js",
+    "build": "webpack --config config/webpack.dev.config.js"
   },
   "author": "",
   "license": "ISC",
@@ -38,6 +38,8 @@
     "webpack-merge": "5.1.2"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@types/classnames": "2.2.10",
     "axios": "0.20.0",
     "connected-react-router": "6.8.0",

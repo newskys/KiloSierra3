@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true,
+        "noResolve": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "sourceMap": true,
+        "jsx": "react",
+        "skipLibCheck": true,
+        "baseUrl": "./",
+        "paths": {
+            "@components/*": ["src/components/*"],
+            "@scss/*": ["src/scss/*"],
+            "@utils/*": ["src/utils/*"],
+            "@reducers/*": ["src/redux/reducers/*"],
+            "@interfaces/*": ["src/interfaces/*"],
+            "@apis/*": ["src/apis/*"],
+            "@route/*": ["src/route/*"]
+        }
+    }
+}

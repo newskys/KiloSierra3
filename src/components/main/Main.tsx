@@ -14,6 +14,7 @@ import LockIcon from '@material-ui/icons/Lock'
 import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {pink} from "@material-ui/core/colors";
+import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +34,13 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.getContrastText(pink[500]),
     backgroundColor: pink[500],
   },
+  button: {
+    margin: '24px 0px 16px 0px',
+    lineHeight: '1.75',
+  },
+  bottom: {
+    marginTop: '64px',
+  }
 }))
 
 const Main: React.FC = () => {
@@ -101,6 +109,14 @@ const Main: React.FC = () => {
           </Grid>
         </div>
       </Container>
+        <Box className={classes.bottom}>
+          <Typography align="center" variant="body2" color="textSecondary">
+            Copyright © Umlaut 2020
+            {/*<Link href="#" onClick={() => {}} underline="hover">*/}
+            {/*  Don't have an account? Sign Up*/}
+            {/*</Link>*/}
+          </Typography>
+        </Box>
       </ThemeProvider>
     </>
   )

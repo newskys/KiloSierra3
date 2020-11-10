@@ -16,17 +16,17 @@ module.exports = {
     rules: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules|stories/,
+        exclude: /node_modules/,
         use: ['babel-loader'],
       },
       {
         test: /\.tsx?$/,
-        exclude: /node_modules|stories/,
+        exclude: /node_modules/,
         use: ['ts-loader'],
       },
       {
-        test: /\.scss$/,
-        exclude: /node_modules|stories/,
+        test: /\.s?css$/,
+        exclude: /node_modules/,
         use: [
           MiniCssExtractPlugin.loader,
           {
@@ -40,19 +40,6 @@ module.exports = {
           },
           'resolve-url-loader',
           'sass-loader', // sass -> css (using node-sass)
-        ],
-      },
-      {
-        test: /\.(woff2?|otf|ttf|eot)$/,
-        exclude: /node_modules|stories/,
-        use: [
-          {
-            loader: 'file-loader',
-            // options: {
-            //   name: '[name].[ext]',
-            //   outputPath: 'fonts/'
-            // }
-          },
         ],
       },
     ],

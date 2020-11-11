@@ -4,6 +4,7 @@ import {createMuiTheme, ThemeProvider} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {pink} from "@material-ui/core/colors";
 import Header from "@components/common/Header";
+import CalendarContainer from "@components/main/CalendarContainer";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,7 +51,7 @@ const Main: React.FC = () => {
     <>
       <Header />
       <ThemeProvider theme={theme}>
-      test
+        <CalendarContainer />
       </ThemeProvider>
     </>
   )

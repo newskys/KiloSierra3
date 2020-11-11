@@ -3,14 +3,12 @@ export enum ENV {
   DEVELOPMENT = 'development',
 }
 
-export enum UserType {
-  GENERAL = 'general',
-  CORPORATE = 'corporate',
-}
-
-export enum GeneralUserType {
-  industry = 'industry',
-  academia = 'academia',
-  researchInstitute = 'research institute',
-  citizen = 'citizen',
+export enum DAYS_OF_THE_WEEK {
+  MONDAY = 'MON',
+  TUESDAY = 'TUE',
+  WEDNESDAY = 'WED',
+  THURSDAY = 'THU',
+  FRIDAY = 'FRI',
+  SATURDAY = 'SAT',
+  SUNDAY = 'SUN',
 }

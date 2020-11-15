@@ -1,6 +1,5 @@
 const path = require('path')
 const alias = require('./alias')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = {
   entry: {
@@ -25,35 +24,19 @@ module.exports = {
         use: ['ts-loader'],
       },
       {
-        test: /\.s?css$/,
-        exclude: /node_modules/,
+        test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader', // css -> js (commonJS)
-            options: {
-              modules: {
-                localIdentName: '[name]_[local]_[hash:base64:5]',
-              },
-              url: true,
-            },
-          },
-          'resolve-url-loader',
-          'sass-loader', // sass -> css (using node-sass)
+          "style-loader",
+          "css-loader"
         ],
       },
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: '../css/bundle.css',
-      chunkFilename: '[name].css',
-      ignoreOrder: false,
-    }),
   ],
   resolve: {
     modules: ['node_modules', path.resolve(__dirname, '../src')],
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.css', '.scss', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.css', '.json'],
     alias,
   },
 }

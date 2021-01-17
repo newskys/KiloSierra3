@@ -53,3 +53,6 @@ module.exports = merge(baseConfig, {
     noEmitOnErrors: true,
   },
 })
+
+// 개발망 이상: 웹서버1 + 스태틱JS(+CSS)
+// 로컬: 웹서버1(node) + 로컬에 실시간 번들링 전용으로 해주는 서버 하나 더 만들자 -> webpack-dev-server -> plugins 다음에 설정값들이 많은 이유

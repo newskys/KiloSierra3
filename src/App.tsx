@@ -1,12 +1,8 @@
-import React from 'react'
-import RootRouter from './route/RootRouter'
-import BaseLayout from "@components/common/BaseLayout";
+import React from 'react';
 
 const App = ({}) => {
   return (
-      <BaseLayout>
-        <RootRouter />
-      </BaseLayout>
+      <>aaa</>
     )
 }
 

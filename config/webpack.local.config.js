@@ -3,7 +3,6 @@ const { merge } = require('webpack-merge')
 const baseConfig = require('./webpack.base.config')
 const DotEnv = require('dotenv-webpack')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const PORT = 7777
 
@@ -26,7 +25,6 @@ module.exports = merge(baseConfig, {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new DotEnv({
       path: path.resolve(__dirname, './local.env'),
     }),

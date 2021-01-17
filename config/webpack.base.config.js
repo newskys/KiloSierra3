@@ -24,10 +24,21 @@ module.exports = {
         use: ['ts-loader'],
       },
       {
-        test: /\.css$/,
+        test: /\.scss$/,
         use: [
-          "style-loader",
-          "css-loader"
+          "style-loader", // Creates `style` nodes from JS strings
+          "css-loader",   // Translates CSS into CommonJS
+          {
+            loader: "sass-loader",   // Compiles Sass to CSS
+            options: {
+              sourceMap: true,
+              sassOptions: {
+                // includePaths: ["absolute/path/a", "absolute/path/b"],
+                outPutStyle: "compressed"
+              }
+            }
+          }
+          
         ],
       },
     ],
@@ -36,7 +47,7 @@ module.exports = {
   ],
   resolve: {
     modules: ['node_modules', path.resolve(__dirname, '../src')],
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.css', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss', '.json'],
     alias,
   },
 }

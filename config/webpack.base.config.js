@@ -1,5 +1,6 @@
 const path = require('path')
 const alias = require('./alias')
+const autoprefixer = require('autoprefixer')
 
 module.exports = {
   entry: {
@@ -24,22 +25,34 @@ module.exports = {
         use: ['ts-loader'],
       },
       {
-        test: /\.scss$/,
+        test: /\.(css|scss)$/,
         use: [
-          "style-loader", // Creates `style` nodes from JS strings
-          "css-loader",   // Translates CSS into CommonJS
-          "postcss-loader",
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1,
+              modules: {
+                localIdentName: "[name]_[local]_[hash:base64:5]"
+              },
+            },
+          },
+          {
+            loader: require.resolve("postcss-loader"),
+            options: {
+              ident: "postcss",
+              plugins: () => [
+                require("postcss-flexbugs-fixes"),
+                autoprefixer({
+                  flexbox: "no-2009"
+                })
+              ],
+            },
+          },
           {
             loader: "sass-loader",   // Compiles Sass to CSS
             options: {
-              sourceMap: true,
-              sassOptions: {
-                // includePaths: ["absolute/path/a", "absolute/path/b"],
-                outPutStyle: "compressed"
-              }
             }
-          }
-          
+          },
         ],
       },
     ],

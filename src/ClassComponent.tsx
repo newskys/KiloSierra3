@@ -1,19 +1,19 @@
 import * as React from 'react';
 import styles from './ClassComponent.scss';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import "./ClassComponent.scss";
 
-const Button = styled.button`
-/* Adapt the colors based on primary prop */
-background: ${props => props.primary ? "palevioletred" : "white"};
-color: ${props => props.primary ? "white" : "palevioletred"};
+// const Button = styled.button`
+// /* Adapt the colors based on primary prop */
+// background: ${props => props.primary ? "palevioletred" : "white"};
+// color: ${props => props.primary ? "white" : "palevioletred"};
 
-font-size: 1em;
-margin: 1em;
-padding: 0.25em 1em;
-border: 2px solid palevioletred;
-border-radius: 3px;
-`;
+// font-size: 1em;
+// margin: 1em;
+// padding: 0.25em 1em;
+// border: 2px solid palevioletred;
+// border-radius: 3px;
+// `;
 
 class ClassComponent extends React.Component {
     // constructor(props) {
@@ -51,8 +51,8 @@ class ClassComponent extends React.Component {
             <div className="wrap">123345</div>
             <div className={styles.wrap}>1234</div>
 
-            <Button>Normal</Button>
-            <Button primary>Primary</Button>
+            {/* <Button>Normal</Button>
+            <Button primary>Primary</Button> */}
             
             </>
         )

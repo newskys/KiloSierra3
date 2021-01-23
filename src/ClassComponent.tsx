@@ -1,5 +1,7 @@
 import * as React from 'react';
+import styles from './ClassComponent.scss';
 import styled from 'styled-components';
+import "./ClassComponent.scss";
 
 const Button = styled.button`
 /* Adapt the colors based on primary prop */
@@ -45,6 +47,9 @@ class ClassComponent extends React.Component {
             <>
             
             ClassComponent!
+            
+            <div className="wrap">123345</div>
+            <div className={styles.wrap}>1234</div>
 
             <Button>Normal</Button>
             <Button primary>Primary</Button>

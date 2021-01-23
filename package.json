@@ -33,6 +33,7 @@
     "webpack-merge": "5.1.2"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.2",
     "@types/classnames": "2.2.10",
     "axios": "0.20.0",
     "css-loader": "5.0.1",

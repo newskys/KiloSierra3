@@ -3,6 +3,8 @@ import styles from './ClassComponent.scss';
 import styled from 'styled-components';
 import "./ClassComponent.scss";
 
+import MaterialButton from '@material-ui/core/Button';
+
 const Button = styled.button`
 /* Adapt the colors based on primary prop */
 background: ${props => props.primary ? "palevioletred" : "white"};
@@ -53,6 +55,8 @@ class ClassComponent extends React.Component {
 
             <Button>Normal</Button>
             <Button primary>Primary</Button>
+
+            <MaterialButton>test</MaterialButton>
             
             </>
         )

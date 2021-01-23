@@ -1,0 +1,23 @@
+.wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  flex: 0 0 auto;
+  height: 50px;
+}
+
+.main {
+  flex: 1 1 auto;
+}
+
+.footer {
+  flex: 0 0 auto;
+  height: 50px;
+}

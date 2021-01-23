@@ -1,12 +1,11 @@
 import React from 'react';
-import ClassComponent from './ClassComponent';
-import FunctionComponent from './FunctionComponent';
+import Layout from '@components/ui/Layout';
+import '@scss/common/reset.scss';
 
 const App = ({}) => {
   return (
       <>
-        <ClassComponent />
-        <FunctionComponent />
+        <Layout />
       </>
     )
 }

@@ -15,6 +15,7 @@ const useStyles = makeStyles({
   },
 
   avatar: {
+    margin: '0 auto',
     backgroundColor: '#FF1493',
   },
 
@@ -30,6 +31,10 @@ const useStyles = makeStyles({
   text_link: {
     margin: '8px 0 0 0',
   },
+
+  text_button: {
+    textTransform: 'none',
+  }
 });
 
 const LoginPage: React.FC = () => {
@@ -57,19 +62,19 @@ const LoginPage: React.FC = () => {
         </Card>
 
         <Box className={classes.avatar_wrap}>
-          {/* <Avatar className={classes.avatar}> */}
+          <Avatar className={classes.avatar}>
             <LockIcon />
-          {/* </Avatar> */}
+          </Avatar>
         </Box>
         <TextField fullWidth className={classes.login_input} variant="outlined" label="Email Address *" margin="normal" />
         <TextField fullWidth className={classes.login_input} variant="outlined" label="Password *" margin="normal" />
         <Button className={classes.signin} fullWidth variant="contained" color="primary">SIGN IN</Button>
         <Grid className={classes.text_link} container>
           <Grid item xs={6}>
-            <Button href="#text-buttons" color="primary">Forgot Password?</Button>
+            <Button className={classes.text_button} href="#text-buttons" color="primary">Forgot Password?</Button>
           </Grid>
           <Grid item xs={6}>
-            <Button href="#text-buttons" color="primary">Don't have an account? Sign Up</Button>
+            <Button className={classes.text_button} href="#text-buttons" color="primary">Don't have an account? Sign Up</Button>
           </Grid>
         </Grid>
         

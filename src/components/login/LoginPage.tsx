@@ -1,4 +1,5 @@
 import React from 'react'
+import LoginContainer from './LoginContainer'
 import { Avatar, Box, Button, Card, CardMedia, CardContent, Grid, TextField, Typography } from '@material-ui/core';
 import LockIcon from '@material-ui/icons/Lock';
 import Layout from '@components/ui/Layout';
@@ -66,19 +67,15 @@ const LoginPage: React.FC = () => {
             <LockIcon />
           </Avatar>
         </Box>
-        <TextField fullWidth className={classes.login_input} variant="outlined" label="Email Address *" margin="normal" />
-        <TextField fullWidth className={classes.login_input} variant="outlined" label="Password *" margin="normal" />
-        <Button className={classes.signin} fullWidth variant="contained" color="primary">SIGN IN</Button>
+        <LoginContainer />
         <Grid className={classes.text_link} container>
-          <Grid item xs={6}>
-            <Button className={classes.text_button} href="#text-buttons" color="primary">Forgot Password?</Button>
-          </Grid>
-          <Grid item xs={6}>
-            <Button className={classes.text_button} href="#text-buttons" color="primary">Don't have an account? Sign Up</Button>
-          </Grid>
-        </Grid>
-        
-      
+                <Grid item xs={6}>
+                    <Button className={classes.text_button} href="#text-buttons" color="primary">Forgot Password?</Button>
+                </Grid>
+                <Grid item xs={6}>
+                    <Button className={classes.text_button} href="#text-buttons" color="primary">Don't have an account? Sign Up</Button>
+                </Grid>
+            </Grid>
       </Box>
     </Layout>
   )

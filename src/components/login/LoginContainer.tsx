@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
-import Login from './Login'
+import Login from '../ui/Login'
 
 const LoginContainer: React.FC = () => {
     const [loginElement, setLoginElement] = useState(null);

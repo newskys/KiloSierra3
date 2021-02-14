@@ -3,3 +3,4 @@ dist/js
 dist/css
 package-lock.json
 .idea
+.DS_Store

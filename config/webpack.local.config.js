@@ -7,29 +7,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const PORT = 7777
 
 module.exports = merge(baseConfig, {
-  module: {
-    rules: [
-      {
-        test: /\.(woff2?|otf|ttf|eot)$/,
-        exclude: /node_modules|stories/,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              //   name: '[name].[ext]',
-              outputPath: 'fonts/',
-            },
-          },
-        ],
-      },
-    ],
-  },
   plugins: [
     new DotEnv({
       path: path.resolve(__dirname, './local.env'),
-    }),
-    new MiniCssExtractPlugin({
-      filename: 'bundle.css',
     }),
   ],
   mode: 'development',

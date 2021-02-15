@@ -3,9 +3,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { BrowserRouter } from 'react-router-dom';
 import Router from '@components/Router';
-import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
-// import Amplify, { Auth } from 'aws-amplify';
-// import awsconfig from './aws-exports';
 
 // https://material-ui.com/customization/default-theme/#default-theme
 const theme = createMuiTheme({
@@ -38,15 +35,15 @@ const theme = createMuiTheme({
 
 // Amplify.configure(awsconfig);
 
-const App = ({}) => {
+const App = ({ }) => {
   return (
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Router />
-        </ThemeProvider>
-      </BrowserRouter>
-    )
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Router />
+      </ThemeProvider>
+    </BrowserRouter>
+  )
 }
 
-export default withAuthenticator(App)
+export default App

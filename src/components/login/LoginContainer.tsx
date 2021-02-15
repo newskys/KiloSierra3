@@ -1,44 +1,64 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import Login from '../ui/Login'
+import { Authenticator } from 'aws-amplify-react';
+import Amplify from 'aws-amplify'
+import awsconfig from '../../aws-exports'
+import AuthWrapper from './AuthWrapper';
+import { Auth } from 'aws-amplify'
+import { SignIn } from 'aws-amplify-react'
+Amplify.configure(awsconfig)
 
 const LoginContainer: React.FC = () => {
-    const [loginElement, setLoginElement] = useState(null);
+    const validAuthStates = ['signIn', 'signedOut', 'signedUp']
+    const [userIdElement, setUserIdElement] = useState(null);
     const [passwordElement, setPasswordElement] = useState(null);
 
     const handleClick = (e) => {
-        const email = loginElement.value;
+        const userId = userIdElement.value;
         const password = passwordElement.value;
 
-        console.log(email, password);
-
-        console.log('~');
-        requestApi(email, password);
-        console.log('~');
+        requestApi(userId, password);
     }
 
-    const requestApi = async (email, password) => {
-        // then -> es6 문법
-        // axios.get(`https://jsonplaceholder.typicode.com/todos/1`).then((response) => axios.get(`https://jsonplaceholder.typicode.com/users/${response.data.userId}`)
-        //     .then((response) => {console.log(response.data)}))
-
-        // async/await es7 문법
-        console.log('1')
-        const todoResult = await axios.get(`https://jsonplaceholder.typicode.com/todos/1`)
-        const userId = todoResult.data.userId
-        console.log('2')
-        const userInfoResult = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`)
-        // console.log(userInfoResult.data)
-        console.log('3')
+    const requestApi = async (userId, password) => {
+        try {
+            await Auth.signIn(userId, password)
+            console.log('signed in successfully.')
+            // this.props.onStateChange('signedIn', {})
+        } catch (err) {
+            if (err.code === 'UserNotConfirmedException') {
+                // this.props.updateUsername(email)
+                await Auth.resendSignUp(userId)
+                console.log('sign up')
+                // this.props.onStateChange('confirmSignUp', {})
+            } else if (err.code === 'NotAuthorizedException') {
+                // The error happens when the incorrect password is provided
+                console.log('login failed - not authorized')
+                // this.setState({ error: 'Login failed.' })
+            } else if (err.code === 'UserNotFoundException') {
+                console.log('login failed - user not found')
+                // The error happens when the supplied username/email does not exist in the Cognito user pool
+                // this.setState({ error: 'Login failed.' })
+            } else {
+                console.log('login failed - not authorized')
+                // this.setState({ error: 'An error has occurred.' })
+                console.error(err)
+            }
+        }
     }
 
     const setRef = (loginEl, passwordEl) => {
-        setLoginElement(loginEl);
+        setUserIdElement(loginEl);
         setPasswordElement(passwordEl);
     }
 
     return (
-        <Login setRef={setRef} onClick={handleClick} />
+        <>
+            <Authenticator hideDefault={false} amplifyConfig={awsconfig}>
+                <Login setRef={setRef} onClick={handleClick} />
+            </Authenticator>
+        </>
     )
 }
 

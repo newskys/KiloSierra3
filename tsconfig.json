@@ -14,8 +14,8 @@
         "paths": {
             "@components/*": ["src/components/*"],
             "@scss/*": ["src/scss/*"],
-            "@utils/*": ["src/utils/*"],
-            "@reducers/*": ["src/redux/reducers/*"],
+            "@common/*": ["src/common/*"],
+            "@recoil/*": ["src/recoil/*"],
             "@interfaces/*": ["src/interfaces/*"],
             "@apis/*": ["src/apis/*"],
             "@route/*": ["src/route/*"]

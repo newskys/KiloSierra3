@@ -1,18 +1,26 @@
-import React, { useState } from 'react'
-import axios from 'axios'
-import Login from '../ui/Login'
+import { UserState, userState } from '@recoil/user';
+import Amplify, { Auth } from 'aws-amplify';
 import { Authenticator } from 'aws-amplify-react';
-import Amplify from 'aws-amplify'
-import awsconfig from '../../aws-exports'
-import AuthWrapper from './AuthWrapper';
-import { Auth } from 'aws-amplify'
-import { SignIn } from 'aws-amplify-react'
+import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import Login from '../ui/Login';
+import awsconfig from '../../aws-exports';
+import { useHistory, History } from "react-router-dom";
+import { HOME } from '@common/routePath';
+
 Amplify.configure(awsconfig)
 
 const LoginContainer: React.FC = () => {
-    const validAuthStates = ['signIn', 'signedOut', 'signedUp']
     const [userIdElement, setUserIdElement] = useState(null);
     const [passwordElement, setPasswordElement] = useState(null);
+    const [user, setUserState] = useRecoilState<UserState>(userState)
+    const history: History = useHistory()
+
+    useEffect(() => {
+        if (!!user.userId) {
+            history.replace(HOME)
+        }
+    }, [user])
 
     const handleClick = (e) => {
         const userId = userIdElement.value;
@@ -23,8 +31,18 @@ const LoginContainer: React.FC = () => {
 
     const requestApi = async (userId, password) => {
         try {
-            await Auth.signIn(userId, password)
-            console.log('signed in successfully.')
+            const result = await Auth.signIn(userId, password)
+            const userState: UserState = {
+                isInit: true,
+                userId: result.username,
+                email: result.attributes?.email,
+                emailVerified: result.attributes?.email_verified,
+                phone: result.attributes?.phone_number,
+                phoneVerified: result.attributes?.phone_number_verified,
+            }
+
+            console.log('signed in successfully.', userState)
+            setUserState(userState)
             // this.props.onStateChange('signedIn', {})
         } catch (err) {
             if (err.code === 'UserNotConfirmedException') {

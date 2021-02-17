@@ -1,7 +1,9 @@
-import React from 'react';
-import '@scss/components/ui/Layout.scss';
-import { Grid, Typography } from '@material-ui/core';
+import FooterContainer from '@components/common/FooterContainer';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import '@scss/components/ui/Layout.scss';
+import React from 'react';
+import Header from './Header';
 
 const useStyles = makeStyles({
   root: {
@@ -20,11 +22,6 @@ const useStyles = makeStyles({
   footer: {
     flex: '0 0 auto',
     height: '50px',
-  },
-  copyright: {
-    display: 'block',
-    textAlign: 'center',
-    fontSize: '12px',
   }
 });
 
@@ -43,12 +40,14 @@ const Layout: React.FC<Props> = ({ children, useHeader = true }) => {
       direction='column'
     >
       {useHeader &&
-        <Grid className={classes.header} component='header' item>Grid Item Header dd</Grid>}
+        <Grid className={classes.header} component='header' item>
+          <Header />
+        </Grid>}
       <Grid className={classes.main} component='main' item>
         {children}
       </Grid>
       <Grid className={classes.footer} component='footer' item>
-        <Typography className={classes.copyright} component='small'>Copyright &copy; Umlaut 2021</Typography>
+        <FooterContainer />
       </Grid>
     </Grid>
   );

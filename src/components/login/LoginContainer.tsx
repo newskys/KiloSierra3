@@ -66,14 +66,14 @@ const LoginContainer: React.FC = () => {
         }
     }
 
-    const setRef = (loginEl, passwordEl) => {
-        setUserIdElement(loginEl);
+    const setRef = (userIdEl, passwordEl) => {
+        setUserIdElement(userIdEl);
         setPasswordElement(passwordEl);
     }
 
     return (
         <>
-            <Authenticator hideDefault={false} amplifyConfig={awsconfig}>
+            <Authenticator hideDefault={true} amplifyConfig={awsconfig}>
                 <Login setRef={setRef} onClick={handleClick} />
             </Authenticator>
         </>

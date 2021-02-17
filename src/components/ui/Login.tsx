@@ -42,17 +42,17 @@ interface Props {
 
 const Login: React.FC<Props> = ({ onClick, setRef }) => {
     const classes = useStyles();
-    const emailRef = useRef();
+    const userIdRef = useRef();
     const passwordRef = useRef();
 
     useEffect(() => {
-        setRef(emailRef.current, passwordRef.current)
+        setRef(userIdRef.current, passwordRef.current)
     }, [])
 
     return (
         <>
-            <TextField inputRef={emailRef} fullWidth className={classes.login_input} variant="outlined" label="Email Address *" margin="normal" />
-            <TextField inputRef={passwordRef} fullWidth className={classes.login_input} variant="outlined" label="Password *" margin="normal" />
+            <TextField inputRef={userIdRef} fullWidth className={classes.login_input} variant="outlined" label="ID *" margin="normal" />
+            <TextField inputRef={passwordRef} fullWidth className={classes.login_input} variant="outlined" label="Password *" margin="normal" type="password" />
             <Button onClick={(e) => onClick(e)} className={classes.signin} fullWidth variant="contained" color="primary">SIGN IN</Button>
         </>
     )

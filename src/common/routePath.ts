@@ -1,3 +1,5 @@
 export const MAIN = '/'
 export const HOME = '/home'
 export const LOGIN = '/login'
+export const SIGN_UP = '/signup'
+export const FORGOT = '/forgot'

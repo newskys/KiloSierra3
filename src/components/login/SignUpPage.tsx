@@ -1,0 +1,78 @@
+import Layout from "@components/ui/Layout";
+import { Avatar, Box, Card, TextField, Typography } from "@material-ui/core";
+import React from "react";
+import AssignmentIcon from "@material-ui/icons/AssignmentInd";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles({
+  root: {
+    padding: "16px",
+  },
+
+  title: {
+    textAlign: 'center',
+  },
+
+  avatar_wrap: {
+    color: "#FF1493",
+    // padding: "16px 0 0 0",
+  },
+
+  avatar: {
+    margin: "0 auto",
+    backgroundColor: "#FF1493",
+  },
+
+  login_input: {
+    margin: "16px 0 0 0",
+  },
+
+  signin: {
+    margin: "16px 0 0 0",
+    padding: "8px",
+  },
+
+  text_link: {
+    margin: "8px 0 0 0",
+  },
+
+  text_button: {
+    textTransform: "none",
+  },
+});
+
+const SignUpPage = () => {
+  const classes = useStyles();
+
+  return (
+    <Layout useHeader={false}>
+      <Box className={classes.root}>
+        <Typography className={classes.title} gutterBottom variant="h4" component="h2">
+          SIGN IN
+        </Typography>
+        <Box className={classes.avatar_wrap}>
+          <Avatar className={classes.avatar}>
+            <AssignmentIcon />
+          </Avatar>
+        </Box>
+
+        <TextField
+          fullWidth
+          className={classes.login_input}
+          variant="outlined"
+          label="ID *"
+          margin="normal"
+        />
+        <TextField
+          fullWidth
+          className={classes.login_input}
+          variant="outlined"
+          label="ID *"
+          margin="normal"
+        />
+      </Box>
+    </Layout>
+  );
+};
+
+export default SignUpPage;

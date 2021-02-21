@@ -4,6 +4,7 @@ import { Avatar, Box, Button, Card, CardMedia, CardContent, Grid, TextField, Typ
 import LockIcon from '@material-ui/icons/Lock';
 import Layout from '@components/ui/Layout';
 import { makeStyles } from '@material-ui/core/styles';
+import LoginAccountConfigContainer from './LoginAccountConfigContainer';
 
 const useStyles = makeStyles({
   root: {
@@ -68,14 +69,7 @@ const LoginPage: React.FC = () => {
           </Avatar>
         </Box>
         <LoginContainer />
-        <Grid className={classes.text_link} container>
-                <Grid item xs={6}>
-                    <Button className={classes.text_button} href="#text-buttons" color="primary">Forgot Password?</Button>
-                </Grid>
-                <Grid item xs={6}>
-                    <Button className={classes.text_button} href="#text-buttons" color="primary">Don't have an account? Sign Up</Button>
-                </Grid>
-            </Grid>
+        <LoginAccountConfigContainer />
       </Box>
     </Layout>
   )

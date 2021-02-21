@@ -1,5 +1,5 @@
 import Layout from "@components/ui/Layout";
-import { Avatar, Box, Card, TextField, Typography } from "@material-ui/core";
+import { Avatar, Box, Button, Card, TextField, Typography } from "@material-ui/core";
 import React from "react";
 import AssignmentIcon from "@material-ui/icons/AssignmentInd";
 import { makeStyles } from "@material-ui/core/styles";
@@ -10,7 +10,7 @@ const useStyles = makeStyles({
   },
 
   title: {
-    textAlign: 'center',
+    textAlign: "center",
   },
 
   avatar_wrap: {
@@ -27,17 +27,9 @@ const useStyles = makeStyles({
     margin: "16px 0 0 0",
   },
 
-  signin: {
+  signup: {
     margin: "16px 0 0 0",
     padding: "8px",
-  },
-
-  text_link: {
-    margin: "8px 0 0 0",
-  },
-
-  text_button: {
-    textTransform: "none",
   },
 });
 
@@ -47,7 +39,12 @@ const SignUpPage = () => {
   return (
     <Layout useHeader={false}>
       <Box className={classes.root}>
-        <Typography className={classes.title} gutterBottom variant="h4" component="h2">
+        <Typography
+          className={classes.title}
+          gutterBottom
+          variant="h4"
+          component="h2"
+        >
           SIGN IN
         </Typography>
         <Box className={classes.avatar_wrap}>
@@ -67,9 +64,37 @@ const SignUpPage = () => {
           fullWidth
           className={classes.login_input}
           variant="outlined"
-          label="ID *"
+          label="Password *"
           margin="normal"
+          type="password"
         />
+        <TextField
+          fullWidth
+          className={classes.login_input}
+          variant="outlined"
+          label="Confirm Password *"
+          margin="normal"
+          helperText="Incorrect entry."
+          type="password"
+        />
+        <TextField
+          fullWidth
+          className={classes.login_input}
+          variant="outlined"
+          label="Email *"
+          margin="normal"
+          helperText="Incorrect entry."
+        />
+        <TextField
+          error
+          fullWidth
+          className={classes.login_input}
+          variant="outlined"
+          label="Phone Number *"
+          margin="normal"
+          helperText="Incorrect entry."
+        />
+        <Button className={classes.signup} fullWidth variant="contained" color="primary">SIGN UP</Button>
       </Box>
     </Layout>
   );

@@ -3,10 +3,15 @@ import { Avatar, Box, Button, Card, TextField, Typography } from "@material-ui/c
 import React from "react";
 import AssignmentIcon from "@material-ui/icons/AssignmentInd";
 import { makeStyles } from "@material-ui/core/styles";
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const useStyles = makeStyles({
   root: {
+    display: "flex",
     padding: "16px",
+    flexDirection: "column",
+    justifyContent: "center",
+    height: "100%",
   },
 
   title: {
@@ -35,6 +40,7 @@ const useStyles = makeStyles({
 
 const SignUpPage = () => {
   const classes = useStyles();
+  const matches = useMediaQuery('(min-width:600px)');
 
   return (
     <Layout useHeader={false}>

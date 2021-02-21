@@ -76,7 +76,7 @@ const HomePage: React.FC = () => {
 
   return (
     <Layout useHeader={true}>
-      <Scheduler data={appointments} height={660}>
+      <Scheduler data={appointments} height={window.innerHeight}>
         <ViewState defaultCurrentDate="2018-07-25" />
         <WeekView
           name="work-week"

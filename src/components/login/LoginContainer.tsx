@@ -11,10 +11,16 @@ import { HOME } from '@common/routePath';
 Amplify.configure(awsconfig)
 
 const LoginContainer: React.FC = () => {
+  // 함수 컴포넌트 버전 setState
   const [userIdElement, setUserIdElement] = useState(null);
   const [passwordElement, setPasswordElement] = useState(null);
   const [user, setUserState] = useRecoilState<UserState>(userState)
   const history: History = useHistory()
+
+  // 함수 컴포넌트 버전 componentDidMount + componentDidUpdate
+  useEffect(() => {
+    console.log('a')
+  }, [])
 
   useEffect(() => {
     if (!!user.userId) {

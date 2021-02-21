@@ -12,8 +12,8 @@ const Auth: React.FC<Props> = ({ children }) => {
 
   const getCurrentUserInfo = async () => {
     try {
-      // const result = await AwsAuth.currentAuthenticatedUser()
-      const result = {username: null, attributes: null}
+      const result = await AwsAuth.currentAuthenticatedUser()
+      // const result = {username: null, attributes: null}
       const userState: UserState = {
         isInit: true,
         userId: result.username,

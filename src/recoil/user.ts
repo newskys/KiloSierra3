@@ -30,6 +30,7 @@ export const getUser: RecoilValueReadOnly<string> = selector({
   key: KEY.GET_USER,
   get: ({ get }) => {
     const user: UserState = get(userState);
+
     return user.email;
   },
 });

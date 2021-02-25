@@ -1,9 +1,18 @@
 import Layout from "@components/ui/Layout";
-import { Avatar, Box, Button, Card, TextField, Typography } from "@material-ui/core";
-import React from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import React, { useState, KeyboardEvent } from "react";
 import AssignmentIcon from "@material-ui/icons/AssignmentInd";
 import { makeStyles } from "@material-ui/core/styles";
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import SignUpInput from "@components/ui/SignUpInput";
+import { checkEmail, checkPassword } from "@common/regex";
 
 const useStyles = makeStyles({
   root: {
@@ -40,67 +49,75 @@ const useStyles = makeStyles({
 
 const SignUpPage = () => {
   const classes = useStyles();
-  const matches = useMediaQuery('(min-width:600px)');
+  const matches = useMediaQuery("(min-width:600px)");
+
+  const [userIdRef, setUserIdRef] = useState<HTMLInputElement>(null);
+  const [passwordRef, setPasswordRef] = useState<HTMLInputElement>(null);
+  const [
+    confirmPasswordRef,
+    setConfirmPasswordRef,
+  ] = useState<HTMLInputElement>(null);
+  const [emailRef, setEmailRef] = useState<HTMLInputElement>(null);
+  const [phoneRef, setPhoneRef] = useState<HTMLInputElement>(null);
+  const [passwordInvalidReason, setPasswordInvalidReason] = useState<string>(null);
+  const [confirmPasswordInvalidReason, setConfirmPasswordInvalidReason] = useState<string>(null);
+  const [emailInvalidReason, setEmailInvalidReason] = useState<string>(null);
+
+  const setRef = (userId, password, confirmPassword, email, phone) => {
+    setUserIdRef(userId);
+    setPasswordRef(password);
+    setConfirmPasswordRef(confirmPassword);
+    setEmailRef(email);
+    setPhoneRef(phone);
+  };
+
+  const validatePassword = (e: KeyboardEvent<HTMLInputElement>) => {
+    const value: string = e.currentTarget.value
+    if (!checkPassword(value)) {
+      setPasswordInvalidReason('8 ~ 20자의 소문자, 숫자, 특수문자로 조합해주세요.')
+    } else {
+      setPasswordInvalidReason(null)
+    }
+
+    validateConfirmPassword(confirmPasswordRef.value)
+  };
+
+  const handleChangeConfirmPassword = (e: KeyboardEvent<HTMLInputElement>) => {
+    validateConfirmPassword(e.currentTarget.value)
+  }
+
+  const validateConfirmPassword = (value: string) => {
+    if (passwordRef.value !== value) {
+      setConfirmPasswordInvalidReason('비밀번호가 다릅니다.')
+    } else {
+      setConfirmPasswordInvalidReason(null)
+    }
+  };
+  const validateEmail = (e: KeyboardEvent<HTMLInputElement>) => {
+    const value: string = e.currentTarget.value
+    if (!checkEmail(value)) {
+      setEmailInvalidReason('이메일 형식에 맞지 않습니다.')
+    } else {
+      setEmailInvalidReason(null)
+    }
+  };
+  const validatePhone = (e: KeyboardEvent<HTMLInputElement>) => {};
+  const submitSignUp = (e: KeyboardEvent<HTMLInputElement>) => {};
 
   return (
     <Layout useHeader={false}>
       <Box className={classes.root}>
-        <Typography
-          className={classes.title}
-          gutterBottom
-          variant="h4"
-          component="h2"
-        >
-          SIGN IN
-        </Typography>
-        <Box className={classes.avatar_wrap}>
-          <Avatar className={classes.avatar}>
-            <AssignmentIcon />
-          </Avatar>
-        </Box>
-
-        <TextField
-          fullWidth
-          className={classes.login_input}
-          variant="outlined"
-          label="ID *"
-          margin="normal"
+        <SignUpInput
+          setRef={setRef}
+          validatePassword={validatePassword}
+          onChangeConfirmPassword={handleChangeConfirmPassword}
+          validateEmail={validateEmail}
+          validatePhone={validatePhone}
+          submitSignUp={submitSignUp}
+          passwordInvalidReason={passwordInvalidReason}
+          confirmPasswordInvalidReason={confirmPasswordInvalidReason}
+          emailInvalidReason={emailInvalidReason}
         />
-        <TextField
-          fullWidth
-          className={classes.login_input}
-          variant="outlined"
-          label="Password *"
-          margin="normal"
-          type="password"
-        />
-        <TextField
-          fullWidth
-          className={classes.login_input}
-          variant="outlined"
-          label="Confirm Password *"
-          margin="normal"
-          helperText="Incorrect entry."
-          type="password"
-        />
-        <TextField
-          fullWidth
-          className={classes.login_input}
-          variant="outlined"
-          label="Email *"
-          margin="normal"
-          helperText="Incorrect entry."
-        />
-        <TextField
-          error
-          fullWidth
-          className={classes.login_input}
-          variant="outlined"
-          label="Phone Number *"
-          margin="normal"
-          helperText="Incorrect entry."
-        />
-        <Button className={classes.signup} fullWidth variant="contained" color="primary">SIGN UP</Button>
       </Box>
     </Layout>
   );

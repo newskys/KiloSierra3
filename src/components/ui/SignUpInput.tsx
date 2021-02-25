@@ -38,26 +38,32 @@ const useStyles = makeStyles({
 
 interface Props {
   setRef: Function;
-  validatePassword: Function;
+  onChangeUserId: Function
+  onChangePassword: Function;
   onChangeConfirmPassword: Function;
-  validateEmail: Function;
+  onChangeEmail: Function;
   validatePhone: Function;
   submitSignUp: Function;
+  userIdInvalidReason: string
   passwordInvalidReason: string;
   confirmPasswordInvalidReason: string;
   emailInvalidReason: string;
+  isSignUpEnabled: boolean
 }
 
 const SignUpInput: React.FC<Props> = ({
   setRef,
-  validatePassword,
+  onChangeUserId,
+  onChangePassword,
   onChangeConfirmPassword,
-  validateEmail,
+  onChangeEmail,
   validatePhone,
   submitSignUp,
+  userIdInvalidReason,
   passwordInvalidReason,
   confirmPasswordInvalidReason,
   emailInvalidReason,
+  isSignUpEnabled,
 }) => {
   const classes = useStyles();
   const userId = useRef<HTMLInputElement>(null);
@@ -95,10 +101,13 @@ const SignUpInput: React.FC<Props> = ({
       <TextField
         inputRef={userId}
         fullWidth
+        error={!!userIdInvalidReason}
         className={classes.login_input}
         variant="outlined"
         label="ID *"
         margin="normal"
+        helperText={'6 ~ 20자의 소문자, 숫자로 조합해주세요.'}
+        onChange={(e) => onChangeUserId(e)}
       />
       <TextField
         inputRef={password}
@@ -110,7 +119,7 @@ const SignUpInput: React.FC<Props> = ({
         margin="normal"
         helperText={'8 ~ 20자의 소문자, 숫자, 특수문자로 조합해주세요.'}
         type="password"
-        onChange={(e) => validatePassword(e)}
+        onChange={(e) => onChangePassword(e)}
       />
       <TextField
         inputRef={confirmPassword}
@@ -132,9 +141,9 @@ const SignUpInput: React.FC<Props> = ({
         variant="outlined"
         label="Email *"
         margin="normal"
-        helperText={emailInvalidReason}
+        helperText={emailInvalidReason || '가입 후 인증메일이 발송됩니다.'}
         type="email"
-        onChange={(e) => validateEmail(e)}
+        onChange={(e) => onChangeEmail(e)}
       />
       {/* <TextField
         inputRef={phone}
@@ -151,11 +160,12 @@ const SignUpInput: React.FC<Props> = ({
       <Button
         className={classes.signup}
         fullWidth
+        disabled={!isSignUpEnabled}
         variant="contained"
         color="primary"
         onClick={(e) => submitSignUp(e)}
       >
-        SIGN UP
+        {isSignUpEnabled ? 'SIGN UP' : '위 항목을 올바르게 채워주세요.'}
       </Button>
     </>
   );

@@ -3,7 +3,7 @@ import { userState, UserState } from '@recoil/user'
 import { Auth } from 'aws-amplify'
 import React from 'react'
 import { useRecoilState } from 'recoil'
-import { useHistory, History } from "react-router-dom";
+import { useHistory, History } from 'react-router-dom'
 import { LOGIN } from '@common/routePath'
 
 const FooterContainer = () => {
@@ -26,7 +26,11 @@ const FooterContainer = () => {
   }
 
   return (
-    <Footer isLogin={isLogin} onClickLogin={handleClickLogin} onClickLogout={handleClickLogout} />
+    <Footer
+      isLogin={isLogin}
+      onClickLogin={handleClickLogin}
+      onClickLogout={handleClickLogout}
+    />
   )
 }
 

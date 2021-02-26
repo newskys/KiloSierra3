@@ -1,26 +1,21 @@
-import { UserState, userState } from '@recoil/user';
-import Amplify, { Auth } from 'aws-amplify';
-import { Authenticator } from 'aws-amplify-react';
-import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import Login from '../ui/LoginInput';
-import awsconfig from '../../aws-exports';
-import { useHistory, History } from "react-router-dom";
-import { HOME } from '@common/routePath';
+import { UserState, userState } from '@recoil/user'
+import Amplify, { Auth } from 'aws-amplify'
+import { Authenticator } from 'aws-amplify-react'
+import React, { useEffect, useState } from 'react'
+import { useRecoilState } from 'recoil'
+import Login from '../ui/LoginInput'
+import awsconfig from '../../aws-exports'
+import { useHistory, History } from 'react-router-dom'
+import { HOME } from '@common/routePath'
 
 Amplify.configure(awsconfig)
 
 const LoginContainer: React.FC = () => {
   // 함수 컴포넌트 버전 setState
-  const [userIdElement, setUserIdElement] = useState(null);
-  const [passwordElement, setPasswordElement] = useState(null);
+  const [userIdElement, setUserIdElement] = useState(null)
+  const [passwordElement, setPasswordElement] = useState(null)
   const [user, setUserState] = useRecoilState<UserState>(userState)
   const history: History = useHistory()
-
-  // 함수 컴포넌트 버전 componentDidMount + componentDidUpdate
-  useEffect(() => {
-    console.log('a')
-  }, [])
 
   useEffect(() => {
     if (!!user.userId) {
@@ -29,10 +24,10 @@ const LoginContainer: React.FC = () => {
   }, [user])
 
   const handleClick = (e) => {
-    const userId = userIdElement.value;
-    const password = passwordElement.value;
+    const userId = userIdElement.value
+    const password = passwordElement.value
 
-    requestApi(userId, password);
+    requestApi(userId, password)
   }
 
   const requestApi = async (userId, password) => {
@@ -73,8 +68,8 @@ const LoginContainer: React.FC = () => {
   }
 
   const setRef = (userIdEl, passwordEl) => {
-    setUserIdElement(userIdEl);
-    setPasswordElement(passwordEl);
+    setUserIdElement(userIdEl)
+    setPasswordElement(passwordEl)
   }
 
   return (

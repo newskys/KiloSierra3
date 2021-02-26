@@ -1,9 +1,9 @@
-import { HOME, LOGIN, MAIN, SIGN_UP } from "@common/routePath";
-import HomePage from "@components/login/HomePage";
-import LoginPage from "@components/login/LoginPage";
-import SignUpPage from "@components/login/SignUpPage";
-import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { HOME, LOGIN, MAIN, SIGN_UP } from '@common/routePath'
+import HomePage from '@components/login/HomePage'
+import LoginPage from '@components/login/LoginPage'
+import SignUpPage from '@components/login/SignUpPage'
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
 
 const Router: React.FC = () => (
   <Switch>
@@ -12,6 +12,6 @@ const Router: React.FC = () => (
     <Route exact path={SIGN_UP} component={SignUpPage} />
     {/* <Layout /> */}
   </Switch>
-);
+)
 
-export default Router;
+export default Router

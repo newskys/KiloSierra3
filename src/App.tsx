@@ -1,10 +1,10 @@
-import Auth from '@components/common/Auth';
-import Router from '@components/common/Router';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
-import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import Auth from '@components/common/Auth'
+import Router from '@components/common/Router'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import React from 'react'
+import { BrowserRouter } from 'react-router-dom'
+import { RecoilRoot } from 'recoil'
 
 // https://material-ui.com/customization/default-theme/#default-theme
 const theme = createMuiTheme({
@@ -33,7 +33,7 @@ const theme = createMuiTheme({
       'sans-serif',
     ].join(','),
   },
-});
+})
 
 const App: React.FC = () => (
   <RecoilRoot>

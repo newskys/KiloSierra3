@@ -1,7 +1,7 @@
-import { UserState, userState } from '@recoil/user';
-import { Auth as AwsAuth } from 'aws-amplify';
-import React, { useEffect } from 'react';
-import { useRecoilState } from 'recoil';
+import { UserState, userState } from '@recoil/user'
+import { Auth as AwsAuth } from 'aws-amplify'
+import React, { useEffect } from 'react'
+import { useRecoilState } from 'recoil'
 
 interface Props {
   children: any
@@ -43,9 +43,7 @@ const Auth: React.FC<Props> = ({ children }) => {
     getCurrentUserInfo()
   }, [])
 
-  return (
-    <>{user.isInit && children}</>
-  )
+  return <>{user.isInit && children}</>
 }
 
 export default Auth

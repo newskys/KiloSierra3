@@ -1,53 +1,54 @@
-import { Avatar, Box, Button, TextField, Typography } from "@material-ui/core";
-import React, { useEffect, useRef } from "react";
-import AssignmentIcon from "@material-ui/icons/AssignmentInd";
-import { makeStyles } from "@material-ui/core/styles";
+import { SIGN_UP } from '@common/lang'
+import { Avatar, Box, Button, TextField, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import AssignmentIcon from '@material-ui/icons/AssignmentInd'
+import React, { useEffect, useRef } from 'react'
 
 const useStyles = makeStyles({
   root: {
-    display: "flex",
-    padding: "16px",
-    flexDirection: "column",
-    justifyContent: "center",
-    height: "100%",
+    display: 'flex',
+    padding: '16px',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: '100%',
   },
 
   title: {
-    textAlign: "center",
+    textAlign: 'center',
   },
 
   avatar_wrap: {
-    color: "#FF1493",
+    color: '#FF1493',
     // padding: "16px 0 0 0",
   },
 
   avatar: {
-    margin: "0 auto",
-    backgroundColor: "#FF1493",
+    margin: '0 auto',
+    backgroundColor: '#FF1493',
   },
 
   login_input: {
-    margin: "16px 0 0 0",
+    margin: '16px 0 0 0',
   },
 
   signup: {
-    margin: "16px 0 0 0",
-    padding: "8px",
+    margin: '16px 0 0 0',
+    padding: '8px',
   },
-});
+})
 
 interface Props {
-  setRef: Function;
+  setRef: Function
   onChangeUserId: Function
-  onChangePassword: Function;
-  onChangeConfirmPassword: Function;
-  onChangeEmail: Function;
-  validatePhone: Function;
-  submitSignUp: Function;
+  onChangePassword: Function
+  onChangeConfirmPassword: Function
+  onChangeEmail: Function
+  validatePhone: Function
+  onClickSignUp: Function
   userIdInvalidReason: string
-  passwordInvalidReason: string;
-  confirmPasswordInvalidReason: string;
-  emailInvalidReason: string;
+  passwordInvalidReason: string
+  confirmPasswordInvalidReason: string
+  emailInvalidReason: string
   isSignUpEnabled: boolean
 }
 
@@ -58,19 +59,19 @@ const SignUpInput: React.FC<Props> = ({
   onChangeConfirmPassword,
   onChangeEmail,
   validatePhone,
-  submitSignUp,
+  onClickSignUp,
   userIdInvalidReason,
   passwordInvalidReason,
   confirmPasswordInvalidReason,
   emailInvalidReason,
   isSignUpEnabled,
 }) => {
-  const classes = useStyles();
-  const userId = useRef<HTMLInputElement>(null);
-  const password = useRef<HTMLInputElement>(null);
-  const confirmPassword = useRef<HTMLInputElement>(null);
-  const email = useRef<HTMLInputElement>(null);
-  const phone = useRef<HTMLInputElement>(null);
+  const classes = useStyles()
+  const userId = useRef<HTMLInputElement>(null)
+  const password = useRef<HTMLInputElement>(null)
+  const confirmPassword = useRef<HTMLInputElement>(null)
+  const email = useRef<HTMLInputElement>(null)
+  const phone = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     setRef(
@@ -79,8 +80,8 @@ const SignUpInput: React.FC<Props> = ({
       confirmPassword.current,
       email.current,
       phone.current
-    );
-  }, []);
+    )
+  }, [])
 
   return (
     <>
@@ -88,8 +89,7 @@ const SignUpInput: React.FC<Props> = ({
         className={classes.title}
         gutterBottom
         variant="h4"
-        component="h2"
-      >
+        component="h2">
         SIGN UP
       </Typography>
       <Box className={classes.avatar_wrap}>
@@ -106,7 +106,7 @@ const SignUpInput: React.FC<Props> = ({
         variant="outlined"
         label="ID *"
         margin="normal"
-        helperText={'6 ~ 20자의 소문자, 숫자로 조합해주세요.'}
+        helperText={userIdInvalidReason}
         onChange={(e) => onChangeUserId(e)}
       />
       <TextField
@@ -117,7 +117,7 @@ const SignUpInput: React.FC<Props> = ({
         variant="outlined"
         label="Password *"
         margin="normal"
-        helperText={'8 ~ 20자의 소문자, 숫자, 특수문자로 조합해주세요.'}
+        helperText={SIGN_UP.PASSWORD_ERROR_REGEX}
         type="password"
         onChange={(e) => onChangePassword(e)}
       />
@@ -141,7 +141,7 @@ const SignUpInput: React.FC<Props> = ({
         variant="outlined"
         label="Email *"
         margin="normal"
-        helperText={emailInvalidReason || '가입 후 인증메일이 발송됩니다.'}
+        helperText={emailInvalidReason || SIGN_UP.SEND_EMAIL}
         type="email"
         onChange={(e) => onChangeEmail(e)}
       />
@@ -163,12 +163,11 @@ const SignUpInput: React.FC<Props> = ({
         disabled={!isSignUpEnabled}
         variant="contained"
         color="primary"
-        onClick={(e) => submitSignUp(e)}
-      >
-        {isSignUpEnabled ? 'SIGN UP' : '위 항목을 올바르게 채워주세요.'}
+        onClick={(e) => onClickSignUp(e)}>
+        {isSignUpEnabled ? 'SIGN UP' : SIGN_UP.SUBMIT_NOT_FILLED}
       </Button>
     </>
-  );
-};
+  )
+}
 
-export default SignUpInput;
+export default SignUpInput

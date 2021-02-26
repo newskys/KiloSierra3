@@ -1,24 +1,24 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "module": "esnext",
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true,
-        "noResolve": false,
-        "noImplicitAny": false,
-        "removeComments": true,
-        "sourceMap": true,
-        "jsx": "react",
-        "skipLibCheck": true,
-        "baseUrl": "./",
-        "paths": {
-            "@components/*": ["src/components/*"],
-            "@scss/*": ["src/scss/*"],
-            "@common/*": ["src/common/*"],
-            "@recoil/*": ["src/recoil/*"],
-            "@interfaces/*": ["src/interfaces/*"],
-            "@apis/*": ["src/apis/*"],
-            "@route/*": ["src/route/*"]
-        }
+  "compilerOptions": {
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "noResolve": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@components/*": ["src/components/*"],
+      "@scss/*": ["src/scss/*"],
+      "@common/*": ["src/common/*"],
+      "@recoil/*": ["src/recoil/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@apis/*": ["src/apis/*"],
+      "@route/*": ["src/route/*"]
     }
+  }
 }

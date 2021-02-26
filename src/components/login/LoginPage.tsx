@@ -1,10 +1,20 @@
 import React from 'react'
 import LoginContainer from './LoginContainer'
-import { Avatar, Box, Button, Card, CardMedia, CardContent, Grid, TextField, Typography } from '@material-ui/core';
-import LockIcon from '@material-ui/icons/Lock';
-import Layout from '@components/ui/Layout';
-import { makeStyles } from '@material-ui/core/styles';
-import LoginAccountConfigContainer from './LoginAccountConfigContainer';
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardMedia,
+  CardContent,
+  Grid,
+  TextField,
+  Typography,
+} from '@material-ui/core'
+import LockIcon from '@material-ui/icons/Lock'
+import Layout from '@components/ui/Layout'
+import { makeStyles } from '@material-ui/core/styles'
+import LoginAccountConfigContainer from './LoginAccountConfigContainer'
 
 const useStyles = makeStyles({
   root: {
@@ -36,11 +46,11 @@ const useStyles = makeStyles({
 
   text_button: {
     textTransform: 'none',
-  }
-});
+  },
+})
 
 const LoginPage: React.FC = () => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <Layout useHeader={false}>
@@ -57,8 +67,8 @@ const LoginPage: React.FC = () => {
               Lizard
             </Typography>
             <Typography variant="body2" color="textSecondary" component="p">
-              Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-              across all continents except Antarctica
+              Lizards are a widespread group of squamate reptiles, with over
+              6,000 species, ranging across all continents except Antarctica
             </Typography>
           </CardContent>
         </Card>
@@ -75,4 +85,4 @@ const LoginPage: React.FC = () => {
   )
 }
 
-export default LoginPage;
+export default LoginPage

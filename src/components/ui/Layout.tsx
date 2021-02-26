@@ -1,9 +1,9 @@
-import FooterContainer from "@components/common/FooterContainer";
-import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import "@scss/components/ui/Layout.scss";
-import React from "react";
-import Header from "./Header";
+import FooterContainer from '@components/common/FooterContainer'
+import { Grid } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import '@scss/components/ui/Layout.scss'
+import React from 'react'
+import Header from './Header'
 
 const useStyles = makeStyles({
   root: {
@@ -20,19 +20,19 @@ const useStyles = makeStyles({
     flex: "1 1 auto",
   },
   footer: {
-    flex: "0 0 auto",
-    height: "66px",
-    textAlign: "center",
+    flex: '0 0 auto',
+    height: '66px',
+    textAlign: 'center',
   },
-});
+})
 
 interface Props {
-  useHeader?: boolean;
-  children?: any;
+  useHeader?: boolean
+  children?: any
 }
 
 const Layout: React.FC<Props> = ({ children, useHeader = true }) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <Grid className={classes.root} container direction="column">
@@ -48,7 +48,7 @@ const Layout: React.FC<Props> = ({ children, useHeader = true }) => {
         <FooterContainer />
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

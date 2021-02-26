@@ -1,6 +1,6 @@
 import { Button, Grid } from '@material-ui/core'
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles({
   text_link: {
@@ -9,8 +9,8 @@ const useStyles = makeStyles({
 
   text_button: {
     textTransform: 'none',
-  }
-});
+  },
+})
 
 interface Props {
   onClickForgot: Function
@@ -18,15 +18,27 @@ interface Props {
 }
 
 const LoginConfig: React.FC<Props> = ({ onClickForgot, onClickSignUp }) => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <Grid className={classes.text_link} container>
       <Grid item xs={6}>
-        <Button className={classes.text_button} href="#" color="primary" onClick={(e) => onClickForgot(e)}>Forgot Password?</Button>
+        <Button
+          className={classes.text_button}
+          href="#"
+          color="primary"
+          onClick={(e) => onClickForgot(e)}>
+          Forgot Password?
+        </Button>
       </Grid>
       <Grid item xs={6}>
-        <Button className={classes.text_button} href="#" color="primary" onClick={(e) => onClickSignUp(e)}>Don't have an account? Sign Up</Button>
+        <Button
+          className={classes.text_button}
+          href="#"
+          color="primary"
+          onClick={(e) => onClickSignUp(e)}>
+          Don't have an account? Sign Up
+        </Button>
       </Grid>
     </Grid>
   )

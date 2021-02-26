@@ -26,26 +26,24 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          "style-loader", // Creates `style` nodes from JS strings
-          "css-loader",   // Translates CSS into CommonJS
-          "postcss-loader",
+          'style-loader', // Creates `style` nodes from JS strings
+          'css-loader', // Translates CSS into CommonJS
+          'postcss-loader',
           {
-            loader: "sass-loader",   // Compiles Sass to CSS
+            loader: 'sass-loader', // Compiles Sass to CSS
             options: {
               sourceMap: true,
               sassOptions: {
                 // includePaths: ["absolute/path/a", "absolute/path/b"],
-                outPutStyle: "compressed"
-              }
-            }
-          }
-          
+                outPutStyle: 'compressed',
+              },
+            },
+          },
         ],
       },
     ],
   },
-  plugins: [
-  ],
+  plugins: [],
   resolve: {
     modules: ['node_modules', path.resolve(__dirname, '../src')],
     extensions: ['.ts', '.tsx', '.mjs', '.js', '.jsx', '.scss', '.json'],

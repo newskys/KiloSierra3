@@ -1,4 +1,4 @@
-import { atom, RecoilState, RecoilValueReadOnly, selector } from "recoil";
+import { atom, RecoilState, RecoilValueReadOnly, selector } from 'recoil'
 
 const KEY = {
   STATE: 'userState',
@@ -24,13 +24,13 @@ export const userState: RecoilState<UserState> = atom({
     phone: null,
     phoneVerified: false,
   },
-});
+})
 
 export const getUser: RecoilValueReadOnly<string> = selector({
   key: KEY.GET_USER,
   get: ({ get }) => {
-    const user: UserState = get(userState);
+    const user: UserState = get(userState)
 
-    return user.email;
+    return user.email
   },
-});
+})

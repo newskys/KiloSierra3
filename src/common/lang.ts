@@ -6,5 +6,7 @@ export const SIGN_UP = {
   PASSWORD_ERROR_REGEX: '8 ~ 20자의 소문자, 숫자, 특수문자로 조합해주세요.',
   CONFIRM_PASSWORD_ERROR_DIFFERENT: '비밀번호가 다릅니다.',
   EMAIL_ERROR_REGEX: '이메일 형식에 맞지 않습니다.',
+  ERROR_INVALID_FORMAT: '형식에 맞지 않는 항목이 있습니다.',
+  OK: '가입되었습니다.',
   CONFIRM_CODE: '이메일로 발송된 코드를 적어주세요.',
 }

@@ -6,7 +6,7 @@ import { useRecoilState } from 'recoil'
 import Login from '../ui/LoginInput'
 import awsconfig from '../../aws-exports'
 import { useHistory, History } from 'react-router-dom'
-import { HOME } from '@common/routePath'
+import { CONFIRM_SIGN_UP, HOME } from '@common/routePath'
 
 Amplify.configure(awsconfig)
 
@@ -48,8 +48,7 @@ const LoginContainer: React.FC = () => {
     } catch (err) {
       if (err.code === 'UserNotConfirmedException') {
         // this.props.updateUsername(email)
-        await Auth.resendSignUp(userId)
-        console.log('sign up')
+        history.push(CONFIRM_SIGN_UP)
         // this.props.onStateChange('confirmSignUp', {})
       } else if (err.code === 'NotAuthorizedException') {
         // The error happens when the incorrect password is provided

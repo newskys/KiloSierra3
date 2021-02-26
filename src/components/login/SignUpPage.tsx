@@ -124,7 +124,7 @@ const SignUpPage = () => {
   const handleClickSignUp = (e: KeyboardEvent<HTMLInputElement>): void => {
     e.preventDefault()
     if (!validateAll()) {
-      alert('형식에 맞지 않는 항목이 있습니다.')
+      alert(SIGN_UP.ERROR_INVALID_FORMAT)
       setSignUpEnabled(false)
       return
     }
@@ -147,8 +147,8 @@ const SignUpPage = () => {
           // phone_number,   // optional - E.164 number convention
         },
       })
-      console.log(user)
-      alert('가입되었습니다.')
+      // console.log(user)
+      alert(SIGN_UP.OK)
       history.push(LOGIN)
     } catch (e) {
       console.error(e)

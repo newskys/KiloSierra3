@@ -40,4 +40,4 @@ const Footer: React.FC<Props> = ({ isLogin, onClickLogin, onClickLogout }) => {
   )
 }
 
-export default Footer
+export default Footer;

@@ -7,17 +7,17 @@ import Header from './Header'
 
 const useStyles = makeStyles({
   root: {
-    height: '100%',
-    flexWrap: 'nowrap',
+    height: "100%",
+    flexWrap: "nowrap",
   },
   header: {
-    position: 'sticky',
+    position: "sticky",
     top: 0,
     left: 0,
-    height: '50px',
+    height: "50px",
   },
   main: {
-    flex: '1 1 auto',
+    flex: "1 1 auto",
   },
   footer: {
     flex: '0 0 auto',

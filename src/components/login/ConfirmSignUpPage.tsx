@@ -6,6 +6,8 @@ import { userState, UserState } from '@recoil/user'
 import { Auth } from 'aws-amplify'
 import React, { KeyboardEvent, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { useHistory, History } from 'react-router-dom'
+import { HOME } from '@common/routePath'
 
 const useStyles = makeStyles({
   root: {
@@ -19,6 +21,7 @@ const useStyles = makeStyles({
 
 const ConfirmSignUpPage = () => {
   const classes = useStyles()
+  const history: History = useHistory()
   const [user, setUserState] = useRecoilState<UserState>(userState)
   const [invalidReason, setInvalidReason] = useState<string>(null)
   const [isConfirmEnabled, setConfirmEnabled] = useState<boolean>(false)
@@ -73,12 +76,19 @@ const ConfirmSignUpPage = () => {
   const confirmSignUp = async (username, code) => {
     try {
       const result = await Auth.confirmSignUp(username, code)
+      console.log(result)
+      // history.push(HOME)
     } catch (e) {
+      if (e.code === "CodeMismatchException") {
+      setInvalidReason('코드가 다릅니다.')
+      checkSignUpAvailability()
+      }
       console.error(e)
     }
   }
 
   const resendEmail = async (userId) => {
+    console.log(user)
     await Auth.resendSignUp(userId)
   }
 

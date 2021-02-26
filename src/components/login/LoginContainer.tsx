@@ -7,6 +7,7 @@ import Login from '../ui/LoginInput'
 import awsconfig from '../../aws-exports'
 import { useHistory, History } from 'react-router-dom'
 import { CONFIRM_SIGN_UP, HOME } from '@common/routePath'
+import { UserStatus } from '@interfaces/status'
 
 Amplify.configure(awsconfig)
 
@@ -18,7 +19,7 @@ const LoginContainer: React.FC = () => {
   const history: History = useHistory()
 
   useEffect(() => {
-    if (!!user.userId) {
+    if (user.status === UserStatus.NORMAL) {
       history.replace(HOME)
     }
   }, [user])
@@ -40,6 +41,7 @@ const LoginContainer: React.FC = () => {
         emailVerified: result.attributes?.email_verified,
         phone: result.attributes?.phone_number,
         phoneVerified: result.attributes?.phone_number_verified,
+        status: UserStatus.NORMAL,
       }
 
       console.log('signed in successfully.', userState)
@@ -48,6 +50,16 @@ const LoginContainer: React.FC = () => {
     } catch (err) {
       if (err.code === 'UserNotConfirmedException') {
         // this.props.updateUsername(email)
+        const userState: UserState = {
+          isInit: true,
+          userId,
+          email: null,
+          emailVerified: null,
+          phone: null,
+          phoneVerified: null,
+          status: UserStatus.TEMP,
+        }
+        setUserState(userState)
         history.push(CONFIRM_SIGN_UP)
         // this.props.onStateChange('confirmSignUp', {})
       } else if (err.code === 'NotAuthorizedException') {

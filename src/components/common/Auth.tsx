@@ -1,3 +1,4 @@
+import { UserStatus } from '@interfaces/status'
 import { UserState, userState } from '@recoil/user'
 import { Auth as AwsAuth } from 'aws-amplify'
 import React, { useEffect } from 'react'
@@ -21,6 +22,7 @@ const Auth: React.FC<Props> = ({ children }) => {
         emailVerified: result.attributes?.email_verified,
         phone: result.attributes?.phone_number,
         phoneVerified: result.attributes?.phone_number_verified,
+        status: UserStatus.NORMAL,
       }
       console.log(userState)
       setUserState(userState)
@@ -33,6 +35,7 @@ const Auth: React.FC<Props> = ({ children }) => {
         emailVerified: null,
         phone: null,
         phoneVerified: null,
+        status: UserStatus.ANONYMOUS,
       }
 
       setUserState(userState)

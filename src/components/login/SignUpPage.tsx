@@ -153,7 +153,6 @@ const SignUpPage = () => {
     } catch (e) {
       console.error(e)
       if (e.code === 'UsernameExistsException') {
-        alert(SIGN_UP.USER_ID_ERROR_USED)
         setUsedUserIds([...usedUserIds, username])
         setUserIdInvalidReason(SIGN_UP.USER_ID_ERROR_USED)
       }

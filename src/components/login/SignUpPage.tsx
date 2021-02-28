@@ -65,58 +65,60 @@ const SignUpPage = () => {
   }
 
   const handleChangeUserId = (e: KeyboardEvent<HTMLInputElement>): void => {
-    const message: string = validateUserId(e.currentTarget.value)
-    setUserIdInvalidReason(message)
+    const value: string = e.currentTarget.value
+    let message: string = null
 
-    // checkSignUpAvailability();
+    if (!checkUserId(value)) {
+      message = SIGN_UP.USER_ID_ERROR_REGEX
+    } else if (usedUserIds.includes(value)) {
+      message = SIGN_UP.USER_ID_ERROR_USED
+    }
+
+    setUserIdInvalidReason(message)
   }
 
-  const validateUserId = (value: string): string => {
-    if (!checkUserId(value)) {
-      return SIGN_UP.USER_ID_ERROR_REGEX
-    }
-
-    if (usedUserIds.includes(value)) {
-      return SIGN_UP.USER_ID_ERROR_USED
-    }
-
-    return null
+  const validateUserId = (value: string): boolean => {
+    return checkUserId(value) && !usedUserIds.includes(value)
   }
 
   const handleChangePassword = (e: KeyboardEvent<HTMLInputElement>) => {
-    const message: string = validatePassword(e.currentTarget.value)
+    const message: string = !validatePassword(e.currentTarget.value)
+      ? SIGN_UP.PASSWORD_ERROR_REGEX
+      : null
     setPasswordInvalidReason(message)
 
-    const confirmMessage: string = validateConfirmPassword(
+    const confirmMessage: string = !validateConfirmPassword(
       confirmPasswordRef.value
     )
+      ? SIGN_UP.CONFIRM_PASSWORD_ERROR_DIFFERENT
+      : null
     setConfirmPasswordInvalidReason(confirmMessage)
   }
 
-  const validatePassword = (value: string): string => {
-    return !checkPassword(value) ? SIGN_UP.PASSWORD_ERROR_REGEX : null
+  const validatePassword = (value: string): boolean => {
+    return checkPassword(value)
   }
 
   const handleChangeConfirmPassword = (
     e: KeyboardEvent<HTMLInputElement>
   ): void => {
-    const message: string = validateConfirmPassword(e.currentTarget.value)
+    const message: string = !validateConfirmPassword(e.currentTarget.value)
+      ? SIGN_UP.CONFIRM_PASSWORD_ERROR_DIFFERENT
+      : null
     setConfirmPasswordInvalidReason(message)
   }
 
+  const validateConfirmPassword = (value: string): boolean => {
+    return passwordRef.value === value
+  }
+
   const handleChangeEmail = (e: KeyboardEvent<HTMLInputElement>): void => {
-    const message: string = validateEmail(e.currentTarget.value)
+    const message: string = !validateEmail(e.currentTarget.value) ? SIGN_UP.EMAIL_ERROR_REGEX : null
     setEmailInvalidReason(message)
   }
 
-  const validateConfirmPassword = (value: string): string => {
-    return passwordRef.value !== value
-      ? SIGN_UP.CONFIRM_PASSWORD_ERROR_DIFFERENT
-      : null
-  }
-
-  const validateEmail = (value: string): string => {
-    return !checkEmail(value) ? SIGN_UP.EMAIL_ERROR_REGEX : null
+  const validateEmail = (value: string): boolean => {
+    return checkEmail(value)
   }
 
   const validatePhone = (e: KeyboardEvent<HTMLInputElement>) => {}
@@ -161,10 +163,10 @@ const SignUpPage = () => {
 
   const validateAll = (): boolean => {
     return (
-      !validateUserId(userIdRef.value) &&
-      !validatePassword(passwordRef.value) &&
-      !validateConfirmPassword(confirmPasswordRef.value) &&
-      !validateEmail(emailRef.value)
+      validateUserId(userIdRef.value) &&
+      validatePassword(passwordRef.value) &&
+      validateConfirmPassword(confirmPasswordRef.value) &&
+      validateEmail(emailRef.value)
     )
   }
 

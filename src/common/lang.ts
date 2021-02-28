@@ -18,4 +18,6 @@ export const AUTH = {
   NOT_FOUND: '아이디 혹은 비밀번호가 틀립니다.',
   OTHER: '로그인할 수 없습니다.',
   WRONG_CODE: '코드가 다릅니다.',
+  RESET_REQUIRED: '새로운 비밀번호를 설정해주세요.',
+  PASSWORD_CHANGED: '비밀번호가 변경되었습니다.',
 }

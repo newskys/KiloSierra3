@@ -1,7 +1,7 @@
 import { UserState, userState } from '@recoil/user'
 import Amplify, { Auth } from 'aws-amplify'
 import { Authenticator } from 'aws-amplify-react'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, MouseEvent } from 'react'
 import { useRecoilState } from 'recoil'
 import Login from '../ui/LoginInput'
 import awsconfig from '../../aws-exports'
@@ -19,22 +19,28 @@ const LoginContainer: React.FC = () => {
   const history: History = useHistory()
 
   useEffect(() => {
-    if (user.status === UserStatus.NORMAL) {
-      history.replace(HOME)
-    }
-    if (user.status === UserStatus.TEMP) {
-      history.replace(CONFIRM_CODE)
+    switch (user.status) {
+      case UserStatus.NORMAL:
+        history.replace(HOME)
+        break
+      case UserStatus.TEMP:
+        history.replace(CONFIRM_CODE)
+        break
+      case UserStatus.RESET:
+        break
+      default:
+        break
     }
   }, [user])
 
-  const handleClick = (e) => {
+  const handleClick = (e: MouseEvent<HTMLInputElement>) => {
     const userId = userIdElement.value
     const password = passwordElement.value
 
     requestApi(userId, password)
   }
 
-  const requestApi = async (userId, password) => {
+  const requestApi = async (userId: string, password: string) => {
     try {
       const userState: UserState = await signIn(userId, password)
       setUserState(userState)
@@ -43,7 +49,7 @@ const LoginContainer: React.FC = () => {
     }
   }
 
-  const setRef = (userIdEl, passwordEl) => {
+  const setRef = (userIdEl: HTMLInputElement, passwordEl: HTMLInputElement) => {
     setUserIdElement(userIdEl)
     setPasswordElement(passwordEl)
   }

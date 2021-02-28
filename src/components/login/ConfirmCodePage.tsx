@@ -5,12 +5,13 @@ import { makeStyles } from '@material-ui/core/styles'
 import { userState, UserState } from '@recoil/user'
 import { Auth } from 'aws-amplify'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
+import { useRecoilState, useResetRecoilState } from 'recoil'
 import { useHistory, History } from 'react-router-dom'
 import { HOME } from '@common/routePath'
 import { signIn } from '@apis/auth'
 import { AuthError, UserStatus } from '@interfaces/status'
 import { AUTH, SIGN_UP } from '@common/lang'
+import { checkPassword } from '@common/regex'
 
 const useStyles = makeStyles({
   root: {
@@ -36,8 +37,14 @@ const ConfirmCodePage: React.FC = () => {
     }
   }, [user])
 
-  const setRef = (codeEl: HTMLInputElement) => {
-    setCodeRef(codeEl)
+  useEffect(() => {
+    if (codeRef) {
+      checkSignUpAvailability()
+    }
+  }, [invalidReason])
+
+  const setRef = (code: HTMLInputElement) => {
+    setCodeRef(code)
   }
 
   const handleChangeCode = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -97,7 +104,6 @@ const ConfirmCodePage: React.FC = () => {
   }
 
   const resendEmail = async (userId) => {
-    console.log(user)
     await Auth.resendSignUp(userId)
     alert(SIGN_UP.RESENT_EMAIL)
   }

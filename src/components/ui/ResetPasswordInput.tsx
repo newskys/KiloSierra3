@@ -54,24 +54,34 @@ interface Props {
   setRef: Function
   invalidReason: string
   onChangeCode: Function
+  onChangePassword: Function
+  onChangeConfirmPassword: Function
   isConfirmEnabled: boolean
   onClickConfirm: Function
   onClickResend: Function
+  passwordInvalidReason: string
+  confirmPasswordInvalidReason: string
 }
 
-const ConfirmCodeInput: React.FC<Props> = ({
+const ResetPasswordInput: React.FC<Props> = ({
   setRef,
   invalidReason,
   onChangeCode,
+  onChangePassword,
+  onChangeConfirmPassword,
   isConfirmEnabled,
   onClickConfirm,
   onClickResend,
+  passwordInvalidReason,
+  confirmPasswordInvalidReason,
 }) => {
   const classes = useStyles()
   const code = useRef<HTMLInputElement>(null)
+  const password = useRef<HTMLInputElement>(null)
+  const confirmPassword = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    setRef(code.current)
+    setRef(code.current, password?.current, confirmPassword?.current)
   }, [])
 
   return (
@@ -81,7 +91,7 @@ const ConfirmCodeInput: React.FC<Props> = ({
         gutterBottom
         variant="h4"
         component="h2">
-        EMAIL CHECK
+        RESET PASSWORD
       </Typography>
       <Box className={classes.avatar_wrap}>
         <Avatar className={classes.avatar}>
@@ -101,6 +111,32 @@ const ConfirmCodeInput: React.FC<Props> = ({
         onChange={(e) => onChangeCode(e)}
       />
 
+      <TextField
+        inputRef={password}
+        fullWidth
+        error={!!passwordInvalidReason}
+        className={classes.login_input}
+        variant="outlined"
+        label="New Password *"
+        margin="normal"
+        helperText={SIGN_UP.PASSWORD_ERROR_REGEX}
+        type="password"
+        onChange={(e) => onChangePassword(e)}
+      />
+
+      <TextField
+        inputRef={confirmPassword}
+        fullWidth
+        error={!!confirmPasswordInvalidReason}
+        className={classes.login_input}
+        variant="outlined"
+        label="Confirm New Password *"
+        margin="normal"
+        helperText={confirmPasswordInvalidReason}
+        type="password"
+        onChange={(e) => onChangeConfirmPassword(e)}
+      />
+
       <Button
         className={classes.signup}
         fullWidth
@@ -108,9 +144,9 @@ const ConfirmCodeInput: React.FC<Props> = ({
         variant="contained"
         color="primary"
         onClick={(e) => onClickConfirm(e)}>
-        {'CONFIRM'}
+        CONFIRM
       </Button>
-      <Grid className={classes.text_link} container justify="flex-end">
+      {/* <Grid className={classes.text_link} container justify="flex-end">
         <Grid item className={classes.grid_text}>
           <Button
             className={classes.text_button}
@@ -120,9 +156,9 @@ const ConfirmCodeInput: React.FC<Props> = ({
             코드를 재발급받고 싶으신가요?
           </Button>
         </Grid>
-      </Grid>
+      </Grid> */}
     </>
   )
 }
 
-export default ConfirmCodeInput
+export default ResetPasswordInput

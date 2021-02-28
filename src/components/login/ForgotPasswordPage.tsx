@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import { userState, UserState } from '@recoil/user';
 import { UserStatus } from '@interfaces/status';
 import { useHistory, History } from 'react-router-dom'
-import { CONFIRM_CODE } from '@common/routePath';
+import { CONFIRM_CODE, RESET } from '@common/routePath';
 
 const useStyles = makeStyles({
   root: {
@@ -28,9 +28,8 @@ const ForgotPasswordPage: React.FC = () => {
   const history: History = useHistory()
 
   useEffect(() => {
-    if (user.status === UserStatus.TEMP) {
-      console.log('test')
-      history.push(CONFIRM_CODE)
+    if (user.status === UserStatus.RESET) {
+      history.push(RESET)
     }
   }, [user])
 
@@ -46,7 +45,7 @@ const ForgotPasswordPage: React.FC = () => {
 
   const forgotPassword = async (userId: string) => {
     try {
-      await Auth.forgotPassword(userId)
+      const result = await Auth.forgotPassword(userId)
 
       const userState: UserState = {
         isInit: true,
@@ -55,7 +54,7 @@ const ForgotPasswordPage: React.FC = () => {
         emailVerified: null,
         phone: null,
         phoneVerified: null,
-        status: UserStatus.TEMP,
+        status: UserStatus.RESET,
       }
 
       // 성공 처리
@@ -64,7 +63,7 @@ const ForgotPasswordPage: React.FC = () => {
     } catch (e) {
       console.error(e)
       if (e.code === "LimitExceededException") {
-
+        
       }
     }
   }

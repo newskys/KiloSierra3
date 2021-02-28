@@ -39,6 +39,19 @@ export const signIn = async (userId, password): Promise<UserState> => {
       throw new Error(AUTH.NOT_FOUND)
       // The error happens when the supplied username/email does not exist in the Cognito user pool
       // this.setState({ error: 'Login failed.' })
+    } else if (e.code === AuthError.RESET_REQUIRED) {
+      const userState: UserState = {
+        isInit: true,
+        userId,
+        password,
+        email: null,
+        emailVerified: null,
+        phone: null,
+        phoneVerified: null,
+        status: UserStatus.RESET,
+      }
+      return userState
+      // throw new Error(AUTH.RESET_REQUIRED)
     } else {
       console.error(e)
       throw new Error(AUTH.NOT_FOUND)

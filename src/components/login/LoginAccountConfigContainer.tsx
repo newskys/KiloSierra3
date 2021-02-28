@@ -1,4 +1,4 @@
-import { SIGN_UP } from '@common/routePath'
+import { FORGOT, SIGN_UP } from '@common/routePath'
 import LoginConfig from '@components/ui/LoginConfig'
 import React, { MouseEvent } from 'react'
 import { useHistory, History } from 'react-router-dom'
@@ -8,6 +8,7 @@ const LoginAccountConfigContainer = () => {
 
   const handleClickForgot = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
+    history.push(FORGOT)
   }
 
   const handleClickSignUp = (e: MouseEvent<HTMLButtonElement>) => {

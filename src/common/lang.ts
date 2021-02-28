@@ -7,6 +7,17 @@ export const SIGN_UP = {
   CONFIRM_PASSWORD_ERROR_DIFFERENT: '비밀번호가 다릅니다.',
   EMAIL_ERROR_REGEX: '이메일 형식에 맞지 않습니다.',
   ERROR_INVALID_FORMAT: '형식에 맞지 않는 항목이 있습니다.',
+  ERROR_INVALID_CODE: '형식에 맞지 않는 항목이 있습니다.',
   OK: '가입되었습니다.',
   CONFIRM_CODE: '이메일로 발송된 코드를 적어주세요.',
+  RESENT_EMAIL: '이메일을 재전송했습니다. 메일함을 확인해주세요.'
+}
+
+export const AUTH = {
+  NOT_AUTHORIZED: '권한이 없습니다',
+  NOT_FOUND: '아이디 혹은 비밀번호가 틀립니다.',
+  OTHER: '로그인할 수 없습니다.',
+  WRONG_CODE: '코드가 다릅니다.',
+  RESET_REQUIRED: '새로운 비밀번호를 설정해주세요.',
+  PASSWORD_CHANGED: '비밀번호가 변경되었습니다.',
 }

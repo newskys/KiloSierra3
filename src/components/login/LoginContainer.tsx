@@ -6,7 +6,7 @@ import { useRecoilState } from 'recoil'
 import Login from '../ui/LoginInput'
 import awsconfig from '../../aws-exports'
 import { useHistory, History } from 'react-router-dom'
-import { CONFIRM_SIGN_UP, HOME } from '@common/routePath'
+import { CONFIRM_CODE, HOME } from '@common/routePath'
 import { UserStatus } from '@interfaces/status'
 import { signIn } from '@apis/auth'
 
@@ -23,7 +23,7 @@ const LoginContainer: React.FC = () => {
       history.replace(HOME)
     }
     if (user.status === UserStatus.TEMP) {
-      history.replace(CONFIRM_SIGN_UP)
+      history.replace(CONFIRM_CODE)
     }
   }, [user])
 

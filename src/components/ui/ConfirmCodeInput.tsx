@@ -12,14 +12,6 @@ import MailOutlineIcon from '@material-ui/icons/MailOutline'
 import React, { useEffect, useRef } from 'react'
 
 const useStyles = makeStyles({
-  root: {
-    display: 'flex',
-    padding: '16px',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    height: '100%',
-  },
-
   title: {
     textAlign: 'center',
   },
@@ -66,7 +58,7 @@ interface Props {
   onClickResend: Function
 }
 
-const ConfirmSignUpInput: React.FC<Props> = ({
+const ConfirmCodeInput: React.FC<Props> = ({
   setRef,
   invalidReason,
   onChangeCode,
@@ -76,6 +68,7 @@ const ConfirmSignUpInput: React.FC<Props> = ({
 }) => {
   const classes = useStyles()
   const code = useRef<HTMLInputElement>(null)
+
   useEffect(() => {
     setRef(code.current)
   }, [])
@@ -117,8 +110,7 @@ const ConfirmSignUpInput: React.FC<Props> = ({
         {'CONFIRM'}
       </Button>
       <Grid className={classes.text_link} container justify="flex-end">
-        <Grid item xs={6}></Grid>
-        <Grid item xs={6} className={classes.grid_text}>
+        <Grid item className={classes.grid_text}>
           <Button
             className={classes.text_button}
             href="#"
@@ -132,4 +124,4 @@ const ConfirmSignUpInput: React.FC<Props> = ({
   )
 }
 
-export default ConfirmSignUpInput
+export default ConfirmCodeInput

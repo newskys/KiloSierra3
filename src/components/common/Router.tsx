@@ -1,5 +1,5 @@
-import { CONFIRM_SIGN_UP, FORGOT, HOME, LOGIN, MAIN, SIGN_UP } from '@common/routePath'
-import ConfirmSignUpPage from '@components/login/ConfirmSignUpPage'
+import { CONFIRM_CODE, FORGOT, HOME, LOGIN, MAIN, SIGN_UP } from '@common/routePath'
+import ConfirmCodePage from '@components/login/ConfirmCodePage'
 import ForgotPasswordPage from '@components/login/ForgotPasswordPage'
 import HomePage from '@components/login/HomePage'
 import LoginPage from '@components/login/LoginPage'
@@ -13,7 +13,7 @@ const Router: React.FC = () => (
     <Route exact path={[MAIN, HOME]} component={HomePage} />
     <Route exact path={LOGIN} component={LoginPage} />
     <Route exact path={SIGN_UP} component={SignUpPage} />
-    <Route exact path={CONFIRM_SIGN_UP} component={ConfirmSignUpPage} />
+    <Route exact path={CONFIRM_CODE} component={ConfirmCodePage} />
     <Route exact path={FORGOT} component={ForgotPasswordPage} />
     {/* <Layout /> */}
   </Switch>

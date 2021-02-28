@@ -1,4 +1,4 @@
-import ConfirmSignUpInput from '@components/ui/ConfirmSignUpInput'
+import ConfirmCodeInput from '@components/ui/ConfirmCodeInput'
 import Layout from '@components/ui/Layout'
 import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   },
 })
 
-const ConfirmSignUpPage: React.FC = () => {
+const ConfirmCodePage: React.FC = () => {
   const classes = useStyles()
   const history: History = useHistory()
   const [user, setUserState] = useRecoilState<UserState>(userState)
@@ -105,7 +105,7 @@ const ConfirmSignUpPage: React.FC = () => {
   return (
     <Layout useHeader={false}>
       <Box className={classes.root}>
-        <ConfirmSignUpInput
+        <ConfirmCodeInput
           setRef={setRef}
           invalidReason={invalidReason}
           isConfirmEnabled={isConfirmEnabled}
@@ -118,4 +118,4 @@ const ConfirmSignUpPage: React.FC = () => {
   )
 }
 
-export default ConfirmSignUpPage
+export default ConfirmCodePage

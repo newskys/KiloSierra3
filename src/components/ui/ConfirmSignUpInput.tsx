@@ -124,7 +124,7 @@ const ConfirmSignUpInput: React.FC<Props> = ({
             href="#"
             color="primary"
             onClick={(e) => onClickResend(e)}>
-            번호를 재발급받고 싶으신가요?
+            코드를 재발급받고 싶으신가요?
           </Button>
         </Grid>
       </Grid>

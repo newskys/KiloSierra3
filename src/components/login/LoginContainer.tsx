@@ -8,11 +8,11 @@ import awsconfig from '../../aws-exports'
 import { useHistory, History } from 'react-router-dom'
 import { CONFIRM_SIGN_UP, HOME } from '@common/routePath'
 import { UserStatus } from '@interfaces/status'
+import { signIn } from '@apis/auth'
 
 Amplify.configure(awsconfig)
 
 const LoginContainer: React.FC = () => {
-  // 함수 컴포넌트 버전 setState
   const [userIdElement, setUserIdElement] = useState(null)
   const [passwordElement, setPasswordElement] = useState(null)
   const [user, setUserState] = useRecoilState<UserState>(userState)
@@ -21,6 +21,9 @@ const LoginContainer: React.FC = () => {
   useEffect(() => {
     if (user.status === UserStatus.NORMAL) {
       history.replace(HOME)
+    }
+    if (user.status === UserStatus.TEMP) {
+      history.replace(CONFIRM_SIGN_UP)
     }
   }, [user])
 
@@ -33,48 +36,10 @@ const LoginContainer: React.FC = () => {
 
   const requestApi = async (userId, password) => {
     try {
-      const result = await Auth.signIn(userId, password)
-      const userState: UserState = {
-        isInit: true,
-        userId: result.username,
-        email: result.attributes?.email,
-        emailVerified: result.attributes?.email_verified,
-        phone: result.attributes?.phone_number,
-        phoneVerified: result.attributes?.phone_number_verified,
-        status: UserStatus.NORMAL,
-      }
-
-      console.log('signed in successfully.', userState)
+      const userState: UserState = await signIn(userId, password)
       setUserState(userState)
-      // this.props.onStateChange('signedIn', {})
-    } catch (err) {
-      if (err.code === 'UserNotConfirmedException') {
-        // this.props.updateUsername(email)
-        const userState: UserState = {
-          isInit: true,
-          userId,
-          email: null,
-          emailVerified: null,
-          phone: null,
-          phoneVerified: null,
-          status: UserStatus.TEMP,
-        }
-        setUserState(userState)
-        history.push(CONFIRM_SIGN_UP)
-        // this.props.onStateChange('confirmSignUp', {})
-      } else if (err.code === 'NotAuthorizedException') {
-        // The error happens when the incorrect password is provided
-        console.log('login failed - not authorized')
-        // this.setState({ error: 'Login failed.' })
-      } else if (err.code === 'UserNotFoundException') {
-        console.log('login failed - user not found')
-        // The error happens when the supplied username/email does not exist in the Cognito user pool
-        // this.setState({ error: 'Login failed.' })
-      } else {
-        console.log('login failed - not authorized')
-        // this.setState({ error: 'An error has occurred.' })
-        console.error(err)
-      }
+    } catch (e) {
+      alert(e)
     }
   }
 

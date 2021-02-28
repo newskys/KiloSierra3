@@ -4,10 +4,13 @@ import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { userState, UserState } from '@recoil/user'
 import { Auth } from 'aws-amplify'
-import React, { KeyboardEvent, useState } from 'react'
+import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import { useHistory, History } from 'react-router-dom'
 import { HOME } from '@common/routePath'
+import { signIn } from '@apis/auth'
+import { AuthError, UserStatus } from '@interfaces/status'
+import { AUTH, SIGN_UP } from '@common/lang'
 
 const useStyles = makeStyles({
   root: {
@@ -19,7 +22,7 @@ const useStyles = makeStyles({
   },
 })
 
-const ConfirmSignUpPage = () => {
+const ConfirmSignUpPage: React.FC = () => {
   const classes = useStyles()
   const history: History = useHistory()
   const [user, setUserState] = useRecoilState<UserState>(userState)
@@ -27,11 +30,11 @@ const ConfirmSignUpPage = () => {
   const [isConfirmEnabled, setConfirmEnabled] = useState<boolean>(false)
   const [codeRef, setCodeRef] = useState<HTMLInputElement>(null)
 
-  // useEffect(() => {
-  //   if (codeRef) {
-  //     checkSignUpAvailability()
-  //   }
-  // }, [invalidReason])
+  useEffect(() => {
+    if (user.status === UserStatus.NORMAL) {
+      history.replace(HOME)
+    }
+  }, [user])
 
   const setRef = (codeEl: HTMLInputElement) => {
     setCodeRef(codeEl)
@@ -41,7 +44,7 @@ const ConfirmSignUpPage = () => {
     const value: string = e.currentTarget.value
 
     if (!validateCode(value)) {
-      setInvalidReason('형식에 맞지 않습니다.')
+      setInvalidReason(SIGN_UP.ERROR_INVALID_CODE)
       checkSignUpAvailability()
     } else {
       setInvalidReason(null)
@@ -75,21 +78,28 @@ const ConfirmSignUpPage = () => {
 
   const confirmSignUp = async (username, code) => {
     try {
-      const result = await Auth.confirmSignUp(username, code)
-      console.log(result)
-      // history.push(HOME)
+      await Auth.confirmSignUp(username, code)
     } catch (e) {
-      if (e.code === "CodeMismatchException") {
-      setInvalidReason('코드가 다릅니다.')
-      checkSignUpAvailability()
+      if (e.code === AuthError.WRONG_CODE) {
+        setInvalidReason(AUTH.WRONG_CODE)
+        checkSignUpAvailability()
       }
       console.error(e)
+      return
+    }
+
+    try {
+      const userState: UserState = await signIn(username, user.password)
+      setUserState(userState)
+    } catch (e) {
+      alert(e)
     }
   }
 
   const resendEmail = async (userId) => {
     console.log(user)
     await Auth.resendSignUp(userId)
+    alert(SIGN_UP.RESENT_EMAIL)
   }
 
   return (

@@ -9,6 +9,7 @@ const KEY = {
 export interface UserState {
   isInit: boolean
   userId: string
+  password?: string
   email: string
   emailVerified: boolean
   phone: string
@@ -21,6 +22,7 @@ export const userState: RecoilState<UserState> = atom({
   default: {
     isInit: false,
     userId: null,
+    password: null,
     email: null,
     emailVerified: false,
     phone: null,

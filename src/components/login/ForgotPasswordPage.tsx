@@ -8,7 +8,7 @@ import { useRecoilState } from 'recoil';
 import { userState, UserState } from '@recoil/user';
 import { UserStatus } from '@interfaces/status';
 import { useHistory, History } from 'react-router-dom'
-import { CONFIRM_CODE, RESET } from '@common/routePath';
+import { CONFIRM_CODE, HOME, RESET } from '@common/routePath';
 
 const useStyles = makeStyles({
   root: {
@@ -26,6 +26,13 @@ const ForgotPasswordPage: React.FC = () => {
   const [userIdRef, setUserIdRef] = useState<HTMLInputElement>(null)
   const [user, setUserState] = useRecoilState<UserState>(userState)
   const history: History = useHistory()
+  const isNotAllowed: boolean = user.status !== UserStatus.ANONYMOUS
+
+  useEffect(() => {
+    if (isNotAllowed) {
+      history.push(HOME)
+    }
+  }, [])
 
   useEffect(() => {
     if (user.status === UserStatus.RESET) {
@@ -66,6 +73,10 @@ const ForgotPasswordPage: React.FC = () => {
         
       }
     }
+  }
+
+  if (isNotAllowed) {
+    return (<></>)
   }
 
   return (

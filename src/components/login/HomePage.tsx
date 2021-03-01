@@ -1,19 +1,26 @@
 import Layout from '@components/ui/Layout'
-import { ViewState } from '@devexpress/dx-react-scheduler'
+import { EditingState, ViewState, ViewSwitcherProps } from '@devexpress/dx-react-scheduler'
 import {
+  AppointmentForm,
   Appointments,
+  AppointmentTooltip,
   DateNavigator,
   DayView,
+  EditRecurrenceMenu,
+  GroupingPanel,
   MonthView,
   Scheduler,
   Toolbar,
   ViewSwitcher,
   WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui'
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import { appointments } from '@common/appointments'
+import { WithStyles } from '@material-ui/styles'
+import { withStyles, Theme, createStyles } from '@material-ui/core'
+import { TodayButton } from '@devexpress/dx-react-scheduler-material-ui'
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -40,55 +47,212 @@ const useStyles = makeStyles((theme) => ({
   weekend: {
     backgroundColor: fade(theme.palette.action.disabledBackground, 0.06),
   },
+  appointment: {
+    borderRadius: 0,
+    borderBottom: 0,
+  },
 }))
 
+export enum ViewName {
+  Week = 'work-week',
+  Month = 'month',
+}
+
 const HomePage: React.FC = () => {
-  const TimeTableCell = (props) => {
-    const classes = useStyles()
+  const classes = useStyles()
+  const [currentViewName, setCurrentViewName] = useState<string>(ViewName.Week)
+  const WeekTimeTableCell = (props) => {
     const { startDate } = props
     const date = new Date(startDate)
 
     if (date.getDate() === new Date().getDate()) {
-      return <WeekView.TimeTableCell {...props} className={classes.todayCell} />
+      return (
+        <WeekView.TimeTableCell
+          {...props}
+          className={classes.todayCell}
+          onClick={props.onDoubleClick}
+        />
+      )
     }
     if (date.getDay() === 0 || date.getDay() === 6) {
       return (
-        <WeekView.TimeTableCell {...props} className={classes.weekendCell} />
+        <WeekView.TimeTableCell
+          {...props}
+          className={classes.weekendCell}
+          onClick={() => {}}
+        />
       )
     }
-    return <WeekView.TimeTableCell {...props} />
+    return (
+      <WeekView.TimeTableCell
+        {...props}
+        onClick={(e) => {
+          console.log(props)
+          props.onDoubleClick(e)
+        }}
+      />
+    )
+  }
+  const MonthTimeTableCell = (props) => {
+    const { startDate } = props
+    const date = new Date(startDate)
+
+    if (date.getDate() === new Date().getDate()) {
+      return (
+        <MonthView.TimeTableCell
+          {...props}
+          className={classes.todayCell}
+          onClick={props.onDoubleClick}
+        />
+      )
+    }
+    if (date.getDay() === 0 || date.getDay() === 6) {
+      return (
+        <MonthView.TimeTableCell
+          {...props}
+          className={classes.weekendCell}
+          onClick={() => {}}
+        />
+      )
+    }
+    return (
+      <MonthView.TimeTableCell
+        {...props}
+        onClick={(e) => {
+          console.log(props)
+          props.onDoubleClick(e)
+        }}
+      />
+    )
   }
 
   const DayScaleCell = (props) => {
-    const classes = useStyles()
     const { startDate, today } = props
 
     if (today) {
-      return <WeekView.DayScaleCell {...props} className={classes.today} />
+      return (
+        <MonthView.DayScaleCell
+          {...props}
+          className={classes.today}
+          onClick={(e) => {
+            console.log(e, 'monthclick')
+          }}
+        />
+      )
     }
     if (startDate.getDay() === 0 || startDate.getDay() === 6) {
-      return <WeekView.DayScaleCell {...props} className={classes.weekend} />
+      return (
+        <MonthView.DayScaleCell
+          {...props}
+          className={classes.weekend}
+          onClick={(e) => {
+            console.log(e, 'monthclick')
+          }}
+        />
+      )
     }
-    return <WeekView.DayScaleCell {...props} />
+    return (
+      <MonthView.DayScaleCell
+        {...props}
+        onClick={(e) => {
+          console.log(e, 'monthclick')
+        }}
+      />
+    )
   }
+
+  const DayScaleEmptyCell = (props) => {
+    const { startDate, today } = props
+
+    return (
+      <MonthView.DayScaleEmptyCell
+        {...props}
+        onClick={(e) => {
+          console.log(e)
+        }}
+      />
+    )
+  }
+
+  type AppointmentProps = Appointments.AppointmentProps
+
+  const Appointment = ({ data, ...restProps }: AppointmentProps) => (
+    <Appointments.Appointment
+      {...restProps}
+      onClick={(e) => {
+        console.log(e)
+      }}
+      className={classes.appointment}
+      // className={classNames({
+      //   [classes.highPriorityAppointment]: data.priority === 1,
+      //   [classes.mediumPriorityAppointment]: data.priority === 2,
+      //   [classes.lowPriorityAppointment]: data.priority === 3,
+      //   [classes.appointment]: true,
+      // })}
+      data={data}
+    />
+  )
+  const viewSwitcher = ({ ...restProps }: ViewSwitcher.SwitcherProps) => (
+    <ViewSwitcher.Switcher
+      {...restProps}
+      
+      onChange={(e) => {setCurrentViewName(e)}}
+    />
+  )
+  // const AppointmentContainer = ({
+  //   data, ...restProps
+  // }) => (
+  //   <Appointments.Container
+  //     {...restProps}
+  //     // onClick={(e) => {console.log('container', e)}}
+  //     // className={classes.appointment
+  //       style={{width: '100%', data:'test', height: '100%'}}
+
+  //     // className={classNames({
+  //     //   [classes.highPriorityAppointment]: data.priority === 1,
+  //     //   [classes.mediumPriorityAppointment]: data.priority === 2,
+  //     //   [classes.lowPriorityAppointment]: data.priority === 3,
+  //     //   [classes.appointment]: true,
+  //     // })}
+  //     // data={data}
+  //   />
+  // );
 
   return (
     <Layout useHeader={true}>
       <Scheduler data={appointments} height={window.innerHeight}>
-        <ViewState defaultCurrentDate="2018-07-25" />
+        <EditingState onCommitChanges={() => {}} />
+        <ViewState
+          defaultCurrentDate="2021-03-01"
+          currentViewName={currentViewName}
+        />
         <WeekView
           name="work-week"
           displayName="Work Week"
           excludedDays={[0, 6]}
           startDayHour={9}
           endDayHour={19}
+          timeTableCellComponent={WeekTimeTableCell}
+          // dayScaleEmptyCellComponent={DayScaleEmptyCell}
         />
-        <MonthView />
-        <DayView />
+        <MonthView
+          name="month"
+          displayName="Month"
+          timeTableCellComponent={MonthTimeTableCell}
+          // dayScaleCellComponent={DayScaleCell}
+          // dayScaleEmptyCellComponent={DayScaleEmptyCell}
+        />
+        {/* <DayView /> */}
         <Toolbar />
+        <TodayButton />
         <DateNavigator />
-        <ViewSwitcher />
-        <Appointments />
+        <ViewSwitcher switcherComponent={viewSwitcher} />
+        <Appointments
+        // appointmentComponent={Appointment}
+        // appointmentContentComponent={AppointmentContainer}
+        />
+        {/* <AppointmentTooltip showCloseButton showDeleteButton showOpenButton /> */}
+        <AppointmentForm />
       </Scheduler>
     </Layout>
   )

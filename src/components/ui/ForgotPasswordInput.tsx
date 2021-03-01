@@ -45,7 +45,7 @@ const ForgotPasswordInput: React.FC<Props> = ({ setRef, onClickForgot }) => {
         // error={!!invalidReason}
         className={classes.input}
         variant="outlined"
-        label="Id *"
+        label="ID *"
         margin="normal"
         // helperText={invalidReason || SIGN_UP.CONFIRM_CODE}
         type="string"
@@ -59,7 +59,7 @@ const ForgotPasswordInput: React.FC<Props> = ({ setRef, onClickForgot }) => {
         variant="contained"
         color="primary"
         onClick={(e) => onClickForgot(e)}>
-        {'CONFIRM'}
+        NEXT
       </Button>
     </>
   )

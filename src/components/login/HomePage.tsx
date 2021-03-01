@@ -61,6 +61,7 @@ export enum ViewName {
 const HomePage: React.FC = () => {
   const classes = useStyles()
   const [currentViewName, setCurrentViewName] = useState<string>(ViewName.Week)
+  const [currentDate, setCurrentDate] = useState<Date>(new Date())
   const WeekTimeTableCell = (props) => {
     const { startDate } = props
     const date = new Date(startDate)
@@ -102,7 +103,7 @@ const HomePage: React.FC = () => {
         <MonthView.TimeTableCell
           {...props}
           className={classes.todayCell}
-          onClick={props.onDoubleClick}
+          onClick={(e) => handleClickDateOnMonthView(props.startDate)}
         />
       )
     }
@@ -120,7 +121,7 @@ const HomePage: React.FC = () => {
         {...props}
         onClick={(e) => {
           console.log(props)
-          props.onDoubleClick(e)
+          handleClickDateOnMonthView(props.startDate)
         }}
       />
     )
@@ -217,13 +218,27 @@ const HomePage: React.FC = () => {
   //     // data={data}
   //   />
   // );
+  const handleCurrentDateChange = (date: Date) => {
+    console.log('handlechange currentdate', date)
+    setCurrentDate(date)
+  }
+
+  const handleClickDateOnMonthView = (date: Date) => {
+    console.log('date', date)
+    setCurrentDate(date)
+    // window.setTimeout(() => {
+      setCurrentViewName(ViewName.Week)
+    // }, 1000)
+  }
 
   return (
     <Layout useHeader={true}>
       <Scheduler data={appointments} height={window.innerHeight}>
         <EditingState onCommitChanges={() => {}} />
         <ViewState
-          defaultCurrentDate="2021-03-01"
+          defaultCurrentDate={new Date()}
+          currentDate={currentDate}
+          onCurrentDateChange={(e) => handleCurrentDateChange(e)}
           currentViewName={currentViewName}
         />
         <WeekView

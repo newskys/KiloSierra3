@@ -9,6 +9,7 @@ import { userState, UserState } from '@recoil/user';
 import { UserStatus } from '@interfaces/status';
 import { useHistory, History } from 'react-router-dom'
 import { CONFIRM_CODE } from '@common/routePath';
+import { checkUserId as checkUserIdRegex } from '@common/regex';
 
 const useStyles = makeStyles({
   root: {
@@ -40,11 +41,22 @@ const ForgotPasswordPage: React.FC = () => {
     setUserIdRef(el)
   }
 
-  const handleChangeId = (e) => {
-    const userIdRegex = /^[0-9a-zA-Z]{6,20}$/
+  // componentDidUpdate(prevProps, prevState) {
+    // if (prevProps.checkUserId !== this.props.checkUserId) {
+    //     asdfasdfasdf
+    // }
+  // }
 
-    setCheckUserId(userIdRegex.test(userIdRef.value))
-    setInvalid(!checkUserId)
+  const handleChangeId = (e) => {
+    const isValidUserId: boolean = checkUserIdRegex(userIdRef.value)
+    setCheckUserId(isValidUserId)
+    // console.log('test', userIdRegex.test(userIdRef.value))
+    // console.log('checkUserId', checkUserId)
+    setInvalid(!isValidUserId)
+    //2번
+    // 렌더링이라는건 엄청난 성능+시간 소모
+    // 리액트는 렌더링 횟수를 최대한 최소화할려고 함
+    // 이런 케이스는 모아서 1번에 렌더링
   }
 
   const handleClickForgot = (e: MouseEvent<HTMLInputElement>) => {

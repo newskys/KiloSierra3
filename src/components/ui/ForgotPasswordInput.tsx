@@ -49,7 +49,7 @@ const ForgotPasswordInput: React.FC<Props> = ({ setRef, onClickForgot, onChangeI
         variant="outlined"
         label="Id *"
         margin="normal"
-        helperText={invalid && '6~20글자 영문+숫자 조합으로 입력해주세요'}
+        helperText={invalid ? '6~20글자 영문+숫자 조합으로 입력해주세요' : undefined}
         type="string"
         onChange={(e) => onChangeId(e)}
       />

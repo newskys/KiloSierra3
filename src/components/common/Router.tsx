@@ -1,10 +1,11 @@
 import { CONFIRM_CODE, FORGOT, HOME, LOGIN, MAIN, RESET, SIGN_UP } from '@common/routePath'
-import ConfirmCodePage from '@components/login/ConfirmCodePage'
-import ForgotPasswordPage from '@components/login/ForgotPasswordPage'
-import HomePage from '@components/login/HomePage'
+
+import ConfirmCodePage from '@components/confirmcode/ConfirmCodePage'
+import ForgotPasswordPage from '@components/forgotpassword/ForgotPasswordPage'
+import HomePage from '@components/home/HomePage'
 import LoginPage from '@components/login/LoginPage'
-import ResetPasswordPage from '@components/login/ResetPasswordPage'
-import SignUpPage from '@components/login/SignUpPage'
+import ResetPasswordPage from '@components/resetpassword/ResetPasswordPage'
+import SignUpPage from '@components/signup/SignUpPage'
 
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'

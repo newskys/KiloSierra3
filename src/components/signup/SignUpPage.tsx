@@ -7,6 +7,7 @@ import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { Auth } from 'aws-amplify'
+import axios from 'axios'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { useHistory, History } from 'react-router-dom'
 
@@ -72,9 +73,34 @@ const SignUpPage = () => {
       message = SIGN_UP.USER_ID_ERROR_REGEX
     } else if (usedUserIds.includes(value)) {
       message = SIGN_UP.USER_ID_ERROR_USED
+    } else {
+      checkSignUpId(value)
     }
 
+    // const hasUserId: boolean = await checkSignUpId(value)
+    // if (hasUserId) {
+    //   message = SIGN_UP.USER_ID_ERROR_USED
+    // } 
+    
+
     setUserIdInvalidReason(message)
+  }
+
+  const checkSignUpId = async (value: string) => {
+    try {
+      const apiId = await axios.get(`https://hu5mcclx4l.execute-api.ap-northeast-2.amazonaws.com/prod/hasuser?userId=${value}`)
+  
+      console.log(apiId.data);
+      // return apiId.data
+
+      if (apiId.data) {
+        setUserIdInvalidReason('중복된 ID가 있습니다.')
+      }
+    } catch (e) {
+      console.error(e.response.data.message)
+      setUserIdInvalidReason(e.response.data.message)
+      // return true
+    }
   }
 
   const validateUserId = (value: string): boolean => {

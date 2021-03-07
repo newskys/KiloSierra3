@@ -25,6 +25,8 @@ const ForgotPasswordPage: React.FC = () => {
   const classes = useStyles()
   const [userIdRef, setUserIdRef] = useState<HTMLInputElement>(null)
   const [user, setUserState] = useRecoilState<UserState>(userState)
+  const [checkUserId, setCheckUserId] = useState(false)
+  const [invalid, setInvalid] = useState(false)
   const history: History = useHistory()
 
   useEffect(() => {
@@ -36,6 +38,13 @@ const ForgotPasswordPage: React.FC = () => {
 
   const setRef = (el: HTMLInputElement) => {
     setUserIdRef(el)
+  }
+
+  const handleChangeId = (e) => {
+    const userIdRegex = /^[0-9a-zA-Z]{6,20}$/
+
+    setCheckUserId(userIdRegex.test(userIdRef.value))
+    setInvalid(!checkUserId)
   }
 
   const handleClickForgot = (e: MouseEvent<HTMLInputElement>) => {
@@ -72,7 +81,7 @@ const ForgotPasswordPage: React.FC = () => {
   return (
     <Layout useHeader={false}>
       <Box className={classes.root}>
-        <ForgotPasswordInput setRef={setRef} onClickForgot={handleClickForgot} />
+        <ForgotPasswordInput setRef={setRef} onClickForgot={handleClickForgot} onChangeId={handleChangeId} invalid={invalid} />
       </Box>
     </Layout>
   );

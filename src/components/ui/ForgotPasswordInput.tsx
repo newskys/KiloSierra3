@@ -21,9 +21,11 @@ const useStyles = makeStyles({
 interface Props {
   setRef: Function
   onClickForgot: Function
+  onChangeId: Function
+  invalid: boolean
 }
 
-const ForgotPasswordInput: React.FC<Props> = ({ setRef, onClickForgot }) => {
+const ForgotPasswordInput: React.FC<Props> = ({ setRef, onClickForgot, onChangeId, invalid }) => {
   const classes = useStyles()
   const userId = useRef<HTMLInputElement>(null)
 
@@ -42,14 +44,14 @@ const ForgotPasswordInput: React.FC<Props> = ({ setRef, onClickForgot }) => {
       <TextField
         inputRef={userId}
         fullWidth
-        // error={!!invalidReason}
+        error={invalid}
         className={classes.input}
         variant="outlined"
         label="Id *"
         margin="normal"
-        // helperText={invalidReason || SIGN_UP.CONFIRM_CODE}
+        helperText={invalid && '6~20글자 영문+숫자 조합으로 입력해주세요'}
         type="string"
-        // onChange={(e) => onChangeCode(e)}
+        onChange={(e) => onChangeId(e)}
       />
 
       <Button

@@ -14,13 +14,14 @@ import {
   ViewSwitcher,
   WeekView,
 } from '@devexpress/dx-react-scheduler-material-ui'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import { appointments } from '@common/appointments'
 import { WithStyles } from '@material-ui/styles'
 import { withStyles, Theme, createStyles } from '@material-ui/core'
 import { TodayButton } from '@devexpress/dx-react-scheduler-material-ui'
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -62,6 +63,10 @@ const HomePage: React.FC = () => {
   const classes = useStyles()
   const [currentViewName, setCurrentViewName] = useState<string>(ViewName.Week)
   const [currentDate, setCurrentDate] = useState<Date>(new Date())
+
+  useEffect(() => {
+    axios.get(`https://hu5mcclx4l.execute-api.ap-northeast-2.amazonaws.com/prod/hasuser`)
+  }, [])
   const WeekTimeTableCell = (props) => {
     const { startDate } = props
     const date = new Date(startDate)

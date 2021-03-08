@@ -9,13 +9,7 @@ const useStyles = makeStyles({
   },
 })
 
-interface Props {
-  isLogin: boolean
-  onClickLogin: Function
-  onClickLogout: Function
-}
-
-const Footer: React.FC<Props> = () => {
+const Footer: React.FC = () => {
   const classes = useStyles()
 
   return (

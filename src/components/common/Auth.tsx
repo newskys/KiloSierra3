@@ -14,6 +14,9 @@ const Auth: React.FC<Props> = ({ children }) => {
   const getCurrentUserInfo = async () => {
     try {
       const result = await AwsAuth.currentAuthenticatedUser()
+      const session = await AwsAuth.currentSession()
+      
+      console.log('result', result)
       // const result = {username: null, attributes: null}
       const userState: UserState = {
         isInit: true,
@@ -22,6 +25,7 @@ const Auth: React.FC<Props> = ({ children }) => {
         emailVerified: result.attributes?.email_verified,
         phone: result.attributes?.phone_number,
         phoneVerified: result.attributes?.phone_number_verified,
+        token: session?.getIdToken()?.getJwtToken(),
         status: UserStatus.NORMAL,
       }
       console.log(userState)

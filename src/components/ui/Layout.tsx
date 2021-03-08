@@ -1,16 +1,13 @@
-import React from 'react'
-import { Grid, AppBar, Toolbar, IconButton, Typography, Button, } from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu';
-import FooterContainer from '@components/common/FooterContainer'
-import { makeStyles } from '@material-ui/core/styles'
+import FooterContainer from '@components/common/FooterContainer';
+import HeaderContainer from '@components/common/HeaderContainer';
+import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 
 const useStyles = makeStyles({
   root: {
     flexWrap: 'nowrap',
     height: '100%',
-  },
-  title: {
-    flexGrow: 1,
   },
   main: {
     flex: '1 1 auto',
@@ -36,20 +33,7 @@ const Layout: React.FC<Props> = ({ children, useHeader = true }) => {
   return (
     <Grid className={classes.root} container direction="column">
       {useHeader && (
-        <AppBar position="sticky">
-          <Toolbar>
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="menu">
-              <MenuIcon />
-            </IconButton>
-            <Typography component="h1" variant="h6" className={classes.title}>
-              News
-            </Typography>
-            <Button color="inherit">Login</Button>
-          </Toolbar>
-        </AppBar>
+        <HeaderContainer />
       )}
       <Grid className={classes.main} component="main" item>
         {children}

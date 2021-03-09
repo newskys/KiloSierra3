@@ -6,6 +6,7 @@ import { Auth } from 'aws-amplify'
 export const signIn = async (userId, password): Promise<UserState> => {
   try {
     const result = await Auth.signIn(userId, password)
+    const session = await Auth.currentSession()
     const userState: UserState = {
       isInit: true,
       userId: result.username,
@@ -14,6 +15,7 @@ export const signIn = async (userId, password): Promise<UserState> => {
       phone: result.attributes?.phone_number,
       phoneVerified: result.attributes?.phone_number_verified,
       status: UserStatus.NORMAL,
+      token: session?.getIdToken()?.getJwtToken(),
     }
 
     return userState

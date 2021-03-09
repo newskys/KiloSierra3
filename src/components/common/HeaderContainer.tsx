@@ -6,16 +6,17 @@ import { useRecoilState } from 'recoil'
 import { useHistory, History } from 'react-router-dom'
 import { LOGIN } from '@common/routePath'
 import Header from '@components/ui/Header'
-import Axios from 'axios'
+import axios from '@apis/axios'
 
 const HeaderContainer = () => {
   const [user, setUserState] = useRecoilState<UserState>(userState)
   const history: History = useHistory()
   const isLogin: boolean = !!user.userId
+  console.log(user)
 
   const handleClickHamburger = async (e) => {
     
-    Axios.get(`https://hu5mcclx4l.execute-api.ap-northeast-2.amazonaws.com/prod/hasuser2?userId=test`, {
+    axios.get(`/hasuser2?userId=test`, {
       // withCredentials: true,
       headers: {
         'Content-Type': 'application/json',
@@ -35,7 +36,6 @@ const HeaderContainer = () => {
     } catch (e) {
       console.error(e)
     }
-    console.log('test')
   }
 
   return (

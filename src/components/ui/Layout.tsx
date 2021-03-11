@@ -1,28 +1,24 @@
-import FooterContainer from '@components/common/FooterContainer'
-import { Grid } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-import '@scss/components/ui/Layout.scss'
-import React from 'react'
-import Header from './Header'
+import FooterContainer from '@components/common/FooterContainer';
+import HeaderContainer from '@components/common/HeaderContainer';
+import { Grid } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 
 const useStyles = makeStyles({
   root: {
-    height: "100%",
-    flexWrap: "nowrap",
-  },
-  header: {
-    position: "sticky",
-    top: 0,
-    left: 0,
-    height: "50px",
+    flexWrap: 'nowrap',
+    height: '100%',
   },
   main: {
-    flex: "1 1 auto",
+    flex: '1 1 auto',
+    height: 'calc(100vh - 56px - 66px)',
   },
   footer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     flex: '0 0 auto',
     height: '66px',
-    textAlign: 'center',
   },
 })
 
@@ -37,9 +33,7 @@ const Layout: React.FC<Props> = ({ children, useHeader = true }) => {
   return (
     <Grid className={classes.root} container direction="column">
       {useHeader && (
-        <Grid className={classes.header} component="header" item>
-          <Header />
-        </Grid>
+        <HeaderContainer />
       )}
       <Grid className={classes.main} component="main" item>
         {children}

@@ -15,6 +15,7 @@ export interface UserState {
   phone: string
   phoneVerified: boolean
   status: UserStatus
+  token?: string
 }
 
 export const userState: RecoilState<UserState> = atom({

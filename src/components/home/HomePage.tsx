@@ -65,7 +65,7 @@ const HomePage: React.FC = () => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date())
 
   useEffect(() => {
-    axios.get(`https://hu5mcclx4l.execute-api.ap-northeast-2.amazonaws.com/prod/hasuser`)
+    // axios.get(`https://hu5mcclx4l.execute-api.ap-northeast-2.amazonaws.com/prod/hasuser`)
   }, [])
   const WeekTimeTableCell = (props) => {
     const { startDate } = props
@@ -238,7 +238,7 @@ const HomePage: React.FC = () => {
 
   return (
     <Layout useHeader={true}>
-      <Scheduler data={appointments} height={window.innerHeight}>
+      <Scheduler data={appointments}>
         <EditingState onCommitChanges={() => {}} />
         <ViewState
           defaultCurrentDate={new Date()}

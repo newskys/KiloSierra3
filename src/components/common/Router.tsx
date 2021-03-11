@@ -1,4 +1,5 @@
 import { CONFIRM_CODE, FORGOT, HOME, LOGIN, MAIN, RESET, SIGN_UP } from '@common/routePath'
+
 import ConfirmCodePage from '@components/confirmcode/ConfirmCodePage'
 import ForgotPasswordPage from '@components/forgotpassword/ForgotPasswordPage'
 import HomePage from '@components/home/HomePage'

@@ -1,7 +1,14 @@
-import { AppBar, Button, IconButton, Toolbar, Typography } from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu';
+import {
+  AppBar,
+  Button,
+  IconButton,
+  Toolbar,
+  Typography,
+} from '@material-ui/core'
+import MenuIcon from '@material-ui/icons/Menu'
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 
 const useStyles = makeStyles({
   root: {
@@ -31,27 +38,34 @@ interface Props {
   onClickLogout: Function
 }
 
-const Header: React.FC<Props> = ({ isLogin, onClickHamburger, onClickLogin, onClickLogout }) => {
+const Header: React.FC<Props> = ({
+  isLogin,
+  onClickHamburger,
+  onClickLogin,
+  onClickLogout,
+}) => {
   const classes = useStyles()
 
   return (
     <AppBar position="sticky">
-    <Toolbar>
-      <IconButton
-        edge="start"
-        color="inherit"
-        aria-label="menu">
-        <MenuIcon onClick={(e) => onClickHamburger(e)} />
-      </IconButton>
-      <Typography component="h1" variant="h6" className={classes.title}>
-        News
-      </Typography>
-      <Button color="inherit"
-      onClick={(e) => (isLogin ? onClickLogout(e) : onClickLogin(e))}>
-        {isLogin ? 'Logout' : 'Login'}
-      </Button>
-    </Toolbar>
-  </AppBar>
+      <Toolbar>
+        <IconButton edge="start" color="inherit" aria-label="menu">
+          <AccountCircleIcon onClick={(e) => onClickHamburger(e)} />
+        </IconButton>
+        <Typography component="h1" variant="h6" className={classes.title}>
+          Ramona
+        </Typography>
+
+        {isLogin ? (
+          <MenuIcon />
+        ) : (
+          <Button
+            color="inherit"
+            onClick={(e) => onClickLogin(e)
+            }>Login</Button>
+        )}
+      </Toolbar>
+    </AppBar>
   )
 }
 

@@ -19,9 +19,10 @@ import { makeStyles } from '@material-ui/core/styles'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import { appointments } from '@common/appointments'
 import { WithStyles } from '@material-ui/styles'
-import { withStyles, Theme, createStyles } from '@material-ui/core'
+import { withStyles, Theme, createStyles, Fab } from '@material-ui/core'
 import { TodayButton } from '@devexpress/dx-react-scheduler-material-ui'
 import axios from 'axios'
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -51,6 +52,12 @@ const useStyles = makeStyles((theme) => ({
   appointment: {
     borderRadius: 0,
     borderBottom: 0,
+  },
+
+  fab: {
+    position: 'absolute',
+    bottom: '98px',
+    right: '32px',
   },
 }))
 
@@ -274,6 +281,11 @@ const HomePage: React.FC = () => {
         {/* <AppointmentTooltip showCloseButton showDeleteButton showOpenButton /> */}
         <AppointmentForm />
       </Scheduler>
+
+      <Fab className={classes.fab} variant="extended" color="primary" aria-label="add">
+        <AddIcon />
+        Add Schedule
+      </Fab>
     </Layout>
   )
 }

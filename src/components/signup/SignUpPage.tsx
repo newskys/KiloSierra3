@@ -74,7 +74,7 @@ const SignUpPage = () => {
     } else if (usedUserIds.includes(value)) {
       message = SIGN_UP.USER_ID_ERROR_USED
     } else {
-      checkSignUpId(value)
+      setTimeout(() => checkSignUpId(value), 500);
     }
 
     // const hasUserId: boolean = await checkSignUpId(value)

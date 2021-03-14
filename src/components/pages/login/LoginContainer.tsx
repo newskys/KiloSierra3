@@ -9,10 +9,20 @@ import { useHistory, History } from 'react-router-dom'
 import { CONFIRM_CODE, HOME } from '@common/routePath'
 import { UserStatus } from '@interfaces/status'
 import { signIn } from '@apis/auth'
+import { Backdrop, CircularProgress } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles({
+  backdrop: {
+    zIndex: 100,
+    color: '#fff',
+  },
+})
 
 Amplify.configure(awsconfig)
 
 const LoginContainer: React.FC = () => {
+  const classes = useStyles()
   const [userIdElement, setUserIdElement] = useState(null)
   const [passwordElement, setPasswordElement] = useState(null)
   const [user, setUserState] = useRecoilState<UserState>(userState)
@@ -59,6 +69,9 @@ const LoginContainer: React.FC = () => {
       <Authenticator hideDefault={true} amplifyConfig={awsconfig}>
         <Login setRef={setRef} onClick={handleClick} />
       </Authenticator>
+      <Backdrop className={classes.backdrop} open={true}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   )
 }

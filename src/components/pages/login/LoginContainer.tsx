@@ -26,6 +26,7 @@ const LoginContainer: React.FC = () => {
   const [userIdElement, setUserIdElement] = useState(null)
   const [passwordElement, setPasswordElement] = useState(null)
   const [user, setUserState] = useRecoilState<UserState>(userState)
+  const [backdropOpen, setBackdropOpen] = useState<boolean>(false)
   const history: History = useHistory()
 
   useEffect(() => {
@@ -51,12 +52,16 @@ const LoginContainer: React.FC = () => {
   }
 
   const requestApi = async (userId: string, password: string) => {
+    setBackdropOpen(true)
+
     try {
       const userState: UserState = await signIn(userId, password)
       setUserState(userState)
     } catch (e) {
       alert(e)
     }
+
+    setBackdropOpen(false)
   }
 
   const setRef = (userIdEl: HTMLInputElement, passwordEl: HTMLInputElement) => {
@@ -69,7 +74,7 @@ const LoginContainer: React.FC = () => {
       <Authenticator hideDefault={true} amplifyConfig={awsconfig}>
         <Login setRef={setRef} onClick={handleClick} />
       </Authenticator>
-      <Backdrop className={classes.backdrop} open={true}>
+      <Backdrop className={classes.backdrop} open={backdropOpen}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </>

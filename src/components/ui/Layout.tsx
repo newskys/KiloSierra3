@@ -12,6 +12,7 @@ const useStyles = makeStyles({
   main: {
     flex: '1 1 auto',
     height: 'calc(100vh - 56px - 66px)',
+    backgroundColor: 'pink',
   },
   footer: {
     display: 'flex',

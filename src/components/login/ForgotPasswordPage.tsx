@@ -9,6 +9,7 @@ import { userState, UserState } from '@recoil/user';
 import { UserStatus } from '@interfaces/status';
 import { useHistory, History } from 'react-router-dom'
 import { CONFIRM_CODE } from '@common/routePath';
+import { checkUserId as checkUserIdRegex } from '@common/regex';
 
 const useStyles = makeStyles({
   root: {
@@ -25,6 +26,8 @@ const ForgotPasswordPage: React.FC = () => {
   const classes = useStyles()
   const [userIdRef, setUserIdRef] = useState<HTMLInputElement>(null)
   const [user, setUserState] = useRecoilState<UserState>(userState)
+  const [checkUserId, setCheckUserId] = useState(false)
+  const [invalid, setInvalid] = useState(false)
   const history: History = useHistory()
 
   useEffect(() => {
@@ -36,6 +39,24 @@ const ForgotPasswordPage: React.FC = () => {
 
   const setRef = (el: HTMLInputElement) => {
     setUserIdRef(el)
+  }
+
+  // componentDidUpdate(prevProps, prevState) {
+    // if (prevProps.checkUserId !== this.props.checkUserId) {
+    //     asdfasdfasdf
+    // }
+  // }
+
+  const handleChangeId = (e) => {
+    const isValidUserId: boolean = checkUserIdRegex(userIdRef.value)
+    setCheckUserId(isValidUserId)
+    // console.log('test', userIdRegex.test(userIdRef.value))
+    // console.log('checkUserId', checkUserId)
+    setInvalid(!isValidUserId)
+    //2번
+    // 렌더링이라는건 엄청난 성능+시간 소모
+    // 리액트는 렌더링 횟수를 최대한 최소화할려고 함
+    // 이런 케이스는 모아서 1번에 렌더링
   }
 
   const handleClickForgot = (e: MouseEvent<HTMLInputElement>) => {
@@ -72,7 +93,7 @@ const ForgotPasswordPage: React.FC = () => {
   return (
     <Layout useHeader={false}>
       <Box className={classes.root}>
-        <ForgotPasswordInput setRef={setRef} onClickForgot={handleClickForgot} />
+        <ForgotPasswordInput setRef={setRef} onClickForgot={handleClickForgot} onChangeId={handleChangeId} invalid={invalid} />
       </Box>
     </Layout>
   );

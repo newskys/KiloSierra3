@@ -243,9 +243,56 @@ const HomePage: React.FC = () => {
     // }, 1000)
   }
 
+  const RootComponent = (props) => {
+    return <Scheduler.Root
+      {...props}
+      style={{'height':`calc(100vh - 56px - 66px)`}}
+    />
+  }
+
   return (
     <Layout useHeader={true}>
-      
+      <Scheduler rootComponent={RootComponent} data={appointments}>
+        <EditingState onCommitChanges={() => {}} />
+        <ViewState
+          defaultCurrentDate={new Date()}
+          currentDate={currentDate}
+          onCurrentDateChange={(e) => handleCurrentDateChange(e)}
+          currentViewName={currentViewName}
+        />
+        <WeekView
+          name="work-week"
+          displayName="Work Week"
+          excludedDays={[0, 6]}
+          startDayHour={9}
+          endDayHour={19}
+          timeTableCellComponent={WeekTimeTableCell}
+          // dayScaleEmptyCellComponent={DayScaleEmptyCell}
+        />
+        <MonthView
+          name="month"
+          displayName="Month"
+          timeTableCellComponent={MonthTimeTableCell}
+          // dayScaleCellComponent={DayScaleCell}
+          // dayScaleEmptyCellComponent={DayScaleEmptyCell}
+        />
+        {/* <DayView /> */}
+        <Toolbar />
+        <TodayButton />
+        <DateNavigator />
+        <ViewSwitcher switcherComponent={viewSwitcher} />
+        <Appointments
+        // appointmentComponent={Appointment}
+        // appointmentContentComponent={AppointmentContainer}
+        />
+        {/* <AppointmentTooltip showCloseButton showDeleteButton showOpenButton /> */}
+        <AppointmentForm />
+      </Scheduler>
+
+      <Fab className={classes.fab} variant="extended" color="primary" aria-label="add">
+        <AddIcon />
+        Add Schedule
+      </Fab>
     </Layout>
   )
 }

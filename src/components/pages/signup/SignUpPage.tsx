@@ -45,6 +45,7 @@ const SignUpPage = () => {
   const [emailInvalidReason, setEmailInvalidReason] = useState<string>(null)
   const [isSignUpEnabled, setSignUpEnabled] = useState<boolean>(false)
   const [usedUserIds, setUsedUserIds] = useState<string[]>([])
+  const [inputIdTimeout, setInputIdTimeout] = useState<number>(null)
 
   useEffect(() => {
     if (userIdRef) {
@@ -56,6 +57,15 @@ const SignUpPage = () => {
     confirmPasswordInvalidReason,
     emailInvalidReason,
   ])
+
+  useEffect(() => {
+    // mount
+
+    return () => {
+      // unmount
+      window.clearTimeout(inputIdTimeout)
+    }
+  }, [])
 
   const setRef = (userId, password, confirmPassword, email, phone): void => {
     setUserIdRef(userId)
@@ -74,14 +84,12 @@ const SignUpPage = () => {
     } else if (usedUserIds.includes(value)) {
       message = SIGN_UP.USER_ID_ERROR_USED
     } else {
-      checkSignUpId(value)
+      window.clearTimeout(inputIdTimeout)
+      const timeout: number = window.setTimeout(() => {
+        checkSignUpId(value)
+      }, 500)
+      setInputIdTimeout(timeout)
     }
-
-    // const hasUserId: boolean = await checkSignUpId(value)
-    // if (hasUserId) {
-    //   message = SIGN_UP.USER_ID_ERROR_USED
-    // } 
-    
 
     setUserIdInvalidReason(message)
   }

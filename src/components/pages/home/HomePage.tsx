@@ -252,7 +252,7 @@ const HomePage: React.FC = () => {
 
   return (
     <Layout useHeader={true}>
-      <Scheduler rootComponent={RootComponent} data={appointments}>
+      <Scheduler data={appointments}>
         <EditingState onCommitChanges={() => {}} />
         <ViewState
           defaultCurrentDate={new Date()}

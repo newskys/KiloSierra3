@@ -21,23 +21,8 @@ import EventNoteIcon from '@material-ui/icons/EventNote'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 const useStyles = makeStyles({
-  root: {
-    flexWrap: 'nowrap',
-    height: '100%',
-  },
   title: {
     flexGrow: 1,
-  },
-  main: {
-    flex: '1 1 auto',
-    height: 'calc(100vh - 56px - 66px)',
-  },
-  footer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: '0 0 auto',
-    height: '66px',
   },
   list: {
     width: 250,
@@ -85,7 +70,7 @@ const Header: React.FC<Props> = ({
     </div>
   )
   return (
-    <AppBar position="sticky">
+    <AppBar position="absolute">
       <Toolbar>
         <IconButton
           edge="start"

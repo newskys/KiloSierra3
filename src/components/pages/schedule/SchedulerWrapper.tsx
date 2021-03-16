@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { appointments } from '@common/appointments'
 import Layout from '@components/ui/Layout'
-import { EditingState, ViewState } from '@devexpress/dx-react-scheduler'
+import { AppointmentModel, EditingState, ViewState } from '@devexpress/dx-react-scheduler'
 import {
   AppointmentForm,
   Appointments,
+  AppointmentTooltip,
   CurrentTimeIndicator,
   DateNavigator,
   MonthView,
@@ -19,6 +20,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import AddIcon from '@material-ui/icons/Add'
 import moment from 'moment'
+import classNames from 'clsx'
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -55,6 +57,19 @@ const useStyles = makeStyles((theme) => ({
     bottom: '98px',
     right: '32px',
   },
+  text: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  content: {
+    opacity: 0.7,
+  },
+  container: {
+    width: '100%',
+    lineHeight: 1.2,
+    height: '100%',
+  },
 }))
 
 export enum ViewName {
@@ -62,10 +77,91 @@ export enum ViewName {
   Month = 'month',
 }
 
-const SchedulerWrapper = () => {
+interface Props {
+  schedule: AppointmentModel[]
+}
+
+interface Schedule {
+  week: AppointmentModel[]
+  month: DayScheduleAvailability[]
+}
+
+interface DayScheduleAvailability {
+  early: boolean
+  mid: boolean
+  late: boolean
+}
+
+const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
   const classes = useStyles()
+  const [schedule, setSchedule] = useState<Schedule>(null)
   const [currentViewName, setCurrentViewName] = useState<string>(ViewName.Week)
   const [currentDate, setCurrentDate] = useState<Date>(new Date())
+  const [currentMonth, setCurrentMonth] = useState<number>(null)
+
+  useEffect(() => {
+    setCurrentMonth(moment(currentDate).month())
+  }, [currentDate])
+
+  const hasNoSchedule = (schedules: AppointmentModel[], startHour: number, endHour: number): boolean => {
+    // 30분 단위 체크    
+    const iterateCount: number = (endHour - startHour) * 2
+    // unavailable: 0, available: 1
+    const availableTimeIndices: number[] = Array(iterateCount).fill(1)
+    let iterateTime: Date = moment(currentDate).set({'hour': 9, 'minute': 0, 'second': 0, 'millisecond': 0}).toDate()
+
+    for (var i = 0; i < iterateCount; i++) {
+      const isBetween: boolean = schedules.some(schedule => {
+        return moment(iterateTime).isBetween(schedule.startDate, schedule.endDate) || moment(schedule.startDate).isSame(iterateTime)
+      })
+
+      isBetween && (availableTimeIndices[i] = 0)
+      iterateTime = moment(iterateTime).add(30, 'minutes').toDate()
+    }
+
+    const hasNoSchedule: boolean = availableTimeIndices.join('').indexOf('1111') >= 0
+    return hasNoSchedule
+  }
+
+  useEffect(() => {
+    if (!currentMonth) {
+      return
+    }
+
+    const endOfMonth: number = moment(currentDate).endOf('month').date()
+    const monthViewSchedules: DayScheduleAvailability[] = []
+    for (var i = 1; i <= endOfMonth; i++) {
+      const daySchedules: AppointmentModel[] = rawSchedule.filter(schedule => moment(schedule.startDate).date() === i)
+      const early: boolean = hasNoSchedule(daySchedules, 9, 12)
+      const mid: boolean = hasNoSchedule(daySchedules, 12, 18)
+      const late: boolean = hasNoSchedule(daySchedules, 18, 22)
+
+      // const hasEarlySchedule: boolean = daySchedules.some(daySchedule => moment(daySchedule.endDate).hour() moment(daySchedule.endDate).hour() < 12)
+      const monthViewSchedule: DayScheduleAvailability = {
+        early,
+        mid,
+        late,
+      }
+
+      monthViewSchedules.push(monthViewSchedule)
+    }
+    // moment(currentDate).endOf('month')
+    // if (currentDate.)
+    // const month = rawSchedule.map((schedule) => {
+    //   const reservedTime = moment(schedule.startDate).hour()
+    //   return {
+    //     early: 
+    //     mid: 
+    //     late: 
+    //   }
+    // })
+    const schedule: Schedule = {
+      week: rawSchedule,
+      month: monthViewSchedules,
+    }
+
+    setSchedule(schedule)
+  }, [currentMonth])
 
   const WeekTimeTableLabel = (props) => {
     return (
@@ -211,17 +307,63 @@ const SchedulerWrapper = () => {
 
 
   type AppointmentProps = Appointments.AppointmentProps
+  type AppointmentContentProps = Appointments.AppointmentContentProps
 
-  const Appointment = ({ data, ...restProps }: AppointmentProps) => (
-    <Appointments.Appointment
-      {...restProps}
-      onClick={(e) => {
-        console.log(e)
-      }}
-      className={classes.appointment}
-      data={data}
-    />
-  )
+  const Appointment = ({ data, ...restProps }: AppointmentProps) => {
+    // console.log('d', data)
+    const isWeekView: boolean = currentViewName === ViewName.Week
+    return (
+      <Appointments.Appointment
+        {...restProps}
+        onClick={(e) => {
+          console.log(e)
+        } }
+        draggable={false}
+        className={classes.appointment}
+        style={isWeekView ? {width: '130%'} : undefined}
+        data={data} />
+    )
+  }
+
+  const AppointmentContent = ({ data, ...restProps }: AppointmentContentProps) => {
+    console.log('d', restProps)
+    return (
+      <Appointments.AppointmentContent {...restProps} data={data}>
+      <div className={classes.container}>
+        <div className={classes.text}>
+          일정
+        </div>
+        <div className={classes.text}>
+          있음
+        </div>
+        {/* <div className={classNames(classes.text, classes.content)}> */}
+          {/* {`Priority: ${priority}`} */}
+        {/* </div> */}
+        {/* <div className={classNames(classes.text, classes.content)}>
+          {`Location: ${data.location}`}
+        </div> */}
+      </div>
+    </Appointments.AppointmentContent>
+      
+      // <Appointments.AppointmentContent
+      //   {...restProps}
+      //   // onClick={(e) => {
+      //   //   console.log(e)
+      //   // } }
+      //   // resources={[{
+      //   //   id: 1,
+      //   //   title: 'title',
+      //   //   fieldName: 'field',
+      //   //   allowMultiple: false,
+      //   //   isMain: false,
+      //   //   color: '',
+      //   //   text: '',
+      //   // }]}
+      //   className={classes.appointment}
+      //   data={data} />
+    )
+  }
+
   const viewSwitcher = ({ ...restProps }: ViewSwitcher.SwitcherProps) => (
     <ViewSwitcher.Switcher
       {...restProps}
@@ -245,8 +387,7 @@ const SchedulerWrapper = () => {
   }
 
     return (
-        
-      <Scheduler data={appointments}>
+      <Scheduler data={rawSchedule}>
       <EditingState onCommitChanges={() => {}} />
       <ViewState
         defaultCurrentDate={new Date()}
@@ -272,6 +413,7 @@ const SchedulerWrapper = () => {
         timeTableCellComponent={MonthTimeTableCell}
         // dayScaleCellComponent={DayScaleCell}
         // dayScaleEmptyCellComponent={DayScaleEmptyCell}
+
       />
       {/* <DayView /> */}
       <Toolbar />
@@ -279,8 +421,8 @@ const SchedulerWrapper = () => {
       <DateNavigator />
       <ViewSwitcher switcherComponent={viewSwitcher} />
       <Appointments
-      // appointmentComponent={Appointment}
-      // appointmentContentComponent={AppointmentContainer}
+      appointmentComponent={Appointment}
+      appointmentContentComponent={AppointmentContent}
       />
       {/* <AppointmentTooltip showCloseButton showDeleteButton showOpenButton /> */}
       <AppointmentForm />

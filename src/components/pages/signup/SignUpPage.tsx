@@ -10,6 +10,7 @@ import { Auth } from 'aws-amplify'
 import axios from 'axios'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { useHistory, History } from 'react-router-dom'
+import { useHeader } from '@hooks/useHeader'
 
 const useStyles = makeStyles({
   root: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
 })
 
 const SignUpPage = () => {
+  useHeader(false)
   const classes = useStyles()
   const matches = useMediaQuery('(min-width:600px)')
   const history: History = useHistory()
@@ -219,7 +221,7 @@ const SignUpPage = () => {
   }
 
   return (
-    <Layout useHeader={false}>
+    <Layout>
       <Box className={classes.root}>
         <SignUpInput
           setRef={setRef}

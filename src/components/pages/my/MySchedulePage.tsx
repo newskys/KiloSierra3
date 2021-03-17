@@ -5,12 +5,13 @@ import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import { userState, UserState } from '@recoil/user'
+import { navItem } from 'aws-amplify'
 import { AxiosResponse } from 'axios'
 import React, { useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router'
 import { useRecoilState } from 'recoil'
 import { useHeader } from '@hooks/useHeader'
-import SchedulerWrapper from './SchedulerWrapper'
+import SchedulerWrapper from '../schedule/SchedulerWrapper'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -29,12 +30,12 @@ interface Schedule {
   endDate: Date
 }
 
-const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
+const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   match,
 }) => {
   useHeader(true)
   const classes = useStyles()
-  const [userStore, setUserStore] = useRecoilState<UserState>(userState)
+  const [user, setUserState] = useRecoilState<UserState>(userState)
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
 
@@ -49,12 +50,9 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     setLoading(false)
   }
 
-
   useEffect(() => {
     // getTutorSchedule(match.params.tutorId)
     getSchedule(match.params.tutorId)
-
-    // setHeaderStore({ ...headerStore, isVisible: true, title: "ramona" })
   }, [])
 
   const getTutorSchedule = async (tutorId: string) => {
@@ -64,7 +62,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
         // withCredentials: true,
         headers: {
           'Content-Type': 'application/json',
-          Authorization: userStore.token,
+          Authorization: user.token,
         },
       }
     )
@@ -98,4 +96,4 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   )
 }
 
-export default SchedulePage
+export default MySchedulePage

@@ -1,14 +1,25 @@
 import Footer from '@components/ui/Footer'
 import { userState, UserState } from '@recoil/user'
 import { Auth } from 'aws-amplify'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { useRecoilState } from 'recoil'
 import { useHistory, History } from 'react-router-dom'
-import { LOGIN } from '@common/routePath'
+import { LOGIN, MY_SCHEDULE } from '@common/routePath'
 import Header from '@components/ui/Header'
 import axios from '@apis/axios'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
-const HeaderContainer = () => {
+export interface HeaderDrawerVO {
+  title: string
+  component: ReactNode
+  onClick: Function
+}
+
+interface Props {
+}
+
+const HeaderContainer: React.FC<Props> = () => {
   const [user, setUserState] = useRecoilState<UserState>(userState)
   const history: History = useHistory()
   const isLogin: boolean = !!user.userId
@@ -29,6 +40,11 @@ const HeaderContainer = () => {
     history.push(LOGIN)
   }
 
+  const handleClickSchedule = async (e) => {
+    console.log('d')
+    history.push(MY_SCHEDULE)
+  }
+
   const handleClickLogout = async (e) => {
     try {
       await Auth.signOut()
@@ -38,12 +54,27 @@ const HeaderContainer = () => {
     }
   }
 
+  const drawerItems: HeaderDrawerVO[] = [
+    {
+      component: <AccountCircleIcon />,
+      title: 'My Account',
+      onClick: () => {console.log('a')},
+    },
+    {
+      component: <ExitToAppIcon />,
+      title: 'Logout',
+      onClick: (e) => handleClickLogout(e),
+    },
+  ]
+
   return (
     <Header
       isLogin={isLogin}
       onClickHamburger={handleClickHamburger}
       onClickLogin={handleClickLogin}
       onClickLogout={handleClickLogout}
+      onClickSchedule={handleClickSchedule}
+      drawerItems={drawerItems}
     />
   )
 }

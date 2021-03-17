@@ -12,6 +12,7 @@ import { Auth } from 'aws-amplify'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { History, useHistory } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
+import { useHeader } from '@hooks/useHeader'
 
 const useStyles = makeStyles({
   root: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles({
 })
 
 const ResetPasswordPage: React.FC = () => {
+  useHeader(false)
   const classes = useStyles()
   const history: History = useHistory()
   const [user, setUserState] = useRecoilState<UserState>(userState)
@@ -152,7 +154,7 @@ const ResetPasswordPage: React.FC = () => {
   }
 
   return (
-    <Layout useHeader={false}>
+    <Layout>
       <Box className={classes.root}>
         <ResetPasswordInput
           setRef={setRef}

@@ -9,6 +9,7 @@ import { userState, UserState } from '@recoil/user';
 import { UserStatus } from '@interfaces/status';
 import { useHistory, History } from 'react-router-dom'
 import { CONFIRM_CODE, HOME, RESET } from '@common/routePath';
+import { useHeader } from '@hooks/useHeader';
 
 const useStyles = makeStyles({
   root: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles({
 })
 
 const ForgotPasswordPage: React.FC = () => {
+  useHeader(false)
   const classes = useStyles()
   const [userIdRef, setUserIdRef] = useState<HTMLInputElement>(null)
   const [user, setUserState] = useRecoilState<UserState>(userState)
@@ -80,7 +82,7 @@ const ForgotPasswordPage: React.FC = () => {
   }
 
   return (
-    <Layout useHeader={false}>
+    <Layout>
       <Box className={classes.root}>
         <ForgotPasswordInput setRef={setRef} onClickForgot={handleClickForgot} />
       </Box>

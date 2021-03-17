@@ -12,13 +12,14 @@ import {
   Typography,
 } from '@material-ui/core'
 import MenuIcon from '@material-ui/icons/Menu'
-import React, { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import InboxIcon from '@material-ui/icons/MoveToInbox'
 import MailIcon from '@material-ui/icons/Mail'
 import EventNoteIcon from '@material-ui/icons/EventNote'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import { HeaderDrawerVO } from '@components/common/HeaderContainer'
 
 const useStyles = makeStyles({
   root: {
@@ -49,6 +50,8 @@ interface Props {
   onClickHamburger: Function
   onClickLogin: Function
   onClickLogout: Function
+  onClickSchedule: Function
+  drawerItems: HeaderDrawerVO[]
 }
 
 const Header: React.FC<Props> = ({
@@ -56,6 +59,8 @@ const Header: React.FC<Props> = ({
   onClickHamburger,
   onClickLogin,
   onClickLogout,
+  onClickSchedule,
+  drawerItems,
 }) => {
   const classes = useStyles()
   const [isDrawerOpened, setDrawerOpened] = useState<boolean>(false)
@@ -65,32 +70,24 @@ const Header: React.FC<Props> = ({
       role="presentation"
       onClick={(e) => setDrawerOpened(false)}
       onKeyDown={(e) => setDrawerOpened(false)}>
-      <List>
-        <ListItem button>
-          <ListItemIcon>
-            <AccountCircleIcon />
-          </ListItemIcon>
-          <ListItemText primary={'My Account'} />
-        </ListItem>
-      </List>
-      <Divider />
-      <List>
-        <ListItem button onClick={(e) => onClickLogout(e)}>
-          <ListItemIcon>
-            <ExitToAppIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Logout'} />
-        </ListItem>
-      </List>
+      {drawerItems.map((item, index) => {
+        return (
+          <List>
+            <ListItem key={`drawer-${index}`} button onClick={(e) => item.onClick(e)}>
+              <ListItemIcon>
+                {item.component}
+              </ListItemIcon>
+              <ListItemText primary={item.title} />
+            </ListItem>
+          </List>
+        )
+      })}
     </div>
   )
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="lecturer's profile">
+        <IconButton edge="start" color="inherit" aria-label="tutor's profile">
           <AccountCircleIcon onClick={(e) => onClickHamburger(e)} />
         </IconButton>
         <Typography component="h1" variant="h6" className={classes.title}>
@@ -100,7 +97,7 @@ const Header: React.FC<Props> = ({
         {isLogin ? (
           <>
             <IconButton color="inherit" aria-label="my schedule">
-              <EventNoteIcon />
+              <EventNoteIcon onClick={(e) => onClickSchedule(e)} />
             </IconButton>
             <IconButton edge="end" color="inherit" aria-label="menu">
               <MenuIcon onClick={(e) => setDrawerOpened(true)} />

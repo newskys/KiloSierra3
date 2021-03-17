@@ -12,6 +12,7 @@ import { signIn } from '@apis/auth'
 import { AuthError, UserStatus } from '@interfaces/status'
 import { AUTH, SIGN_UP } from '@common/lang'
 import { checkPassword } from '@common/regex'
+import { useHeader } from '@hooks/useHeader'
 
 const useStyles = makeStyles({
   root: {
@@ -24,6 +25,7 @@ const useStyles = makeStyles({
 })
 
 const ConfirmCodePage: React.FC = () => {
+  useHeader(false)
   const classes = useStyles()
   const history: History = useHistory()
   const [user, setUserState] = useRecoilState<UserState>(userState)
@@ -109,7 +111,7 @@ const ConfirmCodePage: React.FC = () => {
   }
 
   return (
-    <Layout useHeader={false}>
+    <Layout>
       <Box className={classes.root}>
         <ConfirmCodeInput
           setRef={setRef}

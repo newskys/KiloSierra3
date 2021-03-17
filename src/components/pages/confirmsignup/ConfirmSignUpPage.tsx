@@ -6,6 +6,7 @@ import { userState, UserState } from '@recoil/user'
 import { Auth } from 'aws-amplify'
 import React, { KeyboardEvent, useState } from 'react'
 import { useRecoilState } from 'recoil'
+import { useHeader } from '@hooks/useHeader'
 
 const useStyles = makeStyles({
   root: {
@@ -18,11 +19,13 @@ const useStyles = makeStyles({
 })
 
 const ConfirmSignUpPage = () => {
+  useHeader(false)
   const classes = useStyles()
   const [user, setUserState] = useRecoilState<UserState>(userState)
   const [invalidReason, setInvalidReason] = useState<string>(null)
   const [isConfirmEnabled, setConfirmEnabled] = useState<boolean>(false)
   const [codeRef, setCodeRef] = useState<HTMLInputElement>(null)
+  // useHeader(true)
 
   // useEffect(() => {
   //   if (codeRef) {
@@ -83,7 +86,7 @@ const ConfirmSignUpPage = () => {
   }
 
   return (
-    <Layout useHeader={false}>
+    <Layout>
       <Box className={classes.root}>
         <ConfirmSignUpInput
           setRef={setRef}

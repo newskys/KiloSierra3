@@ -15,6 +15,7 @@ import LockIcon from '@material-ui/icons/Lock'
 import Layout from '@components/ui/Layout'
 import { makeStyles } from '@material-ui/core/styles'
 import LoginAccountConfigContainer from './LoginAccountConfigContainer'
+import { useHeader } from '@hooks/useHeader'
 
 const useStyles = makeStyles({
   root: {
@@ -50,10 +51,11 @@ const useStyles = makeStyles({
 })
 
 const LoginPage: React.FC = () => {
+  useHeader(false)
   const classes = useStyles()
 
   return (
-    <Layout useHeader={false}>
+    <Layout>
       <Box className={classes.root}>
         <Card>
           <CardMedia

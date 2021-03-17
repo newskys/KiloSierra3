@@ -18,7 +18,8 @@
       "@recoil/*": ["src/recoil/*"],
       "@interfaces/*": ["src/interfaces/*"],
       "@apis/*": ["src/apis/*"],
-      "@route/*": ["src/route/*"]
+      "@route/*": ["src/route/*"],
+      "@hooks/*": ["@hooks/*"]
     }
   }
 }

@@ -23,6 +23,7 @@ import { withStyles, Theme, createStyles, Fab } from '@material-ui/core'
 import { TodayButton } from '@devexpress/dx-react-scheduler-material-ui'
 import axios from 'axios'
 import AddIcon from '@material-ui/icons/Add';
+import { useHeader } from '@hooks/useHeader'
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -67,6 +68,7 @@ export enum ViewName {
 }
 
 const HomePage: React.FC = () => {
+  useHeader(true)
   const classes = useStyles()
   const [currentViewName, setCurrentViewName] = useState<string>(ViewName.Week)
   const [currentDate, setCurrentDate] = useState<Date>(new Date())
@@ -251,7 +253,7 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <Layout useHeader={true}>
+    <Layout>
       <Scheduler rootComponent={RootComponent} data={appointments}>
         <EditingState onCommitChanges={() => {}} />
         <ViewState

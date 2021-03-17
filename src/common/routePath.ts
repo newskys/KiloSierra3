@@ -1,6 +1,7 @@
 export const MAIN = '/'
 export const HOME = '/home'
 export const SCHEDULE = '/:tutorId/schedule'
+export const MY_SCHEDULE = '/schedule'
 export const LOGIN = '/login'
 export const SIGN_UP = '/signup'
 export const CONFIRM_CODE = '/code'

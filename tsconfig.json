@@ -19,7 +19,7 @@
       "@interfaces/*": ["src/interfaces/*"],
       "@apis/*": ["src/apis/*"],
       "@route/*": ["src/route/*"],
-      "@hooks/*": ["@hooks/*"]
+      "@hooks/*": ["src/hooks/*"]
     }
   }
 }

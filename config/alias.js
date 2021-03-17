@@ -8,5 +8,5 @@ module.exports = {
   '@interfaces': path.resolve(__dirname, '../src/interfaces'),
   '@apis': path.resolve(__dirname, '../src/apis'),
   '@route': path.resolve(__dirname, '../src/route'),
-  '@hooks': path.resolve(__dirname, '../@hooks'),
+  '@hooks': path.resolve(__dirname, '../src/hooks'),
 }

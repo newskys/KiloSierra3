@@ -5,13 +5,12 @@ import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
 import { userState, UserState } from '@recoil/user'
-import { navItem } from 'aws-amplify'
 import { AxiosResponse } from 'axios'
 import React, { useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router'
 import { useRecoilState } from 'recoil'
 import { useHeader } from '@hooks/useHeader'
-import SchedulerWrapper from '../schedule/SchedulerWrapper'
+import SchedulerWrapper from '@components/pages/schedule/SchedulerWrapper'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -33,7 +32,7 @@ interface Schedule {
 const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   match,
 }) => {
-  useHeader(true)
+  useHeader(true, 'My Schedule')
   const classes = useStyles()
   const [user, setUserState] = useRecoilState<UserState>(userState)
   const [schedules, setSchedules] = useState<Schedule[]>(null)

@@ -25,8 +25,8 @@ import MySchedulePage from '@components/pages/my/MySchedulePage'
 const Router: React.FC = () => (
   <Switch>
     <Route exact path={[MAIN, HOME]} component={HomePage} />
-    <Route exact path={SCHEDULE} component={SchedulePage} />
     <Route exact path={MY_SCHEDULE} component={MySchedulePage} />
+    <Route exact path={SCHEDULE} component={SchedulePage} />
     <Route exact path={LOGIN} component={LoginPage} />
     <Route exact path={SIGN_UP} component={SignUpPage} />
     <Route exact path={CONFIRM_CODE} component={ConfirmCodePage} />

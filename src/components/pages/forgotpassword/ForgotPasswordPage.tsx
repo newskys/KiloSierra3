@@ -1,15 +1,15 @@
-import React, { useEffect, useState, MouseEvent } from 'react';
-import { Auth } from 'aws-amplify';
-import Layout from '@components/ui/Layout';
-import { Box } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { HOME, RESET } from '@common/routePath';
 import ForgotPasswordInput from '@components/ui/ForgotPasswordInput';
-import { useRecoilState } from 'recoil';
-import { userState, UserState } from '@recoil/user';
-import { UserStatus } from '@interfaces/status';
-import { useHistory, History } from 'react-router-dom'
-import { CONFIRM_CODE, HOME, RESET } from '@common/routePath';
+import Layout from '@components/ui/Layout';
 import { useHeader } from '@hooks/useHeader';
+import { UserStatus } from '@interfaces/status';
+import { Box } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { userState, UserState } from '@recoil/user';
+import { Auth } from 'aws-amplify';
+import React, { MouseEvent, useEffect, useState } from 'react';
+import { History, useHistory } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles({
   root: {

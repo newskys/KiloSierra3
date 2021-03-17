@@ -9,6 +9,7 @@ import Header from '@components/ui/Header'
 import axios from '@apis/axios'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import { headerState, HeaderState } from '@recoil/header'
 
 export interface HeaderDrawerVO {
   title: string
@@ -21,19 +22,20 @@ interface Props {
 
 const HeaderContainer: React.FC<Props> = () => {
   const [user, setUserState] = useRecoilState<UserState>(userState)
+  const [headerStore, setHeaderStore] = useRecoilState<HeaderState>(headerState)
   const history: History = useHistory()
   const isLogin: boolean = !!user.userId
   console.log(user)
 
   const handleClickHamburger = async (e) => {
     
-    axios.get(`/hasuser2?userId=test`, {
-      // withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': user.token
-      }
-    })
+    // axios.get(`/hasuser2?userId=test`, {
+    //   // withCredentials: true,
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': user.token
+    //   }
+    // })
   }
 
   const handleClickLogin = async (e) => {
@@ -70,7 +72,8 @@ const HeaderContainer: React.FC<Props> = () => {
   return (
     <Header
       isLogin={isLogin}
-      onClickHamburger={handleClickHamburger}
+      title={headerStore.title}
+      onClickProfile={headerStore.onClickProfile}
       onClickLogin={handleClickLogin}
       onClickLogout={handleClickLogout}
       onClickSchedule={handleClickSchedule}

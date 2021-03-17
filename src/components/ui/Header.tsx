@@ -20,6 +20,8 @@ import MailIcon from '@material-ui/icons/Mail'
 import EventNoteIcon from '@material-ui/icons/EventNote'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { HeaderDrawerVO } from '@components/common/HeaderContainer'
+import { useRecoilState } from 'recoil'
+import { headerState, HeaderState } from '@recoil/header'
 
 const useStyles = makeStyles({
   root: {
@@ -47,7 +49,8 @@ const useStyles = makeStyles({
 
 interface Props {
   isLogin: boolean
-  onClickHamburger: Function
+  title: string
+  onClickProfile: Function
   onClickLogin: Function
   onClickLogout: Function
   onClickSchedule: Function
@@ -56,7 +59,8 @@ interface Props {
 
 const Header: React.FC<Props> = ({
   isLogin,
-  onClickHamburger,
+  title,
+  onClickProfile,
   onClickLogin,
   onClickLogout,
   onClickSchedule,
@@ -72,12 +76,12 @@ const Header: React.FC<Props> = ({
       onKeyDown={(e) => setDrawerOpened(false)}>
       {drawerItems.map((item, index) => {
         return (
-          <List>
-            <ListItem key={`drawer-${index}`} button onClick={(e) => item.onClick(e)}>
-              <ListItemIcon>
+          <List key={`drawer-list-${index}`}>
+            <ListItem key={`drawer-item-${index}`} button onClick={(e) => item.onClick(e)}>
+              <ListItemIcon key={`drawer-item-icon-${index}`}>
                 {item.component}
               </ListItemIcon>
-              <ListItemText primary={item.title} />
+              <ListItemText key={`drawer-item-text-${index}`} primary={item.title} />
             </ListItem>
           </List>
         )
@@ -88,10 +92,10 @@ const Header: React.FC<Props> = ({
     <AppBar position="sticky">
       <Toolbar>
         <IconButton edge="start" color="inherit" aria-label="tutor's profile">
-          <AccountCircleIcon onClick={(e) => onClickHamburger(e)} />
+          <AccountCircleIcon onClick={(e) => onClickProfile(e)} />
         </IconButton>
         <Typography component="h1" variant="h6" className={classes.title}>
-          Ramona
+          {title}
         </Typography>
 
         {isLogin ? (

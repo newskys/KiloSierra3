@@ -1,29 +1,25 @@
+import { appointments } from '@common/appointments'
 import Layout from '@components/ui/Layout'
-import { EditingState, ViewState, ViewSwitcherProps } from '@devexpress/dx-react-scheduler'
+import { EditingState, ViewState } from '@devexpress/dx-react-scheduler'
 import {
   AppointmentForm,
   Appointments,
-  AppointmentTooltip,
+
   DateNavigator,
-  DayView,
-  EditRecurrenceMenu,
-  GroupingPanel,
+
+
+
   MonthView,
-  Scheduler,
-  Toolbar,
+  Scheduler, TodayButton, Toolbar,
   ViewSwitcher,
-  WeekView,
+  WeekView
 } from '@devexpress/dx-react-scheduler-material-ui'
-import React, { useEffect, useState } from 'react'
+import { useHeader } from '@hooks/useHeader'
+import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { fade } from '@material-ui/core/styles/colorManipulator'
-import { appointments } from '@common/appointments'
-import { WithStyles } from '@material-ui/styles'
-import { withStyles, Theme, createStyles, Fab } from '@material-ui/core'
-import { TodayButton } from '@devexpress/dx-react-scheduler-material-ui'
-import axios from 'axios'
-import AddIcon from '@material-ui/icons/Add';
-import { useHeader } from '@hooks/useHeader'
+import AddIcon from '@material-ui/icons/Add'
+import React, { useEffect, useState } from 'react'
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {

@@ -32,7 +32,7 @@ interface Schedule {
 const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   match,
 }) => {
-  useHeader(true)
+  useHeader(true, 'Ramona')
   const classes = useStyles()
   const [userStore, setUserStore] = useRecoilState<UserState>(userState)
   const [schedules, setSchedules] = useState<Schedule[]>(null)
@@ -51,10 +51,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
 
 
   useEffect(() => {
-    // getTutorSchedule(match.params.tutorId)
     getSchedule(match.params.tutorId)
-
-    // setHeaderStore({ ...headerStore, isVisible: true, title: "ramona" })
   }, [])
 
   const getTutorSchedule = async (tutorId: string) => {

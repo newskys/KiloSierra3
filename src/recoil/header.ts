@@ -7,15 +7,15 @@ const KEY = {
 
 export interface HeaderState {
   isVisible: boolean
-  iconComponent: any
-  onClickIcon: any
+  profileUrl: string
+  onClickProfile: Function
   title: string
 }
 
 const initialState: HeaderState = {
   title: null,
-  iconComponent: null,
-  onClickIcon: () => {},
+  profileUrl: null,
+  onClickProfile: () => {},
   isVisible: false,
 }
 

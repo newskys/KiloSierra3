@@ -1,12 +1,12 @@
 import ConfirmSignUpInput from '@components/ui/ConfirmSignUpInput'
 import Layout from '@components/ui/Layout'
+import { useHeader } from '@hooks/useHeader'
 import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { userState, UserState } from '@recoil/user'
 import { Auth } from 'aws-amplify'
 import React, { KeyboardEvent, useState } from 'react'
 import { useRecoilState } from 'recoil'
-import { useHeader } from '@hooks/useHeader'
 
 const useStyles = makeStyles({
   root: {

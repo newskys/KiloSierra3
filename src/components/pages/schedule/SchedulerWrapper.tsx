@@ -245,13 +245,17 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
   const MonthTimeTableCell = (props) => {
     const { startDate } = props
     const date = new Date(startDate)
+    // const onClick =
+    //   currentViewName === ViewName.Week
+    //     ? props.onClick
+    //     : (e) => handleClickDateOnMonthView(props.startDate)
 
     if (date.getDate() === new Date().getDate()) {
       return (
         <MonthView.TimeTableCell
           {...props}
           className={classes.todayCell}
-          onClick={(e) => handleClickDateOnMonthView(props.startDate)}
+          onClick={(e) => handleClickDateOnMonthView(e, props.startDate)}
         />
       )
     }
@@ -269,7 +273,7 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
         {...props}
         onClick={(e) => {
           console.log(props)
-          handleClickDateOnMonthView(props.startDate)
+          handleClickDateOnMonthView(e, props.startDate)
         }}
       />
     )
@@ -323,6 +327,12 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
     )
   }
 
+  const handleClickDateOnWeekView = (e, onClick: Function, startDate: Date) => {
+    if (e.data.isMine) {
+      onClick(e)
+    }
+  }
+
   const Appointment = ({
     data,
     ...restProps
@@ -336,7 +346,11 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
     return (
       <Appointments.Appointment
         {...restProps}
-        onClick={(e) => handleClickDateOnMonthView(new Date(data.startDate))}
+        onClick={
+          isWeekView
+            ? (e) => handleClickDateOnWeekView(e, restProps.onClick, new Date(data.startDate))
+            : (e) => handleClickDateOnMonthView(e, new Date(data.startDate))
+        }
         draggable={false}
         className={classes.appointment}
         style={style}
@@ -355,12 +369,12 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
         <div className={classes.container}>
           {currentViewName === ViewName.Week ? (
             <>
-              <div className={classes.text}>일정</div>
-              <div className={classes.text}>있음</div>
+              <div className={classes.text}>{data.title || '일정'}</div>
+              <div className={classes.text}>{data.title ? '' : '있음'}</div>
             </>
           ) : (
             <>
-              <div className={classes.text}>일정</div>
+              <div className={classes.text}>{data.title || '일정'}</div>
             </>
           )}
           {/* <div className={classNames(classes.text, classes.content)}> */}
@@ -405,8 +419,8 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
     setCurrentDate(date)
   }
 
-  const handleClickDateOnMonthView = (date: Date) => {
-    console.log('date', date)
+  const handleClickDateOnMonthView = (e, date: Date) => {
+    console.log('date', e, date)
     setCurrentDate(date)
     // window.setTimeout(() => {
     setCurrentViewName(ViewName.Week)
@@ -453,7 +467,7 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
         appointmentComponent={Appointment}
         appointmentContentComponent={AppointmentContent}
       />
-      {/* <AppointmentTooltip showCloseButton showDeleteButton showOpenButton /> */}
+      <AppointmentTooltip showCloseButton showDeleteButton showOpenButton />
       <AppointmentForm />
       <CurrentTimeIndicator
         shadePreviousCells={true}

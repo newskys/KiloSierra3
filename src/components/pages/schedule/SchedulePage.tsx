@@ -11,6 +11,9 @@ import { RouteComponentProps } from 'react-router'
 import { useRecoilState } from 'recoil'
 import { useHeader } from '@hooks/useHeader'
 import SchedulerWrapper from './SchedulerWrapper'
+import { useLogin } from '@hooks/useLogin'
+import { Schedule } from '@interfaces/schedule'
+import { getTutorSchedule } from '@apis/schedule'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -24,23 +27,19 @@ interface MatchParams {
   tutorId: string
 }
 
-interface Schedule {
-  startDate: Date
-  endDate: Date
-}
-
 const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   match,
 }) => {
   useHeader(true, 'Ramona')
+  const [isLogin, token] = useLogin()
   const classes = useStyles()
-  const [userStore, setUserStore] = useRecoilState<UserState>(userState)
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
 
   const getSchedule = async (tutorId: string) => {
     try {
-      const result: Schedule[] = await getTutorSchedule('umlaut')
+      const result: Schedule[] = await getTutorSchedule('umlaut', token)
+        // : await getTutorSchedule('umlaut', token)
       setSchedules(result)
     } catch (e) {
       console.error(e)
@@ -49,30 +48,17 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     setLoading(false)
   }
 
-
   useEffect(() => {
     getSchedule(match.params.tutorId)
   }, [])
-
-  const getTutorSchedule = async (tutorId: string) => {
-    const result: AxiosResponse<Schedule[]> = await axios.get(
-      `/tutors/${tutorId}/schedule`,
-      {
-        // withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: userStore.token,
-        },
-      }
-    )
-
-    return result.data
-  }
 
   const schedulesVO: AppointmentModel[] = schedules?.map((schedule, index) => {
     return {
       startDate: new Date(schedule.startDate),
       endDate: new Date(schedule.endDate),
+      title: schedule.title,
+      place: schedule.place,
+      isMine: schedule.isMine,
     }
   })
 

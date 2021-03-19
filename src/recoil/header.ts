@@ -7,6 +7,7 @@ const KEY = {
 
 export interface HeaderState {
   isVisible: boolean
+  hasProfile: boolean
   profileUrl: string
   onClickProfile: Function
   title: string
@@ -14,6 +15,7 @@ export interface HeaderState {
 
 const initialState: HeaderState = {
   title: null,
+  hasProfile: false,
   profileUrl: null,
   onClickProfile: () => {},
   isVisible: false,

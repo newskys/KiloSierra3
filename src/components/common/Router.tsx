@@ -1,4 +1,5 @@
 import {
+  ADD_SCHEDULE,
   CONFIRM_CODE,
   FORGOT,
   HOME,
@@ -21,12 +22,14 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import SchedulePage from '@components/pages/schedule/SchedulePage'
 import MySchedulePage from '@components/pages/my/MySchedulePage'
+import ReservationPage from '@components/pages/reservation/ReservationPage'
 
 const Router: React.FC = () => (
   <Switch>
     <Route exact path={[MAIN, HOME]} component={HomePage} />
     <Route exact path={MY_SCHEDULE} component={MySchedulePage} />
     <Route exact path={SCHEDULE} component={SchedulePage} />
+    <Route exact path={ADD_SCHEDULE} component={ReservationPage} />
     <Route exact path={LOGIN} component={LoginPage} />
     <Route exact path={SIGN_UP} component={SignUpPage} />
     <Route exact path={CONFIRM_CODE} component={ConfirmCodePage} />

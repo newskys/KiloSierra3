@@ -1,16 +1,17 @@
-import axios from '@apis/axios'
+import { getMySchedule } from '@apis/schedule'
+import { ADD_SCHEDULE } from '@common/routePath'
+import SchedulerWrapper from '@components/pages/schedule/SchedulerWrapper'
 import Layout from '@components/ui/Layout'
 import { AppointmentModel } from '@devexpress/dx-react-scheduler'
+import { useHeader } from '@hooks/useHeader'
+import { useLogin } from '@hooks/useLogin'
+import { Schedule } from '@interfaces/schedule'
 import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
-import { userState, UserState } from '@recoil/user'
-import { AxiosResponse } from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { MouseEvent, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router'
-import { useRecoilState } from 'recoil'
-import { useHeader } from '@hooks/useHeader'
-import SchedulerWrapper from '@components/pages/schedule/SchedulerWrapper'
+import { History, useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -24,23 +25,19 @@ interface MatchParams {
   tutorId: string
 }
 
-interface Schedule {
-  startDate: Date
-  endDate: Date
-}
-
 const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   match,
 }) => {
   useHeader(true, 'My Schedule')
   const classes = useStyles()
-  const [user, setUserState] = useRecoilState<UserState>(userState)
+  const history: History = useHistory()
+  const [isLogin, token] = useLogin()
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
 
   const getSchedule = async (tutorId: string) => {
     try {
-      const result: Schedule[] = await getTutorSchedule('umlaut')
+      const result: Schedule[] = await getMySchedule(token)
       setSchedules(result)
     } catch (e) {
       console.error(e)
@@ -54,27 +51,20 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     getSchedule(match.params.tutorId)
   }, [])
 
-  const getTutorSchedule = async (tutorId: string) => {
-    const result: AxiosResponse<Schedule[]> = await axios.get(
-      `/tutors/${tutorId}/schedule`,
-      {
-        // withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: user.token,
-        },
-      }
-    )
-
-    return result.data
-  }
-
   const schedulesVO: AppointmentModel[] = schedules?.map((schedule, index) => {
     return {
       startDate: new Date(schedule.startDate),
       endDate: new Date(schedule.endDate),
+      title: schedule.title,
+      place: schedule.place,
+      isMine: schedule.isMine,
     }
   })
+
+  const onClickAddSchedule = (e: MouseEvent) => {
+    e.preventDefault()
+    history.push(`ramona/schedule/add`)
+  }
 
   return (
     <Layout>
@@ -85,6 +75,7 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
             className={classes.fab}
             variant="extended"
             color="primary"
+            onClick={(e) => onClickAddSchedule(e)}
             aria-label="add">
             <AddIcon />
             Add Schedule

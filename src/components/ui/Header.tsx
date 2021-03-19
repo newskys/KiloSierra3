@@ -1,7 +1,7 @@
+import { HeaderDrawerVO } from '@components/common/HeaderContainer'
 import {
   AppBar,
   Button,
-  Divider,
   Drawer,
   IconButton,
   List,
@@ -11,17 +11,13 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core'
-import MenuIcon from '@material-ui/icons/Menu'
-import React, { ReactNode, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from '@material-ui/icons/Mail'
 import EventNoteIcon from '@material-ui/icons/EventNote'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import { HeaderDrawerVO } from '@components/common/HeaderContainer'
-import { useRecoilState } from 'recoil'
-import { headerState, HeaderState } from '@recoil/header'
+import MenuIcon from '@material-ui/icons/Menu'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
+import React, { useState, MouseEvent } from 'react'
+import { History, useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles({
   root: {
@@ -50,6 +46,8 @@ const useStyles = makeStyles({
 interface Props {
   isLogin: boolean
   title: string
+  hasProfile: boolean
+  profileUrl: string
   onClickProfile: Function
   onClickLogin: Function
   onClickLogout: Function
@@ -60,6 +58,8 @@ interface Props {
 const Header: React.FC<Props> = ({
   isLogin,
   title,
+  hasProfile,
+  profileUrl,
   onClickProfile,
   onClickLogin,
   onClickLogout,
@@ -67,6 +67,7 @@ const Header: React.FC<Props> = ({
   drawerItems,
 }) => {
   const classes = useStyles()
+  const history: History = useHistory()
   const [isDrawerOpened, setDrawerOpened] = useState<boolean>(false)
   const list = () => (
     <div
@@ -77,23 +78,45 @@ const Header: React.FC<Props> = ({
       {drawerItems.map((item, index) => {
         return (
           <List key={`drawer-list-${index}`}>
-            <ListItem key={`drawer-item-${index}`} button onClick={(e) => item.onClick(e)}>
+            <ListItem
+              key={`drawer-item-${index}`}
+              button
+              onClick={(e) => item.onClick(e)}>
               <ListItemIcon key={`drawer-item-icon-${index}`}>
                 {item.component}
               </ListItemIcon>
-              <ListItemText key={`drawer-item-text-${index}`} primary={item.title} />
+              <ListItemText
+                key={`drawer-item-text-${index}`}
+                primary={item.title}
+              />
             </ListItem>
           </List>
         )
       })}
     </div>
   )
+
+  const onClickBack = (e: MouseEvent) => {
+    e.preventDefault()
+    history.goBack()
+  }
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <IconButton edge="start" color="inherit" aria-label="tutor's profile">
-          <AccountCircleIcon onClick={(e) => onClickProfile(e)} />
-        </IconButton>
+        {hasProfile && (
+          <IconButton edge="start" color="inherit" aria-label="tutor's profile">
+            <AccountCircleIcon onClick={(e) => onClickProfile(e)} />
+          </IconButton>
+        )}
+        {!hasProfile && (
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={(e) => onClickBack(e)}
+            aria-label="back to previous page">
+            <ArrowBackIcon />
+          </IconButton>
+        )}
         <Typography component="h1" variant="h6" className={classes.title}>
           {title}
         </Typography>

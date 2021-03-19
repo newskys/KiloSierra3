@@ -1,19 +1,17 @@
-import axios from '@apis/axios'
+import { getTutorSchedule } from '@apis/schedule'
+import { ADD_SCHEDULE } from '@common/routePath'
 import Layout from '@components/ui/Layout'
 import { AppointmentModel } from '@devexpress/dx-react-scheduler'
+import { useHeader } from '@hooks/useHeader'
+import { useLogin } from '@hooks/useLogin'
+import { Schedule } from '@interfaces/schedule'
 import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
-import { userState, UserState } from '@recoil/user'
-import { AxiosResponse } from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, MouseEvent } from 'react'
 import { RouteComponentProps } from 'react-router'
-import { useRecoilState } from 'recoil'
-import { useHeader } from '@hooks/useHeader'
+import { History, useHistory } from 'react-router-dom'
 import SchedulerWrapper from './SchedulerWrapper'
-import { useLogin } from '@hooks/useLogin'
-import { Schedule } from '@interfaces/schedule'
-import { getTutorSchedule } from '@apis/schedule'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -30,9 +28,11 @@ interface MatchParams {
 const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   match,
 }) => {
-  useHeader(true, 'Ramona')
+  const tutorId: string = match.params.tutorId
+  useHeader(true, 'Ramona', true)
   const [isLogin, token] = useLogin()
   const classes = useStyles()
+  const history: History = useHistory()
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
 
@@ -49,7 +49,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   }
 
   useEffect(() => {
-    getSchedule(match.params.tutorId)
+    getSchedule(tutorId)
   }, [])
 
   const schedulesVO: AppointmentModel[] = schedules?.map((schedule, index) => {
@@ -62,6 +62,11 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     }
   })
 
+  const onClickAddSchedule = (e: MouseEvent) => {
+    e.preventDefault()
+    history.push(`/${tutorId}/schedule/add`)
+  }
+
   return (
     <Layout>
       {!isLoading && (
@@ -71,6 +76,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
             className={classes.fab}
             variant="extended"
             color="primary"
+            onClick={(e) => onClickAddSchedule(e)}
             aria-label="add">
             <AddIcon />
             Add Schedule

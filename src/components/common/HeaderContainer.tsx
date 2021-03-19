@@ -1,16 +1,13 @@
-import Footer from '@components/ui/Footer'
-import { userState, UserState } from '@recoil/user'
-import { Auth } from 'aws-amplify'
-import React, { ReactNode } from 'react'
-import { useRecoilState } from 'recoil'
-import { useHistory, History } from 'react-router-dom'
 import { LOGIN, MY_SCHEDULE } from '@common/routePath'
 import Header from '@components/ui/Header'
-import axios from '@apis/axios'
+import { useLogin } from '@hooks/useLogin'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { headerState, HeaderState } from '@recoil/header'
-import { useLogin } from '@hooks/useLogin'
+import { Auth } from 'aws-amplify'
+import React, { ReactNode } from 'react'
+import { History, useHistory } from 'react-router-dom'
+import { useRecoilState } from 'recoil'
 
 export interface HeaderDrawerVO {
   title: string
@@ -27,14 +24,6 @@ const HeaderContainer: React.FC<Props> = () => {
   const history: History = useHistory()
 
   const handleClickHamburger = async (e) => {
-    
-    // axios.get(`/hasuser2?userId=test`, {
-    //   // withCredentials: true,
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': user.token
-    //   }
-    // })
   }
 
   const handleClickLogin = async (e) => {
@@ -73,6 +62,8 @@ const HeaderContainer: React.FC<Props> = () => {
       isLogin={isLogin}
       title={headerStore.title}
       onClickProfile={headerStore.onClickProfile}
+      hasProfile={headerStore.hasProfile}
+      profileUrl={headerStore.profileUrl}
       onClickLogin={handleClickLogin}
       onClickLogout={handleClickLogout}
       onClickSchedule={handleClickSchedule}

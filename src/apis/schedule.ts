@@ -21,3 +21,18 @@ export const getTutorSchedule = async (tutorId: string, token: string) => {
 
   return result.data
 }
+
+export const getMySchedule = async (token: string) => {
+  const result: AxiosResponse<Schedule[]> = await axios.get(
+    `/myschedule`,
+    {
+      // withCredentials: true,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    }
+  )
+
+  return result.data
+}

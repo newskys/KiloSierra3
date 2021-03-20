@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 })
 
 const ReservationPage: React.FC = () => {
-  useHeader(true, HeaderType.COMMON, 'Schedule Request')
+  useHeader(true, HeaderType.BOOKING, 'Schedule Request')
   const classes = useStyles()
 
   const setRef = (startTimeEl, endTimeEl) => {

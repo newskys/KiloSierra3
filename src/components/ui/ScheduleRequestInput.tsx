@@ -1,12 +1,23 @@
-import React, { useRef, useEffect, useState } from 'react'
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@material-ui/core'
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
+import { DateTimePicker, LocalizationProvider } from '@material-ui/pickers'
+import MomentAdapter from '@material-ui/pickers/adapter/moment'
+import moment from 'moment'
+import 'moment/locale/ko'
+import React, { useEffect, useRef, useState } from 'react'
 
 const useStyles = makeStyles({
   root: {
     padding: '16px',
   },
-  
+
   formControl: {
     marginTop: '16px',
     // minWidth: 120,
@@ -46,57 +57,109 @@ interface Props {
 }
 
 const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
+  const [selectedDate, setDate] = useState(moment())
+  // const [inputValue, setInputValue] = useState(moment().format('YYYY-MM-DD'))
+
+  // console.log('inputValue', inputValue)
+  // console.log('selectedDate', selectedDate)
+  const onDateChange = (date, value) => {
+    // console.log('date changed', date, value)
+    // setDate(date)
+    // setInputValue(value)
+  }
+
+  const onAccept = (date) => {
+    setDate(moment(date))
+    // console.log('onaccept', moment(date).toString())
+  }
+
+  // const selectLocale = (newLocale: any) => {
+  //   moment.locale(newLocale);
+
+  //   setLocale(newLocale);
+  // };
+
   const classes = useStyles()
   const startTimeRef = useRef<HTMLInputElement>()
   const endTimeRef = useRef<HTMLInputElement>()
   const titleRef = useRef<HTMLInputElement>()
   const placeRef = useRef<HTMLInputElement>()
   const phoneRef = useRef<HTMLInputElement>()
-  const [level, setLevel] = useState<number>(0);
+  const [hour, setHour] = useState<number>(2)
+  const [level, setLevel] = useState<number>(1)
 
-  const handleChange = (event) => {
-    setLevel(event.target.value);
+  const handleChangeLevel = (e) => {
+    setLevel(e.target.value)
+  }
+
+  const handleChangeHour = (e) => {
+    setHour(e.target.value)
   }
 
   useEffect(() => {
-    setRef(startTimeRef.current, endTimeRef.current, titleRef.current, placeRef.current, phoneRef.current)
-    startTimeRef.current.min = '09:00'
-    startTimeRef.current.max = '22:00'
-    startTimeRef.current.step = '1800'
+    setRef(
+      startTimeRef.current,
+      endTimeRef.current,
+      titleRef.current,
+      placeRef.current,
+      phoneRef.current
+    )
   }, [])
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item xs={6}>
-        <TextField
-          inputRef={startTimeRef}
-          fullWidth
-          className={classes.login_input}
-          variant="outlined"
-          // label="StartDate"
-          margin="normal"
-          type="time"
+      {/* <Grid container spacing={2}>
+        <Grid item xs={6}> */}
+      <LocalizationProvider
+        dateLibInstance={moment}
+        dateAdapter={MomentAdapter}
+        locale={'ko'}>
+        <DateTimePicker
+          disabled={true}
+          disablePast
+          minutesStep={30}
+          allowKeyboardControl={false}
+          showToolbar={true}
+          // disableCloseOnSelect={true}
+          renderInput={(props) => <TextField variant="outlined" {...props} />}
+          toolbarFormat={'MM.DD a'}
+          // ToolbarComponent={<></>}
+          label="Request Time"
+          value={selectedDate}
+          inputFormat={'yyyy.MM.DD a hh:mm'}
+          onChange={onDateChange}
+          // minTime={new Date(0, 0, 0, 9, 0)}
+          // maxTime={new Date(0, 0, 0, 21, 0)}
+          onError={console.log}
+          onAccept={onAccept}
+          // maxDate={new Date(0, 0, 31)}
         />
-        </Grid>
-        <Grid item xs={6}>
-        <TextField
-          inputRef={endTimeRef}
-          fullWidth
-          className={classes.login_input}
-          variant="outlined"
-          // label="EndDate"
-          margin="normal"
-          type="time"
-        />
-        </Grid>
-      </Grid>
+      </LocalizationProvider>
+      {/* </Grid>
+        <Grid item xs={6}> */}
+      {/* </Grid>
+      </Grid> */}
+      <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel id="demo-simple-select-outlined-label">Duration</InputLabel>
+        <Select
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={hour}
+          onChange={handleChangeHour}
+          label="duration">
+          <MenuItem value={0}>1 Hour</MenuItem>
+          <MenuItem value={1}>1 Hour 30 Minutes</MenuItem>
+          <MenuItem value={2}>2 Hours</MenuItem>
+          <MenuItem value={3}>2 Hours 30 Minutes</MenuItem>
+          <MenuItem value={4}>3 Hours</MenuItem>
+        </Select>
+      </FormControl>
       <TextField
         inputRef={titleRef}
         fullWidth
         className={classes.login_input}
         variant="outlined"
-        label="Request"
+        label="Requests"
         margin="normal"
       />
       <TextField
@@ -113,9 +176,8 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
           labelId="demo-simple-select-outlined-label"
           id="demo-simple-select-outlined"
           value={level}
-          onChange={handleChange}
-          label="Level"
-        >
+          onChange={handleChangeLevel}
+          label="Level">
           <MenuItem value={0}>Test</MenuItem>
           <MenuItem value={1}>A1 (Beginner)</MenuItem>
           <MenuItem value={2}>A2</MenuItem>
@@ -140,7 +202,7 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
         fullWidth
         variant="contained"
         color="primary">
-        SIGN IN
+        REQUEST
       </Button>
     </>
   )

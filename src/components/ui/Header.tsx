@@ -187,6 +187,20 @@ const Header: React.FC<Props> = ({
           </Drawer>
         </>
       )
+    } else if (headerType === HeaderType.BOOKING) {
+      return (
+        <>
+          <IconButton edge="end" color="inherit" aria-label="menu">
+            <MenuIcon onClick={(e) => setDrawerOpened(true)} />
+          </IconButton>
+          <Drawer
+            anchor={'right'}
+            open={isDrawerOpened}
+            onClose={(e) => setDrawerOpened(false)}>
+            {list()}
+          </Drawer>
+        </>
+      )
     }
 
     return (

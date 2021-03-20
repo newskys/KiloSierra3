@@ -18,6 +18,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import React, { useState, MouseEvent } from 'react'
 import { History, useHistory } from 'react-router-dom'
+import { HeaderType } from '@interfaces/header'
 
 const useStyles = makeStyles({
   root: {
@@ -46,30 +47,30 @@ const useStyles = makeStyles({
 interface Props {
   isLogin: boolean
   title: string
-  hasProfile: boolean
   profileUrl: string
   onClickProfile: Function
   onClickLogin: Function
-  onClickLogout: Function
   onClickSchedule: Function
+  headerItems: any[]
+  headerType: HeaderType
   drawerItems: HeaderDrawerVO[]
 }
 
 const Header: React.FC<Props> = ({
   isLogin,
   title,
-  hasProfile,
   profileUrl,
   onClickProfile,
   onClickLogin,
-  onClickLogout,
   onClickSchedule,
+  headerItems,
+  headerType,
   drawerItems,
 }) => {
   const classes = useStyles()
   const history: History = useHistory()
   const [isDrawerOpened, setDrawerOpened] = useState<boolean>(false)
-  const list = () => (
+  const list = (): JSX.Element => (
     <div
       className={classes.list}
       role="presentation"
@@ -100,15 +101,22 @@ const Header: React.FC<Props> = ({
     e.preventDefault()
     history.goBack()
   }
-  return (
-    <AppBar position="sticky">
-      <Toolbar>
-        {hasProfile && (
+
+  const left = () => {
+    if (headerType === HeaderType.TUTOR) {
+      return (
+        <>
           <IconButton edge="start" color="inherit" aria-label="tutor's profile">
             <AccountCircleIcon onClick={(e) => onClickProfile(e)} />
           </IconButton>
-        )}
-        {!hasProfile && (
+          <Typography component="h1" variant="h6" className={classes.title}>
+            {title}
+          </Typography>
+        </>
+      )
+    } else if (headerType === HeaderType.MY_SCHEDULE) {
+      return (
+        <>
           <IconButton
             edge="start"
             color="inherit"
@@ -116,11 +124,73 @@ const Header: React.FC<Props> = ({
             aria-label="back to previous page">
             <ArrowBackIcon />
           </IconButton>
-        )}
+          <Typography component="h1" variant="h6" className={classes.title}>
+            {title}
+          </Typography>
+        </>
+      )
+    }
+
+    return (
+      <>
+        <IconButton
+          edge="start"
+          color="inherit"
+          onClick={(e) => onClickBack(e)}
+          aria-label="back to previous page">
+          <ArrowBackIcon />
+        </IconButton>
         <Typography component="h1" variant="h6" className={classes.title}>
           {title}
         </Typography>
+      </>
+    )
+  }
 
+  const right = () => {
+    if (headerType === HeaderType.TUTOR) {
+      return (
+        <>
+          {isLogin ? (
+            <>
+              <IconButton color="inherit" aria-label="my schedule">
+                <EventNoteIcon onClick={(e) => onClickSchedule(e)} />
+              </IconButton>
+              <IconButton edge="end" color="inherit" aria-label="menu">
+                <MenuIcon onClick={(e) => setDrawerOpened(true)} />
+              </IconButton>
+              <Drawer
+                anchor={'right'}
+                open={isDrawerOpened}
+                onClose={(e) => setDrawerOpened(false)}>
+                {list()}
+              </Drawer>
+            </>
+          ) : (
+            <Button color="inherit" onClick={(e) => onClickLogin(e)}>
+              Login
+            </Button>
+          )}
+        </>
+      )
+    } else if (headerType === HeaderType.MY_SCHEDULE) {
+      return (
+        <>
+          <IconButton edge="end" color="inherit" aria-label="menu">
+            <MenuIcon onClick={(e) => setDrawerOpened(true)} />
+          </IconButton>
+          <Drawer
+            anchor={'right'}
+            open={isDrawerOpened}
+            onClose={(e) => setDrawerOpened(false)}>
+            {list()}
+          </Drawer>
+        </>
+      )
+    }
+
+    return (
+      <>
         {isLogin ? (
           <>
             <IconButton color="inherit" aria-label="my schedule">
@@ -141,6 +211,15 @@ const Header: React.FC<Props> = ({
             Login
           </Button>
         )}
+      </>
+    )
+  }
+
+  return (
+    <AppBar position="sticky">
+      <Toolbar>
+        {left()}
+        {right()}
       </Toolbar>
     </AppBar>
   )

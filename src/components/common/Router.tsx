@@ -22,7 +22,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import SchedulePage from '@components/pages/schedule/SchedulePage'
 import MySchedulePage from '@components/pages/my/MySchedulePage'
-import ReservationPage from '@components/pages/reservation/ReservationPage'
+import ReservationPage from '@components/pages/booking/BookingPage'
 
 const Router: React.FC = () => (
   <Switch>

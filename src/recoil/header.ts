@@ -1,3 +1,4 @@
+import { HeaderType } from '@interfaces/header'
 import { atom, RecoilState } from 'recoil'
 
 const KEY = {
@@ -11,6 +12,7 @@ export interface HeaderState {
   profileUrl: string
   onClickProfile: Function
   title: string
+  headerType: HeaderType
 }
 
 const initialState: HeaderState = {
@@ -19,6 +21,7 @@ const initialState: HeaderState = {
   profileUrl: null,
   onClickProfile: () => {},
   isVisible: false,
+  headerType: HeaderType.COMMON,
 }
 
 export const headerState: RecoilState<HeaderState> = atom({

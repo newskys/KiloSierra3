@@ -1,5 +1,6 @@
 import { LOGIN, MY_SCHEDULE } from '@common/routePath'
 import Header from '@components/ui/Header'
+import HeaderType from '@components/ui/Header'
 import { useLogin } from '@hooks/useLogin'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
@@ -31,7 +32,6 @@ const HeaderContainer: React.FC<Props> = () => {
   }
 
   const handleClickSchedule = async (e) => {
-    console.log('d')
     history.push(MY_SCHEDULE)
   }
 
@@ -57,16 +57,18 @@ const HeaderContainer: React.FC<Props> = () => {
     },
   ]
 
+  const headerItems = []
+
   return (
     <Header
       isLogin={isLogin}
       title={headerStore.title}
       onClickProfile={headerStore.onClickProfile}
-      hasProfile={headerStore.hasProfile}
       profileUrl={headerStore.profileUrl}
       onClickLogin={handleClickLogin}
-      onClickLogout={handleClickLogout}
       onClickSchedule={handleClickSchedule}
+      headerType={headerStore.headerType}
+      headerItems={headerItems}
       drawerItems={drawerItems}
     />
   )

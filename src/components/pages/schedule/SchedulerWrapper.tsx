@@ -363,7 +363,6 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
     data,
     ...restProps
   }: Appointments.AppointmentContentProps) => {
-    // console.log('d', restProps)
     return (
       <Appointments.AppointmentContent {...restProps} data={data}>
         <div className={classes.container}>

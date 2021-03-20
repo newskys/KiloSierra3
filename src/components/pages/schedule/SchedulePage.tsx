@@ -4,6 +4,7 @@ import Layout from '@components/ui/Layout'
 import { AppointmentModel } from '@devexpress/dx-react-scheduler'
 import { useHeader } from '@hooks/useHeader'
 import { useLogin } from '@hooks/useLogin'
+import { HeaderType } from '@interfaces/header'
 import { Schedule } from '@interfaces/schedule'
 import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -29,7 +30,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   match,
 }) => {
   const tutorId: string = match.params.tutorId
-  useHeader(true, 'Ramona', true)
+  useHeader(true, HeaderType.TUTOR, 'Ramona')
   const [isLogin, token] = useLogin()
   const classes = useStyles()
   const history: History = useHistory()

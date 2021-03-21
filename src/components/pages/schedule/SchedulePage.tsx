@@ -12,6 +12,7 @@ import AddIcon from '@material-ui/icons/Add'
 import React, { useEffect, useState, MouseEvent } from 'react'
 import { RouteComponentProps } from 'react-router'
 import { History, useHistory } from 'react-router-dom'
+import BookingModal from '../booking/BookingModal'
 import SchedulerWrapper from './SchedulerWrapper'
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +41,6 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   const getSchedule = async (tutorId: string) => {
     try {
       const result: Schedule[] = await getTutorSchedule('umlaut', token)
-        // : await getTutorSchedule('umlaut', token)
       setSchedules(result)
     } catch (e) {
       console.error(e)
@@ -72,6 +72,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     <Layout>
       {!isLoading && (
         <>
+          <BookingModal />
           <SchedulerWrapper schedule={schedulesVO} />
           <Fab
             className={classes.fab}
@@ -84,6 +85,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
           </Fab>
         </>
       )}
+      
     </Layout>
   )
 }

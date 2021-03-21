@@ -1,6 +1,8 @@
 import {
   Button,
   FormControl,
+  IconButton,
+  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
@@ -12,6 +14,9 @@ import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import moment from 'moment'
 import 'moment/locale/ko'
 import React, { useEffect, useRef, useState } from 'react'
+import ChatIcon from '@material-ui/icons/Chat'
+import LocationOnIcon from '@material-ui/icons/LocationOn'
+import PhoneIcon from '@material-ui/icons/Phone';
 
 const useStyles = makeStyles({
   root: {
@@ -121,7 +126,15 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
           allowKeyboardControl={false}
           showToolbar={true}
           // disableCloseOnSelect={true}
-          renderInput={(props) => <TextField variant="outlined" {...props} />}
+          // openPickerIcon={<></>}
+          renderInput={(props) => (
+            <TextField
+              {...props}
+              fullWidth
+              variant="outlined"
+              helperText={''}
+            />
+          )}
           toolbarFormat={'MM.DD a'}
           // ToolbarComponent={<></>}
           label="Request Time"
@@ -139,7 +152,7 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
         <Grid item xs={6}> */}
       {/* </Grid>
       </Grid> */}
-      <FormControl variant="outlined" className={classes.formControl}>
+      <FormControl variant="outlined" fullWidth className={classes.formControl}>
         <InputLabel id="demo-simple-select-outlined-label">Duration</InputLabel>
         <Select
           labelId="demo-simple-select-outlined-label"
@@ -155,22 +168,26 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
         </Select>
       </FormControl>
       <TextField
-        inputRef={titleRef}
-        fullWidth
-        className={classes.login_input}
-        variant="outlined"
-        label="Requests"
-        margin="normal"
-      />
-      <TextField
         inputRef={placeRef}
         fullWidth
         className={classes.login_input}
         variant="outlined"
         label="Place"
         margin="normal"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="input location"
+                disabled={true}
+                edge="end">
+                <LocationOnIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
-      <FormControl variant="outlined" className={classes.formControl}>
+      <FormControl fullWidth variant="outlined" className={classes.formControl}>
         <InputLabel id="demo-simple-select-outlined-label">Level</InputLabel>
         <Select
           labelId="demo-simple-select-outlined-label"
@@ -195,15 +212,39 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
         label="Phone Number"
         margin="normal"
         type="tel"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="input location"
+                disabled={true}
+                edge="end">
+                <PhoneIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
       />
-      <Button
-        onClick={(e) => onClick(e)}
-        className={classes.signin}
+      <TextField
+        inputRef={titleRef}
         fullWidth
-        variant="contained"
-        color="primary">
-        REQUEST
-      </Button>
+        className={classes.login_input}
+        variant="outlined"
+        label="Requests"
+        margin="normal"
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="input requests"
+                disabled={true}
+                edge="end">
+                <ChatIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
     </>
   )
 }

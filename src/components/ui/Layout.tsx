@@ -1,6 +1,6 @@
 import FooterContainer from '@components/common/FooterContainer';
 import HeaderContainer from '@components/common/HeaderContainer';
-import { Grid } from '@material-ui/core';
+import { Grid, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { HeaderState, headerState } from '@recoil/header';
 import React from 'react';
@@ -8,18 +8,22 @@ import { useRecoilState } from 'recoil';
 
 const useStyles = makeStyles({
   root: {
-    flexWrap: 'nowrap',
+    position: 'relative',
     height: '100%',
+    padding: '56px 0 66px',
+    boxSizing: 'border-box',
   },
   main: {
-    flex: '1 1 auto',
-    height: 'calc(100vh - 56px - 66px)',
+    height: '100%',
   },
   footer: {
+    position: 'absolute',
+    left: '0',
+    bottom: '0',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    flex: '0 0 auto',
+    width: '100%',
     height: '66px',
   },
 })

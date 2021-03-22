@@ -22,7 +22,7 @@ import { DateTimePicker, LocalizationProvider } from '@material-ui/pickers'
 import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import moment from 'moment'
 import 'moment/locale/ko'
-import React, { useEffect, useRef, useState, MouseEvent } from 'react'
+import React, { useEffect, useRef, useState, MouseEvent, ChangeEvent } from 'react'
 
 const useStyles = makeStyles({
   root: {
@@ -90,6 +90,7 @@ interface Props {
   initDateTime: Date
   schedule?: ScheduleRequest
   setSchedule: Function
+  hasSavedInfo: boolean
 }
 
 const ScheduleRequestInput: React.FC<Props> = ({
@@ -99,15 +100,16 @@ const ScheduleRequestInput: React.FC<Props> = ({
   initDateTime,
   schedule,
   setSchedule,
+  hasSavedInfo,
 }) => {
-  const [expanded, setExpanded] = React.useState<string>(null)
-  const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(false)
+  const [expanded, setExpanded] = React.useState<boolean>(!hasSavedInfo)
+  const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(hasSavedInfo)
   const [selectedDate, setDate] = useState(moment(initDateTime))
 
-  const handleChange = (panel) => (e: MouseEvent, isExpanded) => {
+  const handleChangeAccordion = (e, isExpanded) => {
     // e.preventDefault()
     // e.stopPropagation()
-    setExpanded(isExpanded ? panel : false)
+    setExpanded(isExpanded)
   }
 
   const handleClickInfoSave = (e: MouseEvent) => {
@@ -265,8 +267,8 @@ const ScheduleRequestInput: React.FC<Props> = ({
       />
       <Accordion
         style={{ marginTop: '16px' }}
-        expanded={expanded === 'panel1'}
-        onChange={handleChange('panel1')}>
+        expanded={expanded}
+        onChange={(e, isExpanded) => handleChangeAccordion(e, isExpanded)}>
         <AccordionSummary>
           기본 정보
           <FormControlLabel

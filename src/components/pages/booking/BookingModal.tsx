@@ -124,6 +124,7 @@ const BookingModal: React.FC<Props> = ({
             onClickClose={handleClose}
             onClickSave={handleClickSave}
             setSchedule={setSchedule}
+            hasSavedInfo={true}
           />
         </DialogContent>
         <DialogActions>

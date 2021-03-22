@@ -66,6 +66,9 @@ const BookingModal: React.FC<Props> = ({
   const [titleEl, setTitleEl] = useState<HTMLInputElement>(null)
   const [placeEl, setPlaceEl] = useState<HTMLInputElement>(null)
   const [phoneEl, setPhoneEl] = useState<HTMLInputElement>(null)
+  const [timeInvalidReason, setTimeInvalidReason] = useState<string>(null)
+  const [placeInvalidReason, setPlaceInvalidReason] = useState<string>(null)
+  const [phoneInvalidReason, setPhoneInvalidReason] = useState<string>(null)
 
   const setRef = (startTimeEl, endTimeEl, titleEl, placeEl, phoneEl) => {
     startTimeEl
@@ -115,7 +118,7 @@ const BookingModal: React.FC<Props> = ({
         aria-labelledby="customized-dialog-title"
         open={isOpen}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          예약 신청
+          수업 예약 신청
         </DialogTitle>
         <DialogContent dividers>
           <ScheduleRequestInput
@@ -125,6 +128,9 @@ const BookingModal: React.FC<Props> = ({
             onClickSave={handleClickSave}
             setSchedule={setSchedule}
             hasSavedInfo={true}
+            timeInvalidReason={timeInvalidReason}
+            placeInvalidReason={placeInvalidReason}
+            phoneInvalidReason={phoneInvalidReason}
           />
         </DialogContent>
         <DialogActions>

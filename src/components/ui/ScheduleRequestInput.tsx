@@ -22,7 +22,14 @@ import { DateTimePicker, LocalizationProvider } from '@material-ui/pickers'
 import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import moment from 'moment'
 import 'moment/locale/ko'
-import React, { useEffect, useRef, useState, MouseEvent, ChangeEvent } from 'react'
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  MouseEvent,
+  ChangeEvent,
+} from 'react'
+import { IMaskInput } from 'react-imask'
 
 const useStyles = makeStyles({
   root: {
@@ -69,7 +76,7 @@ const useStyles = makeStyles({
     '& .MuiAccordionSummary-content': {
       // marginLeft: '8px',
       justifyContent: 'space-between',
-      alignItems: 'center',      
+      alignItems: 'center',
     },
   },
   accordion_details: {
@@ -79,8 +86,8 @@ const useStyles = makeStyles({
     marginRight: '8px',
     '& .MuiFormControlLabel-label': {
       fontSize: '0.9rem',
-    }
-  }
+    },
+  },
 })
 
 interface Props {
@@ -91,6 +98,9 @@ interface Props {
   schedule?: ScheduleRequest
   setSchedule: Function
   hasSavedInfo: boolean
+  timeInvalidReason: string
+  placeInvalidReason: string
+  phoneInvalidReason: string
 }
 
 const ScheduleRequestInput: React.FC<Props> = ({
@@ -101,6 +111,9 @@ const ScheduleRequestInput: React.FC<Props> = ({
   schedule,
   setSchedule,
   hasSavedInfo,
+  timeInvalidReason,
+  placeInvalidReason,
+  phoneInvalidReason,
 }) => {
   const [expanded, setExpanded] = React.useState<boolean>(!hasSavedInfo)
   const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(hasSavedInfo)
@@ -173,6 +186,33 @@ const ScheduleRequestInput: React.FC<Props> = ({
     />
   )
 
+  const phoneNumberInput = (props) => {
+    return (
+      <IMaskInput
+      {...props}
+                  mask={'000-0000-0000'}
+                  radix="."
+                  value="010-"
+                  unmask={true} // true|false|'typed'
+                  // inputRef={(el) => (this.input = el)} // access to nested input
+                  // DO NOT USE onChange TO HANDLE CHANGES!
+                  // USE onAccept INSTEAD
+                  
+                  onAccept={
+                    // depending on prop above first argument is
+                    // `value` if `unmask=false`,
+                    // `unmaskedValue` if `unmask=true`,
+                    // `typedValue` if `unmask='typed'`
+                    (value, mask) => console.log(value)
+                  }
+                  // ...and more mask props in a guide
+
+                  // input props also available
+                  placeholder="전화번호를 입력해주세요."
+                />
+    )
+  }
+
   return (
     <>
       {/* <Grid container spacing={2}>
@@ -195,6 +235,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
               fullWidth
               variant="outlined"
               helperText={''}
+              error={!!timeInvalidReason}
             />
           )}
           toolbarFormat={'MM.DD a'}
@@ -232,13 +273,11 @@ const ScheduleRequestInput: React.FC<Props> = ({
         variant="outlined"
         label="Place"
         margin="normal"
+        error={!!placeInvalidReason}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton
-                aria-label="input location"
-                disabled={true}
-                edge="end">
+              <IconButton aria-label="input place" disabled={true} edge="end">
                 <LocationOnIcon />
               </IconButton>
             </InputAdornment>
@@ -318,7 +357,9 @@ const ScheduleRequestInput: React.FC<Props> = ({
             label="Phone Number"
             margin="normal"
             type="tel"
+            error={!!phoneInvalidReason}
             InputProps={{
+              inputComponent: phoneNumberInput,
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton

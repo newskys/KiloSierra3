@@ -1,5 +1,6 @@
 import ConfirmSignUpInput from '@components/ui/ConfirmSignUpInput'
 import Layout from '@components/ui/Layout'
+import { useFooter } from '@hooks/useFooter'
 import { useHeader } from '@hooks/useHeader'
 import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -20,6 +21,7 @@ const useStyles = makeStyles({
 
 const ConfirmSignUpPage = () => {
   useHeader(false)
+  useFooter(false)
   const classes = useStyles()
   const [user, setUserState] = useRecoilState<UserState>(userState)
   const [invalidReason, setInvalidReason] = useState<string>(null)

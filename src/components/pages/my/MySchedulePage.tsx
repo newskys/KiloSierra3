@@ -1,6 +1,6 @@
 import { getMySchedule } from '@apis/schedule'
 import { ADD_SCHEDULE } from '@common/routePath'
-import SchedulerWrapper from '@components/pages/schedule/SchedulerWrapper'
+import SchedulerWrapper from '@components/common/SchedulerWrapper'
 import Layout from '@components/ui/Layout'
 import { AppointmentModel } from '@devexpress/dx-react-scheduler'
 import { useHeader } from '@hooks/useHeader'
@@ -71,7 +71,7 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     <Layout>
       {!isLoading && (
         <>
-          <SchedulerWrapper schedule={schedulesVO} />
+          <SchedulerWrapper schedule={schedulesVO} onClickSchedule={(e) => console.log('dbk', e)} />
           <Fab
             className={classes.fab}
             variant="extended"

@@ -1,6 +1,10 @@
+import { ScheduleRequest } from '@interfaces/schedule'
 import {
-  Button,
+  Accordion,
+  AccordionDetails,
+  Checkbox,
   FormControl,
+  FormControlLabel,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -8,15 +12,17 @@ import {
   Select,
   TextField,
 } from '@material-ui/core'
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
 import { makeStyles } from '@material-ui/core/styles'
+import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp'
+import ChatIcon from '@material-ui/icons/Chat'
+import LocationOnIcon from '@material-ui/icons/LocationOn'
+import PhoneIcon from '@material-ui/icons/Phone'
 import { DateTimePicker, LocalizationProvider } from '@material-ui/pickers'
 import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import moment from 'moment'
 import 'moment/locale/ko'
-import React, { useEffect, useRef, useState } from 'react'
-import ChatIcon from '@material-ui/icons/Chat'
-import LocationOnIcon from '@material-ui/icons/LocationOn'
-import PhoneIcon from '@material-ui/icons/Phone';
+import React, { useEffect, useRef, useState, MouseEvent } from 'react'
 
 const useStyles = makeStyles({
   root: {
@@ -54,15 +60,61 @@ const useStyles = makeStyles({
   text_button: {
     textTransform: 'none',
   },
+  accordion_summary: {
+    backgroundColor: 'rgba(0, 0, 0, .03)',
+    // flexDirection: 'row-reverse',
+    '& .MuiAccordionSummary-expandIcon.Mui-expanded': {
+      transform: 'rotate(90deg)',
+    },
+    '& .MuiAccordionSummary-content': {
+      // marginLeft: '8px',
+      justifyContent: 'space-between',
+      alignItems: 'center',      
+    },
+  },
+  accordion_details: {
+    flexDirection: 'column',
+  },
+  saveinfo_label: {
+    marginRight: '8px',
+    '& .MuiFormControlLabel-label': {
+      fontSize: '0.9rem',
+    }
+  }
 })
 
 interface Props {
-  onClick: Function
+  onClickClose: Function
+  onClickSave: Function
   setRef: Function
+  initDateTime: Date
+  schedule?: ScheduleRequest
+  setSchedule: Function
 }
 
-const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
-  const [selectedDate, setDate] = useState(moment())
+const ScheduleRequestInput: React.FC<Props> = ({
+  onClickSave,
+  onClickClose,
+  setRef,
+  initDateTime,
+  schedule,
+  setSchedule,
+}) => {
+  const [expanded, setExpanded] = React.useState<string>(null)
+  const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(false)
+  const [selectedDate, setDate] = useState(moment(initDateTime))
+
+  const handleChange = (panel) => (e: MouseEvent, isExpanded) => {
+    // e.preventDefault()
+    // e.stopPropagation()
+    setExpanded(isExpanded ? panel : false)
+  }
+
+  const handleClickInfoSave = (e: MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setSaveInfoOn(!saveInfoOn)
+  }
   // const [inputValue, setInputValue] = useState(moment().format('YYYY-MM-DD'))
 
   // console.log('inputValue', inputValue)
@@ -74,7 +126,7 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
   }
 
   const onAccept = (date) => {
-    setDate(moment(date))
+    setDate(date)
     // console.log('onaccept', moment(date).toString())
   }
 
@@ -110,6 +162,14 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
       phoneRef.current
     )
   }, [])
+
+  const AccordionSummary = (props) => (
+    <MuiAccordionSummary
+      expandIcon={<ArrowForwardIosSharpIcon style={{ fontSize: '0.9rem' }} />}
+      {...props}
+      className={classes.accordion_summary}
+    />
+  )
 
   return (
     <>
@@ -148,10 +208,6 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
           // maxDate={new Date(0, 0, 31)}
         />
       </LocalizationProvider>
-      {/* </Grid>
-        <Grid item xs={6}> */}
-      {/* </Grid>
-      </Grid> */}
       <FormControl variant="outlined" fullWidth className={classes.formControl}>
         <InputLabel id="demo-simple-select-outlined-label">Duration</InputLabel>
         <Select
@@ -187,44 +243,6 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
           ),
         }}
       />
-      <FormControl fullWidth variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">Level</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={level}
-          onChange={handleChangeLevel}
-          label="Level">
-          <MenuItem value={0}>Test</MenuItem>
-          <MenuItem value={1}>A1 (Beginner)</MenuItem>
-          <MenuItem value={2}>A2</MenuItem>
-          <MenuItem value={3}>B1</MenuItem>
-          <MenuItem value={4}>B2</MenuItem>
-          <MenuItem value={5}>C1</MenuItem>
-          <MenuItem value={6}>C2 (Native)</MenuItem>
-        </Select>
-      </FormControl>
-      <TextField
-        inputRef={phoneRef}
-        fullWidth
-        className={classes.login_input}
-        variant="outlined"
-        label="Phone Number"
-        margin="normal"
-        type="tel"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="input location"
-                disabled={true}
-                edge="end">
-                <PhoneIcon />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
       <TextField
         inputRef={titleRef}
         fullWidth
@@ -245,6 +263,74 @@ const ScheduleRequestInput: React.FC<Props> = ({ onClick, setRef }) => {
           ),
         }}
       />
+      <Accordion
+        style={{ marginTop: '16px' }}
+        expanded={expanded === 'panel1'}
+        onChange={handleChange('panel1')}>
+        <AccordionSummary>
+          기본 정보
+          <FormControlLabel
+            onClick={handleClickInfoSave}
+            className={classes.saveinfo_label}
+            control={
+              <Checkbox
+                checked={saveInfoOn}
+                // onChange={(e) => {
+                //   console.log(e)
+                // }}
+                name="saveInfoCheck"
+                color="primary"
+              />
+            }
+            label="다음에도 사용"
+          />
+        </AccordionSummary>
+        <AccordionDetails className={classes.accordion_details}>
+          <FormControl
+            fullWidth
+            variant="outlined"
+            className={classes.formControl}>
+            <InputLabel id="demo-simple-select-outlined-label">
+              Level
+            </InputLabel>
+            <Select
+              labelId="demo-simple-select-outlined-label"
+              id="demo-simple-select-outlined"
+              value={level}
+              onChange={handleChangeLevel}
+              label="Level">
+              <MenuItem value={0}>Test</MenuItem>
+              <MenuItem value={1}>A1 (Beginner)</MenuItem>
+              <MenuItem value={2}>A2</MenuItem>
+              <MenuItem value={3}>B1</MenuItem>
+              <MenuItem value={4}>B2</MenuItem>
+              <MenuItem value={5}>C1</MenuItem>
+              <MenuItem value={6}>C2 (Native)</MenuItem>
+            </Select>
+          </FormControl>
+          <TextField
+            inputRef={phoneRef}
+            fullWidth
+            className={classes.login_input}
+            variant="outlined"
+            label="Phone Number"
+            margin="normal"
+            type="tel"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="input location"
+                    disabled={true}
+                    edge="end">
+                    <PhoneIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </AccordionDetails>
+      </Accordion>
     </>
   )
 }

@@ -13,7 +13,7 @@ import React, { useEffect, useState, MouseEvent } from 'react'
 import { RouteComponentProps } from 'react-router'
 import { History, useHistory } from 'react-router-dom'
 import BookingModal from '../booking/BookingModal'
-import SchedulerWrapper from './SchedulerWrapper'
+import SchedulerWrapper from '../../common/SchedulerWrapper'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -37,6 +37,8 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   const history: History = useHistory()
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
+  const [isModalOpen, setModalOpen] = useState<boolean>(false)
+  const [initModalDateTime, setInitModalDateTime] = useState<Date>(null)
 
   const getSchedule = async (tutorId: string) => {
     try {
@@ -63,26 +65,40 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     }
   })
 
-  const onClickAddSchedule = (e: MouseEvent) => {
-    e.preventDefault()
-    history.push(`/${tutorId}/schedule/add`)
+  const handleClickAddSchedule = (e: MouseEvent) => {
+    setModalOpen(true)
+  }
+
+  const setSchedule = async () => {
+    // setInitModalDateTime()
+  }
+
+  const handleClickSchedule = (e, date: Date) => {
+    if (date.getTime() < new Date().getTime()) {
+      return
+    }
+
+    console.log('date', date)
+    setInitModalDateTime(date)
+    setModalOpen(true)
   }
 
   return (
     <Layout>
       {!isLoading && (
         <>
-          <BookingModal />
-          <SchedulerWrapper schedule={schedulesVO} />
+          <BookingModal isOpen={isModalOpen} setOpen={setModalOpen} initDateTime={initModalDateTime} setSchedule={setSchedule} />
+          <SchedulerWrapper schedule={schedulesVO} onClickSchedule={handleClickSchedule} />
           <Fab
             className={classes.fab}
             variant="extended"
             color="primary"
-            onClick={(e) => onClickAddSchedule(e)}
+            onClick={(e) => handleClickAddSchedule(e)}
             aria-label="add">
             <AddIcon />
             Add Schedule
           </Fab>
+
         </>
       )}
       

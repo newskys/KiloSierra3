@@ -74,6 +74,12 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: 1.2,
     height: '100%',
   },
+  timetableContainer: {
+    width: '50px',
+    '& table': {
+      width: '100%',
+    },
+  },
 }))
 
 export enum ViewName {
@@ -83,6 +89,7 @@ export enum ViewName {
 
 interface Props {
   schedule: AppointmentModel[]
+  onClickSchedule: Function
 }
 
 interface MonthViewSchedule {
@@ -97,7 +104,10 @@ interface DayScheduleAvailability {
   late: boolean
 }
 
-const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
+const SchedulerWrapper: React.FC<Props> = ({
+  schedule: rawSchedule,
+  onClickSchedule,
+}) => {
   const classes = useStyles()
   const [monthViewSchedule, setMonthViewSchedule] = useState<
     AppointmentModel[]
@@ -190,7 +200,13 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
     return (
       <WeekView.TimeScaleLabel
         {...props}
-        style={{ width: '50px' }}
+        // className={classes.timetableContainer}
+        style={{
+          width: '50px',
+          //   '& > table': {
+          //     width: '100%'
+          //   }
+        }}
         formatDate={(date, options) => {
           const time: string = moment(date).format('h:mm')
           // if (moment(date).hours() % 12 === 0 && moment(date).minutes() === 0) {
@@ -204,7 +220,36 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
   }
 
   const WeekTimeScaleLayout = (props) => {
-    return <WeekView.TimeScaleLayout {...props} style={{ width: '50px' }} />
+    return (
+      <WeekView.TimeScaleLayout
+        // height={100}
+        {...props}
+        className={classes.timetableContainer}
+        // style={{ width: '51px' }}
+      />
+    )
+  }
+
+  const WeekTimeTableRow = (props) => {
+    console.log(props)
+    return (
+      <WeekView.TimeTableRow
+        // height={100}
+        {...props}
+        // style={{ width: '10px' }}
+      />
+    )
+  }
+
+  const WeekTimeTableLayout = (props) => {
+    console.log(props)
+    return (
+      <WeekView.TimeTableLayout
+        // height={100}
+        {...props}
+        // style={{ width: '10px' }}
+      />
+    )
   }
 
   const WeekTimeTableCell = (props) => {
@@ -216,7 +261,7 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
         <WeekView.TimeTableCell
           {...props}
           className={classes.todayCell}
-          onClick={props.onDoubleClick}
+          onClick={(e) => onClickSchedule(e, date)}
         />
       )
     }
@@ -225,20 +270,14 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
         <WeekView.TimeTableCell
           {...props}
           className={classes.weekendCell}
-          onClick={(e) => {
-            console.log(props)
-            props.onDoubleClick(e)
-          }}
+          onClick={(e) => onClickSchedule(e, date)}
         />
       )
     }
     return (
       <WeekView.TimeTableCell
         {...props}
-        onClick={(e) => {
-          console.log(props)
-          props.onDoubleClick(e)
-        }}
+        onClick={(e) => onClickSchedule(e, date)}
       />
     )
   }
@@ -348,7 +387,12 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
         {...restProps}
         onClick={
           isWeekView
-            ? (e) => handleClickDateOnWeekView(e, restProps.onClick, new Date(data.startDate))
+            ? (e) =>
+                handleClickDateOnWeekView(
+                  e,
+                  restProps.onClick,
+                  new Date(data.startDate)
+                )
             : (e) => handleClickDateOnMonthView(e, new Date(data.startDate))
         }
         draggable={false}
@@ -446,8 +490,11 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
         startDayHour={9}
         endDayHour={22}
         timeTableCellComponent={WeekTimeTableCell}
+        // timeTableLayoutComponent={WeekTimeTableLayout}
         timeScaleLabelComponent={WeekTimeTableLabel}
         timeScaleLayoutComponent={WeekTimeScaleLayout}
+        // timeTableRowComponent={WeekTimeTableRow}
+
         // dayScaleEmptyCellComponent={DayScaleEmptyCell}
       />
       <MonthView
@@ -467,7 +514,7 @@ const SchedulerWrapper: React.FC<Props> = ({ schedule: rawSchedule }) => {
         appointmentContentComponent={AppointmentContent}
       />
       <AppointmentTooltip showCloseButton showDeleteButton showOpenButton />
-      <AppointmentForm />
+      {/* <AppointmentForm /> */}
       <CurrentTimeIndicator
         shadePreviousCells={true}
         shadePreviousAppointments={true}

@@ -1,15 +1,12 @@
 import Layout from '@components/ui/Layout'
+import { useFooter } from '@hooks/useFooter'
 import { useHeader } from '@hooks/useHeader'
 import {
   Avatar,
   Box,
-
   Card,
-
-  CardContent, CardMedia,
-
-
-
+  CardContent,
+  CardMedia,
   Typography
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -53,6 +50,8 @@ const useStyles = makeStyles({
 
 const LoginPage: React.FC = () => {
   useHeader(false)
+  useFooter(true)
+
   const classes = useStyles()
 
   return (

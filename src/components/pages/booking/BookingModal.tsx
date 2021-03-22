@@ -1,6 +1,7 @@
 import ScheduleRequestInput from '@components/ui/ScheduleRequestInput'
 import { useHeader } from '@hooks/useHeader'
 import { HeaderType } from '@interfaces/header'
+import { ScheduleRequest } from '@interfaces/schedule'
 import {
   Button,
   DialogActions,
@@ -12,7 +13,7 @@ import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
-import React from 'react'
+import React, { useState } from 'react'
 
 const useStyles = makeStyles({
   root: {
@@ -46,16 +47,45 @@ const useStyles = makeStyles({
 //   },
 // })
 
-const BookingModal: React.FC = () => {
+interface Props {
+  isOpen: boolean
+  setOpen: Function
+  setSchedule: Function
+  initDateTime: Date
+}
+
+const BookingModal: React.FC<Props> = ({
+  isOpen,
+  setOpen,
+  initDateTime,
+  setSchedule,
+}) => {
   const classes = useStyles()
+  const [startTimeEl, setStartTimeEl] = useState<HTMLInputElement>(null)
+  const [endTimeEl, setEndTimeEl] = useState<HTMLInputElement>(null)
+  const [titleEl, setTitleEl] = useState<HTMLInputElement>(null)
+  const [placeEl, setPlaceEl] = useState<HTMLInputElement>(null)
+  const [phoneEl, setPhoneEl] = useState<HTMLInputElement>(null)
 
-  const setRef = (startTimeEl, endTimeEl) => {}
-  const [open, setOpen] = React.useState(false)
-
-  const handleClickOpen = () => {
-    setOpen(true)
+  const setRef = (startTimeEl, endTimeEl, titleEl, placeEl, phoneEl) => {
+    startTimeEl
   }
+
   const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleClickSave = (e) => {
+    const newSchedule: ScheduleRequest = {
+      startDate: null,
+      endDate: null,
+      title: null,
+      level: null,
+      place: null,
+      phone: null,
+    }
+
+    setSchedule(newSchedule)
     setOpen(false)
   }
 
@@ -83,23 +113,23 @@ const BookingModal: React.FC = () => {
       <Dialog
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
-        open={false}>
+        open={isOpen}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          Modal title
+          예약 신청
         </DialogTitle>
         <DialogContent dividers>
           <ScheduleRequestInput
-          setRef={setRef}
-          onClick={()=>{}}
-        />
+            initDateTime={initDateTime}
+            setRef={setRef}
+            onClickClose={handleClose}
+            onClickSave={handleClickSave}
+            setSchedule={setSchedule}
+          />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>
-            Save changes
-          </Button>
+          <Button onClick={handleClickSave}>Save changes</Button>
         </DialogActions>
       </Dialog>
-      
     </>
   )
 }

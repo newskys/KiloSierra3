@@ -18,7 +18,7 @@ import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp'
 import ChatIcon from '@material-ui/icons/Chat'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 import PhoneIcon from '@material-ui/icons/Phone'
-import { DateTimePicker, LocalizationProvider } from '@material-ui/pickers'
+import { MobileDateTimePicker, LocalizationProvider } from '@material-ui/pickers'
 import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import moment from 'moment'
 import 'moment/locale/ko'
@@ -30,6 +30,7 @@ import React, {
   ChangeEvent,
 } from 'react'
 import { IMaskInput } from 'react-imask'
+import ScheduleIcon from '@material-ui/icons/Schedule'
 
 const useStyles = makeStyles({
   root: {
@@ -118,6 +119,8 @@ const ScheduleRequestInput: React.FC<Props> = ({
   const [expanded, setExpanded] = React.useState<boolean>(!hasSavedInfo)
   const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(hasSavedInfo)
   const [selectedDate, setDate] = useState(moment(initDateTime))
+  const [phoneNumber, setPhoneNumber] = useState<string>('01')
+  const [phoneNumberTimeout, setPhoneNumberTimeout] = useState<number>(null)
 
   const handleChangeAccordion = (e, isExpanded) => {
     // e.preventDefault()
@@ -158,7 +161,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
   const placeRef = useRef<HTMLInputElement>()
   const phoneRef = useRef<HTMLInputElement>()
   const [hour, setHour] = useState<number>(2)
-  const [level, setLevel] = useState<number>(1)
+  const [level, setLevel] = useState<number>(null)
 
   const handleChangeLevel = (e) => {
     setLevel(e.target.value)
@@ -174,7 +177,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
       endTimeRef.current,
       titleRef.current,
       placeRef.current,
-      phoneRef.current
+      // phoneRef.current
     )
   }, [])
 
@@ -186,32 +189,54 @@ const ScheduleRequestInput: React.FC<Props> = ({
     />
   )
 
-  const phoneNumberInput = (props) => {
-    return (
-      <IMaskInput
-      {...props}
-                  mask={'000-0000-0000'}
-                  radix="."
-                  value="010-"
-                  unmask={true} // true|false|'typed'
-                  // inputRef={(el) => (this.input = el)} // access to nested input
-                  // DO NOT USE onChange TO HANDLE CHANGES!
-                  // USE onAccept INSTEAD
-                  
-                  onAccept={
-                    // depending on prop above first argument is
-                    // `value` if `unmask=false`,
-                    // `unmaskedValue` if `unmask=true`,
-                    // `typedValue` if `unmask='typed'`
-                    (value, mask) => console.log(value)
-                  }
-                  // ...and more mask props in a guide
-
-                  // input props also available
-                  placeholder="전화번호를 입력해주세요."
-                />
-    )
+  const setLazyNumber = (newPhoneNumber: string) => {
+    if (phoneNumberTimeout) {
+      window.clearTimeout(phoneNumberTimeout)
+    }
+    
+    const timeout: number = window.setTimeout(() => {
+      // console.log(newPhoneNumber)
+      // setPhoneNumber(newPhoneNumber)
+      // window.clearTimeout(phoneNumberTimeout)
+      // setPhoneNumberTimeout(null)
+    }, 3000)
+    setPhoneNumberTimeout(timeout)
   }
+
+  // const phoneNumberInput = (props) => (
+  //   <IMaskInput
+  //     {...props}
+  //     // mask={Number}
+  //     mask={'{\\01}`0-0000-0000'}
+  //     radix="."
+  //     defaultValue={'01'}
+  //     value={phoneNumber}
+  //     lazy={false}
+  //     unmask={true} // true|false|'typed'
+  //     // inputRef={phoneRef} // access to nested input
+  //     // DO NOT USE onChange TO HANDLE CHANGES!
+  //     // USE onAccept INSTEAD
+
+  //     onAccept={
+  //     // //   // depending on prop above first argument is
+  //     // //   // `value` if `unmask=false`,
+  //     // //   // `unmaskedValue` if `unmask=true`,
+  //     // //   // `typedValue` if `unmask='typed'`
+  //       (unmaskedValue, mask) => {
+  //         console.log(unmaskedValue, mask)
+  //         setLazyNumber(unmaskedValue)
+  //       }
+  //     }
+  //     // onBlur={(data) => {
+  //     //   return console.log(data.currentTarget.value)
+  //     // }
+  //     // }
+  //     // ...and more mask props in a guide
+
+  //     // input props also available
+  //     placeholder="전화번호를 입력해주세요."
+  //   />
+  // )
 
   return (
     <>
@@ -221,8 +246,8 @@ const ScheduleRequestInput: React.FC<Props> = ({
         dateLibInstance={moment}
         dateAdapter={MomentAdapter}
         locale={'ko'}>
-        <DateTimePicker
-          disabled={true}
+        <MobileDateTimePicker
+          // disabled={true}
           disablePast
           minutesStep={30}
           allowKeyboardControl={false}
@@ -236,16 +261,29 @@ const ScheduleRequestInput: React.FC<Props> = ({
               variant="outlined"
               helperText={''}
               error={!!timeInvalidReason}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="select date and time"
+                      disabled={true}
+                      edge="end">
+                      <ScheduleIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           )}
           toolbarFormat={'MM.DD a'}
-          // ToolbarComponent={<></>}
-          label="Request Time"
+          toolbarPlaceholder={''}
+          // ToolbarComponent={ToolbarComponent}
+          label="수업 시간"
           value={selectedDate}
           inputFormat={'yyyy.MM.DD a hh:mm'}
           onChange={onDateChange}
-          // minTime={new Date(0, 0, 0, 9, 0)}
-          // maxTime={new Date(0, 0, 0, 21, 0)}
+          minTime={new Date(0, 0, 0, 9, 0)}
+          maxTime={new Date(0, 0, 0, 21, 0)}
           onError={console.log}
           onAccept={onAccept}
           // maxDate={new Date(0, 0, 31)}
@@ -273,6 +311,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
         variant="outlined"
         label="Place"
         margin="normal"
+        placeholder="수업을 원하는 장소를 입력해주세요."
         error={!!placeInvalidReason}
         InputProps={{
           endAdornment: (
@@ -291,6 +330,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
         variant="outlined"
         label="Requests"
         margin="normal"
+        placeholder="(선택) 요청 사항을 입력해주세요."
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -359,7 +399,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
             type="tel"
             error={!!phoneInvalidReason}
             InputProps={{
-              inputComponent: phoneNumberInput,
+              // inputComponent: phoneNumberInput,
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton

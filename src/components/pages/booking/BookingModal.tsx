@@ -1,7 +1,11 @@
+import { RESERVATION } from '@common/lang'
+import { checkPhone } from '@common/regex'
+import { SAVED_INFO } from '@common/storage'
 import ScheduleRequestInput from '@components/ui/ScheduleRequestInput'
 import { useHeader } from '@hooks/useHeader'
 import { HeaderType } from '@interfaces/header'
 import { ScheduleRequest } from '@interfaces/schedule'
+import { ReservationBasicInfo } from '@interfaces/storage'
 import {
   Button,
   DialogActions,
@@ -13,7 +17,7 @@ import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
-import React, { useState } from 'react'
+import React, { useState, KeyboardEvent, useEffect, useMemo, useRef } from 'react'
 
 const useStyles = makeStyles({
   root: {
@@ -45,17 +49,41 @@ const BookingModal: React.FC<Props> = ({
   setSchedule,
 }) => {
   const classes = useStyles()
+  // const phoneRef = useRef<HTMLInputElement>()
   const [startTimeEl, setStartTimeEl] = useState<HTMLInputElement>(null)
   const [endTimeEl, setEndTimeEl] = useState<HTMLInputElement>(null)
   const [titleEl, setTitleEl] = useState<HTMLInputElement>(null)
   const [placeEl, setPlaceEl] = useState<HTMLInputElement>(null)
   const [phoneEl, setPhoneEl] = useState<HTMLInputElement>(null)
+  const [tempPhone, setTempPhone] = useState<string>(null)
   const [timeInvalidReason, setTimeInvalidReason] = useState<string>(null)
   const [placeInvalidReason, setPlaceInvalidReason] = useState<string>(null)
   const [phoneInvalidReason, setPhoneInvalidReason] = useState<string>(null)
 
+  useEffect(() => {
+  }, [])
+
+  const savedInfo = (() => {
+    const savedInfo: ReservationBasicInfo = JSON.parse(window.localStorage.getItem(SAVED_INFO))
+    console.log('savedinfo', savedInfo)
+    if (!savedInfo || !Number.isInteger(savedInfo.level) || !validatePhone(savedInfo.phone)) {
+      return null
+    }
+  
+    return savedInfo
+  })()
+
   const setRef = (startTimeEl, endTimeEl, titleEl, placeEl, phoneEl) => {
-    startTimeEl
+    setStartTimeEl(startTimeEl)
+    setEndTimeEl(endTimeEl)
+    setTitleEl(titleEl)
+    setPlaceEl(placeEl)
+    // setPhoneEl(phoneEl)
+  }
+
+  const setPhoneRef = (phoneEl) => {
+    setPhoneEl(phoneEl)
+    console.log('pe',phoneEl)
   }
 
   const handleClose = () => {
@@ -95,6 +123,42 @@ const BookingModal: React.FC<Props> = ({
     )
   }
 
+  const handleChangeTime = (value: string) => {}
+
+  const validateTime = () => {}
+
+  const handleChangePlace = (value: string) => {}
+
+  const validatePlace = (value: string) => {
+    return
+  }
+
+  const handleChangePhone = (e: KeyboardEvent<HTMLInputElement>) => {
+    const value: string = e.currentTarget.value
+    if (validatePhone(value)) {
+      setTempPhone(value)
+      setPhoneInvalidReason(null)
+
+      // phoneEl.blur()
+    }
+  }
+
+  const handleBlurPhone = (e: KeyboardEvent<HTMLInputElement>) => {
+    const value: string = e.currentTarget.value
+    let message: string = null
+
+    if (!validatePhone(value)) {
+      message = RESERVATION.PHONE_ERROR_REGEX
+    }
+
+    setTempPhone(value)
+    setPhoneInvalidReason(message)
+  }
+
+  const validatePhone = (value: string) => {
+    return checkPhone(value)
+  }
+
   return (
     <>
       <Dialog
@@ -108,13 +172,20 @@ const BookingModal: React.FC<Props> = ({
           <ScheduleRequestInput
             initDateTime={initDateTime}
             setRef={setRef}
+            setPhoneRef={setPhoneRef}
+            // phoneRef={phoneRef}
             onClickClose={handleClose}
             onClickSave={handleClickSave}
             setSchedule={setSchedule}
-            hasSavedInfo={true}
+            savedInfo={savedInfo}
             timeInvalidReason={timeInvalidReason}
             placeInvalidReason={placeInvalidReason}
             phoneInvalidReason={phoneInvalidReason}
+            onChangeTime={handleChangeTime}
+            onChangePlace={handleChangePlace}
+            onChangePhone={handleChangePhone}
+            onBlurPhone={handleBlurPhone}
+            tempPhone={tempPhone}
           />
         </DialogContent>
         <DialogActions>

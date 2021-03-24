@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { appointments } from '@common/appointments'
 import Layout from '@components/ui/Layout'
 import {
   AppointmentModel,

@@ -21,3 +21,8 @@ export const AUTH = {
   RESET_REQUIRED: '새로운 비밀번호를 설정해주세요.',
   PASSWORD_CHANGED: '비밀번호가 변경되었습니다.',
 }
+
+export const RESERVATION = {
+  PLACE_ERROR_REGEX: '장소를 입력해주세요.',
+  PHONE_ERROR_REGEX: '형식에 맞지 않습니다.',
+}

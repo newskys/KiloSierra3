@@ -18,7 +18,10 @@ import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp'
 import ChatIcon from '@material-ui/icons/Chat'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 import PhoneIcon from '@material-ui/icons/Phone'
-import { MobileDateTimePicker, LocalizationProvider } from '@material-ui/pickers'
+import {
+  MobileDateTimePicker,
+  LocalizationProvider,
+} from '@material-ui/pickers'
 import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import moment from 'moment'
 import 'moment/locale/ko'
@@ -28,9 +31,13 @@ import React, {
   useState,
   MouseEvent,
   ChangeEvent,
+  KeyboardEvent,
+  FormEvent,
+  RefObject,
 } from 'react'
-import { IMaskInput } from 'react-imask'
+import NumberFormat from 'react-number-format'
 import ScheduleIcon from '@material-ui/icons/Schedule'
+import { ReservationBasicInfo } from '@interfaces/storage'
 
 const useStyles = makeStyles({
   root: {
@@ -92,35 +99,56 @@ const useStyles = makeStyles({
 })
 
 interface Props {
+  // phoneRef: RefObject<HTMLInputElement>
   onClickClose: Function
   onClickSave: Function
   setRef: Function
+  setPhoneRef: Function
   initDateTime: Date
   schedule?: ScheduleRequest
   setSchedule: Function
-  hasSavedInfo: boolean
+  savedInfo: ReservationBasicInfo
   timeInvalidReason: string
   placeInvalidReason: string
   phoneInvalidReason: string
+  onChangeTime: Function
+  onChangePlace: Function
+  onChangePhone: Function
+  onBlurPhone: Function
+  tempPhone: string
 }
 
 const ScheduleRequestInput: React.FC<Props> = ({
+  // phoneRef,
   onClickSave,
   onClickClose,
   setRef,
+  setPhoneRef,
   initDateTime,
   schedule,
   setSchedule,
-  hasSavedInfo,
+  savedInfo,
   timeInvalidReason,
   placeInvalidReason,
   phoneInvalidReason,
+  onChangeTime,
+  onChangePlace,
+  onChangePhone,
+  onBlurPhone,
+  tempPhone,
 }) => {
-  const [expanded, setExpanded] = React.useState<boolean>(!hasSavedInfo)
-  const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(hasSavedInfo)
+  const classes = useStyles()
+  const startTimeRef = useRef<HTMLInputElement>()
+  const endTimeRef = useRef<HTMLInputElement>()
+  const titleRef = useRef<HTMLInputElement>()
+  const placeRef = useRef<HTMLInputElement>()
+  const phoneRef = useRef<HTMLInputElement>()
+  const [expanded, setExpanded] = React.useState<boolean>(!savedInfo)
+  const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(!!savedInfo)
   const [selectedDate, setDate] = useState(moment(initDateTime))
-  const [phoneNumber, setPhoneNumber] = useState<string>('01')
   const [phoneNumberTimeout, setPhoneNumberTimeout] = useState<number>(null)
+  const [hour, setHour] = useState<number>(2)
+  const [level, setLevel] = useState<number>(savedInfo?.level ?? null)
 
   const handleChangeAccordion = (e, isExpanded) => {
     // e.preventDefault()
@@ -154,15 +182,6 @@ const ScheduleRequestInput: React.FC<Props> = ({
   //   setLocale(newLocale);
   // };
 
-  const classes = useStyles()
-  const startTimeRef = useRef<HTMLInputElement>()
-  const endTimeRef = useRef<HTMLInputElement>()
-  const titleRef = useRef<HTMLInputElement>()
-  const placeRef = useRef<HTMLInputElement>()
-  const phoneRef = useRef<HTMLInputElement>()
-  const [hour, setHour] = useState<number>(2)
-  const [level, setLevel] = useState<number>(null)
-
   const handleChangeLevel = (e) => {
     setLevel(e.target.value)
   }
@@ -176,9 +195,10 @@ const ScheduleRequestInput: React.FC<Props> = ({
       startTimeRef.current,
       endTimeRef.current,
       titleRef.current,
-      placeRef.current,
-      // phoneRef.current
+      placeRef.current
+      // phoneRef.current,
     )
+    // console.log(startTimeRef.current, placeRef.current, phoneRef.current)
   }, [])
 
   const AccordionSummary = (props) => (
@@ -189,54 +209,18 @@ const ScheduleRequestInput: React.FC<Props> = ({
     />
   )
 
-  const setLazyNumber = (newPhoneNumber: string) => {
-    if (phoneNumberTimeout) {
-      window.clearTimeout(phoneNumberTimeout)
-    }
-    
-    const timeout: number = window.setTimeout(() => {
-      // console.log(newPhoneNumber)
-      // setPhoneNumber(newPhoneNumber)
-      // window.clearTimeout(phoneNumberTimeout)
-      // setPhoneNumberTimeout(null)
-    }, 3000)
-    setPhoneNumberTimeout(timeout)
-  }
-
-  // const phoneNumberInput = (props) => (
-  //   <IMaskInput
-  //     {...props}
-  //     // mask={Number}
-  //     mask={'{\\01}`0-0000-0000'}
-  //     radix="."
-  //     defaultValue={'01'}
-  //     value={phoneNumber}
-  //     lazy={false}
-  //     unmask={true} // true|false|'typed'
-  //     // inputRef={phoneRef} // access to nested input
-  //     // DO NOT USE onChange TO HANDLE CHANGES!
-  //     // USE onAccept INSTEAD
-
-  //     onAccept={
-  //     // //   // depending on prop above first argument is
-  //     // //   // `value` if `unmask=false`,
-  //     // //   // `unmaskedValue` if `unmask=true`,
-  //     // //   // `typedValue` if `unmask='typed'`
-  //       (unmaskedValue, mask) => {
-  //         console.log(unmaskedValue, mask)
-  //         setLazyNumber(unmaskedValue)
-  //       }
-  //     }
-  //     // onBlur={(data) => {
-  //     //   return console.log(data.currentTarget.value)
-  //     // }
-  //     // }
-  //     // ...and more mask props in a guide
-
-  //     // input props also available
-  //     placeholder="전화번호를 입력해주세요."
-  //   />
-  // )
+  const phoneNumberInput = (props) => (
+    <NumberFormat
+      {...props}
+      format="01#-####-####"
+      // inputRef={phoneRef}
+      // ref={phoneRef}
+      defaultValue={savedInfo?.phone || undefined}
+      allowEmptyFormatting
+      value={tempPhone}
+      mask="_"
+    />
+  )
 
   return (
     <>
@@ -257,6 +241,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
           renderInput={(props) => (
             <TextField
               {...props}
+              inputRef={startTimeRef}
               fullWidth
               variant="outlined"
               helperText={''}
@@ -346,7 +331,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
       />
       <Accordion
         style={{ marginTop: '16px' }}
-        expanded={expanded}
+        expanded={true}
         onChange={(e, isExpanded) => handleChangeAccordion(e, isExpanded)}>
         <AccordionSummary>
           기본 정보
@@ -390,16 +375,19 @@ const ScheduleRequestInput: React.FC<Props> = ({
             </Select>
           </FormControl>
           <TextField
-            inputRef={phoneRef}
             fullWidth
             className={classes.login_input}
             variant="outlined"
-            label="Phone Number"
+            inputRef={phoneRef}
+            // label="연락처"
             margin="normal"
-            type="tel"
+            helperText={phoneInvalidReason}
+            // value={tempPhone}
             error={!!phoneInvalidReason}
+            onChange={(e) => onChangePhone(e)}
+            onBlur={(e) => onBlurPhone(e)}
             InputProps={{
-              // inputComponent: phoneNumberInput,
+              inputComponent: phoneNumberInput,
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton

@@ -297,7 +297,9 @@ const ScheduleRequestInput: React.FC<Props> = ({
         label="Place"
         margin="normal"
         placeholder="수업을 원하는 장소를 입력해주세요."
+        helperText={placeInvalidReason}
         error={!!placeInvalidReason}
+        onChange={(e) => onChangePlace(e)}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">

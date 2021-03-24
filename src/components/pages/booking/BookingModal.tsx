@@ -127,10 +127,19 @@ const BookingModal: React.FC<Props> = ({
 
   const validateTime = () => {}
 
-  const handleChangePlace = (value: string) => {}
+  const handleChangePlace = (e: KeyboardEvent<HTMLInputElement>) => {
+    const value: string = e.currentTarget.value
+    let message: string = null
+
+    if (!validatePlace(value)) {
+      message = RESERVATION.PLACE_ERROR_REGEX
+    }
+
+    setPlaceInvalidReason(message)
+  }
 
   const validatePlace = (value: string) => {
-    return
+    return value.trim() !== ''
   }
 
   const handleChangePhone = (e: KeyboardEvent<HTMLInputElement>) => {

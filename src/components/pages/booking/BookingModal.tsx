@@ -8,8 +8,10 @@ import { ScheduleRequest } from '@interfaces/schedule'
 import { ReservationBasicInfo } from '@interfaces/storage'
 import {
   Button,
+  Checkbox,
   DialogActions,
   DialogContent,
+  FormControlLabel,
   IconButton,
   Typography,
 } from '@material-ui/core'
@@ -17,7 +19,13 @@ import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
-import React, { useState, KeyboardEvent, useEffect, useMemo, useRef } from 'react'
+import React, {
+  useState,
+  KeyboardEvent,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react'
 
 const useStyles = makeStyles({
   root: {
@@ -54,36 +62,62 @@ const BookingModal: React.FC<Props> = ({
   const [endTimeEl, setEndTimeEl] = useState<HTMLInputElement>(null)
   const [titleEl, setTitleEl] = useState<HTMLInputElement>(null)
   const [placeEl, setPlaceEl] = useState<HTMLInputElement>(null)
+  const [levelEl, setLevelEl] = useState<HTMLSelectElement>(null)
   const [phoneEl, setPhoneEl] = useState<HTMLInputElement>(null)
+  const [tempLevel, setTempLevel] = useState<number>(null)
   const [tempPhone, setTempPhone] = useState<string>(null)
   const [timeInvalidReason, setTimeInvalidReason] = useState<string>(null)
   const [placeInvalidReason, setPlaceInvalidReason] = useState<string>(null)
   const [phoneInvalidReason, setPhoneInvalidReason] = useState<string>(null)
+  const [savedInfo, setSavedInfo] = useState<ReservationBasicInfo>(null)
+  const [isSaveInfo, setSaveInfo] = useState<boolean>(null)
 
   useEffect(() => {
+    const savedInfo: ReservationBasicInfo = JSON.parse(
+      window.localStorage.getItem(SAVED_INFO)
+    )
+    console.log('savedinfo', savedInfo)
+    if (
+      savedInfo &&
+      Number.isInteger(savedInfo.level) &&
+      validatePhone(savedInfo.phone)
+    ) {
+      setSavedInfo(savedInfo)
+      setSaveInfo(true)
+      setTempLevel(savedInfo.level)
+      setTempPhone(savedInfo.phone)
+    }
+
   }, [])
 
-  const savedInfo = (() => {
-    const savedInfo: ReservationBasicInfo = JSON.parse(window.localStorage.getItem(SAVED_INFO))
-    console.log('savedinfo', savedInfo)
-    if (!savedInfo || !Number.isInteger(savedInfo.level) || !validatePhone(savedInfo.phone)) {
-      return null
+  const saveNewInfo = (isSaveInfo: boolean, level: number, phone: string) => {
+    const newInfo: ReservationBasicInfo = {
+      level,
+      phone,
     }
-  
-    return savedInfo
-  })()
 
-  const setRef = (startTimeEl, endTimeEl, titleEl, placeEl, phoneEl) => {
+    window.localStorage.setItem(SAVED_INFO, isSaveInfo ? JSON.stringify(newInfo) : null)
+  }
+
+  const setRef = (
+    startTimeEl,
+    endTimeEl,
+    titleEl,
+    placeEl,
+    levelEl,
+    phoneEl
+  ) => {
     setStartTimeEl(startTimeEl)
     setEndTimeEl(endTimeEl)
     setTitleEl(titleEl)
     setPlaceEl(placeEl)
+    setLevelEl(levelEl)
     // setPhoneEl(phoneEl)
   }
 
   const setPhoneRef = (phoneEl) => {
     setPhoneEl(phoneEl)
-    console.log('pe',phoneEl)
+    console.log('pe', phoneEl)
   }
 
   const handleClose = () => {
@@ -100,8 +134,13 @@ const BookingModal: React.FC<Props> = ({
       phone: null,
     }
 
-    setSchedule(newSchedule)
-    setOpen(false)
+    if (validateAll()) {
+      saveNewInfo(isSaveInfo, tempLevel, tempPhone)
+      alert(RESERVATION.OK)
+      setSchedule(newSchedule)
+      setOpen(false)
+    } else {
+    }
   }
 
   const DialogTitle = (props) => {
@@ -123,9 +162,28 @@ const BookingModal: React.FC<Props> = ({
     )
   }
 
-  const handleChangeTime = (value: string) => {}
+  const handleChangeSaveInfo = (e) => {
+    setSaveInfo(!isSaveInfo)
+  }
 
-  const validateTime = () => {}
+  const handleChangeLevel = (e: React.ChangeEvent) => {
+    const value: number = parseInt(e.currentTarget.getAttribute('data-value'))
+    setTempLevel(value)
+  }
+
+  const handleChangeTime = (value: string) => {
+    let message: string = null
+
+    if (!validateTime(value)) {
+      message = RESERVATION.TIME_ERROR
+    }
+
+    setTimeInvalidReason(message)
+  }
+
+  const validateTime = (value: string) => {
+    return true
+  }
 
   const handleChangePlace = (e: KeyboardEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value
@@ -168,6 +226,10 @@ const BookingModal: React.FC<Props> = ({
     return checkPhone(value)
   }
 
+  const validateAll = (): boolean => {
+    return validatePlace(placeEl.value) && validatePhone(tempPhone)
+  }
+
   return (
     <>
       <Dialog
@@ -184,12 +246,15 @@ const BookingModal: React.FC<Props> = ({
             setPhoneRef={setPhoneRef}
             // phoneRef={phoneRef}
             onClickClose={handleClose}
-            onClickSave={handleClickSave}
             setSchedule={setSchedule}
             savedInfo={savedInfo}
+            isSaveInfo={isSaveInfo}
+            setSaveInfo={handleChangeSaveInfo}
             timeInvalidReason={timeInvalidReason}
             placeInvalidReason={placeInvalidReason}
             phoneInvalidReason={phoneInvalidReason}
+            level={tempLevel}
+            onChangeLevel={handleChangeLevel}
             onChangeTime={handleChangeTime}
             onChangePlace={handleChangePlace}
             onChangePhone={handleChangePhone}
@@ -198,7 +263,7 @@ const BookingModal: React.FC<Props> = ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClickSave}>Save changes</Button>
+          <Button onClick={handleClickSave}>예약</Button>
         </DialogActions>
       </Dialog>
     </>

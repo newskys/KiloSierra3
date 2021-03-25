@@ -5,6 +5,7 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
+  Grid,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -101,18 +102,21 @@ const useStyles = makeStyles({
 interface Props {
   // phoneRef: RefObject<HTMLInputElement>
   onClickClose: Function
-  onClickSave: Function
   setRef: Function
   setPhoneRef: Function
   initDateTime: Date
   schedule?: ScheduleRequest
   setSchedule: Function
   savedInfo: ReservationBasicInfo
+  isSaveInfo: boolean
+  setSaveInfo: Function
   timeInvalidReason: string
   placeInvalidReason: string
   phoneInvalidReason: string
+  level: number
   onChangeTime: Function
   onChangePlace: Function
+  onChangeLevel: Function
   onChangePhone: Function
   onBlurPhone: Function
   tempPhone: string
@@ -120,7 +124,6 @@ interface Props {
 
 const ScheduleRequestInput: React.FC<Props> = ({
   // phoneRef,
-  onClickSave,
   onClickClose,
   setRef,
   setPhoneRef,
@@ -128,11 +131,15 @@ const ScheduleRequestInput: React.FC<Props> = ({
   schedule,
   setSchedule,
   savedInfo,
+  isSaveInfo,
+  setSaveInfo,
   timeInvalidReason,
   placeInvalidReason,
   phoneInvalidReason,
   onChangeTime,
   onChangePlace,
+  onChangeLevel,
+  level,
   onChangePhone,
   onBlurPhone,
   tempPhone,
@@ -142,24 +149,26 @@ const ScheduleRequestInput: React.FC<Props> = ({
   const endTimeRef = useRef<HTMLInputElement>()
   const titleRef = useRef<HTMLInputElement>()
   const placeRef = useRef<HTMLInputElement>()
+  const levelRef = useRef<HTMLSelectElement>()
   const phoneRef = useRef<HTMLInputElement>()
-  const [expanded, setExpanded] = React.useState<boolean>(!savedInfo)
-  const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(!!savedInfo)
+  const [isExpanded, setExpanded] = React.useState<boolean>(!isSaveInfo)
+  // const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(isSaveInfo)
   const [selectedDate, setDate] = useState(moment(initDateTime))
   const [phoneNumberTimeout, setPhoneNumberTimeout] = useState<number>(null)
   const [hour, setHour] = useState<number>(2)
-  const [level, setLevel] = useState<number>(savedInfo?.level ?? null)
+  // const [level, setLevel] = useState<number>(savedInfo?.level ?? null)
 
   const handleChangeAccordion = (e, isExpanded) => {
     // e.preventDefault()
     // e.stopPropagation()
-    setExpanded(isExpanded)
+    // setExpanded(!isExpanded)
   }
 
   const handleClickInfoSave = (e: MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    setSaveInfoOn(!saveInfoOn)
+    setSaveInfo()
+    // setSaveInfoOn(!saveInfoOn)
   }
   // const [inputValue, setInputValue] = useState(moment().format('YYYY-MM-DD'))
 
@@ -182,9 +191,9 @@ const ScheduleRequestInput: React.FC<Props> = ({
   //   setLocale(newLocale);
   // };
 
-  const handleChangeLevel = (e) => {
-    setLevel(e.target.value)
-  }
+  // const handleChangeLevel = (e) => {
+  //   setLevel(e.target.value)
+  // }
 
   const handleChangeHour = (e) => {
     setHour(e.target.value)
@@ -195,7 +204,8 @@ const ScheduleRequestInput: React.FC<Props> = ({
       startTimeRef.current,
       endTimeRef.current,
       titleRef.current,
-      placeRef.current
+      placeRef.current,
+      levelRef.current,
       // phoneRef.current,
     )
     // console.log(startTimeRef.current, placeRef.current, phoneRef.current)
@@ -224,8 +234,6 @@ const ScheduleRequestInput: React.FC<Props> = ({
 
   return (
     <>
-      {/* <Grid container spacing={2}>
-        <Grid item xs={6}> */}
       <LocalizationProvider
         dateLibInstance={moment}
         dateAdapter={MomentAdapter}
@@ -244,7 +252,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
               inputRef={startTimeRef}
               fullWidth
               variant="outlined"
-              helperText={''}
+              helperText={'30분 단위로 진행됩니다.'}
               error={!!timeInvalidReason}
               InputProps={{
                 endAdornment: (
@@ -263,7 +271,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
           toolbarFormat={'MM.DD a'}
           toolbarPlaceholder={''}
           // ToolbarComponent={ToolbarComponent}
-          label="수업 시간"
+          label="수업일"
           value={selectedDate}
           inputFormat={'yyyy.MM.DD a hh:mm'}
           onChange={onDateChange}
@@ -275,28 +283,31 @@ const ScheduleRequestInput: React.FC<Props> = ({
         />
       </LocalizationProvider>
       <FormControl variant="outlined" fullWidth className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">Duration</InputLabel>
+        <InputLabel id="demo-simple-select-outlined-label">
+          수업 시간
+        </InputLabel>
         <Select
           labelId="demo-simple-select-outlined-label"
           id="demo-simple-select-outlined"
           value={hour}
           onChange={handleChangeHour}
-          label="duration">
-          <MenuItem value={0}>1 Hour</MenuItem>
-          <MenuItem value={1}>1 Hour 30 Minutes</MenuItem>
-          <MenuItem value={2}>2 Hours</MenuItem>
-          <MenuItem value={3}>2 Hours 30 Minutes</MenuItem>
-          <MenuItem value={4}>3 Hours</MenuItem>
+          label="수업 시간">
+          <MenuItem value={0}>1시간</MenuItem>
+          <MenuItem value={1}>1시간 30분</MenuItem>
+          <MenuItem value={2}>2시간</MenuItem>
+          <MenuItem value={3}>2시간 30분</MenuItem>
+          <MenuItem value={4}>3시간</MenuItem>
         </Select>
       </FormControl>
+
       <TextField
         inputRef={placeRef}
         fullWidth
         className={classes.login_input}
         variant="outlined"
-        label="Place"
+        label="장소"
         margin="normal"
-        placeholder="수업을 원하는 장소를 입력해주세요."
+        // placeholder="수업을 원하는 장소를 입력해주세요."
         helperText={placeInvalidReason}
         error={!!placeInvalidReason}
         onChange={(e) => onChangePlace(e)}
@@ -315,9 +326,9 @@ const ScheduleRequestInput: React.FC<Props> = ({
         fullWidth
         className={classes.login_input}
         variant="outlined"
-        label="Requests"
+        label="요청 사항"
         margin="normal"
-        placeholder="(선택) 요청 사항을 입력해주세요."
+        // placeholder="(선택) 요청 사항을 입력해주세요."
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -331,10 +342,16 @@ const ScheduleRequestInput: React.FC<Props> = ({
           ),
         }}
       />
+      <FormControlLabel
+        style={{ display: 'block', textAlign: 'right' }}
+        control={<Checkbox name="recurring_check" />}
+        label="이번 달 같은 요일/시간 반복"
+      />
       <Accordion
         style={{ marginTop: '16px' }}
-        expanded={true}
-        onChange={(e, isExpanded) => handleChangeAccordion(e, isExpanded)}>
+        defaultExpanded={isExpanded}
+        // onChange={(e, isExpanded) => handleChangeAccordion(e, isExpanded)}
+      >
         <AccordionSummary>
           기본 정보
           <FormControlLabel
@@ -342,7 +359,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
             className={classes.saveinfo_label}
             control={
               <Checkbox
-                checked={saveInfoOn}
+                checked={isSaveInfo}
                 // onChange={(e) => {
                 //   console.log(e)
                 // }}
@@ -362,10 +379,11 @@ const ScheduleRequestInput: React.FC<Props> = ({
               Level
             </InputLabel>
             <Select
-              labelId="demo-simple-select-outlined-label"
+              // labelId="demo-simple-select-outlined-label"
               id="demo-simple-select-outlined"
+              
               value={level}
-              onChange={handleChangeLevel}
+              onChange={(e) => onChangeLevel(e)}
               label="Level">
               <MenuItem value={0}>Test</MenuItem>
               <MenuItem value={1}>A1 (Beginner)</MenuItem>

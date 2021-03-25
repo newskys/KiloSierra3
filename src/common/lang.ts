@@ -23,6 +23,8 @@ export const AUTH = {
 }
 
 export const RESERVATION = {
+  TIME_ERROR: '해당 시간에 예약할 수 없습니다.',
   PLACE_ERROR_REGEX: '장소를 입력해주세요.',
   PHONE_ERROR_REGEX: '형식에 맞지 않습니다.',
+  OK: '예약 신청되었습니다.',
 }

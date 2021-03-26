@@ -1,8 +1,10 @@
+import { checkScheduleAvailablility } from '@apis/schedule'
 import { RESERVATION } from '@common/lang'
 import { checkPhone } from '@common/regex'
 import { SAVED_INFO } from '@common/storage'
 import ScheduleRequestInput from '@components/ui/ScheduleRequestInput'
 import { useHeader } from '@hooks/useHeader'
+import { useLogin } from '@hooks/useLogin'
 import { HeaderType } from '@interfaces/header'
 import { ScheduleRequest } from '@interfaces/schedule'
 import { ReservationBasicInfo } from '@interfaces/storage'
@@ -19,6 +21,7 @@ import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
+import moment from 'moment'
 import React, {
   useState,
   KeyboardEvent,
@@ -57,6 +60,7 @@ const BookingModal: React.FC<Props> = ({
   setSchedule,
 }) => {
   const classes = useStyles()
+  const [isLogin, token] = useLogin()
   // const phoneRef = useRef<HTMLInputElement>()
   const [startTimeEl, setStartTimeEl] = useState<HTMLInputElement>(null)
   const [endTimeEl, setEndTimeEl] = useState<HTMLInputElement>(null)
@@ -171,17 +175,31 @@ const BookingModal: React.FC<Props> = ({
     setTempLevel(value)
   }
 
-  const handleChangeTime = (value: string) => {
+  const handleChangeTime = async (value: string) => {
     let message: string = null
 
-    if (!validateTime(value)) {
+    if (!(await validateTime(value))) {
       message = RESERVATION.TIME_ERROR
     }
 
     setTimeInvalidReason(message)
   }
 
-  const validateTime = (value: string) => {
+  const handleChangeDuration = async (value: string) => {
+    let message: string = null
+
+    if (!(await validateTime(value))) {
+      message = RESERVATION.TIME_ERROR
+    }
+
+    setTimeInvalidReason(message)
+  }
+
+  const validateTime = async (value: string) => {
+    const startDate: Date = moment('22:00:00', 'hh:mm:ss').toDate()
+    const endDate: Date = moment('24:00:00', 'hh:mm:ss').toDate()
+    const result = await checkScheduleAvailablility('ramona', startDate, endDate, token)
+    console.log('result', result)
     return true
   }
 
@@ -255,6 +273,7 @@ const BookingModal: React.FC<Props> = ({
             phoneInvalidReason={phoneInvalidReason}
             level={tempLevel}
             onChangeLevel={handleChangeLevel}
+            onChangeDuration={handleChangeDuration}
             onChangeTime={handleChangeTime}
             onChangePlace={handleChangePlace}
             onChangePhone={handleChangePhone}

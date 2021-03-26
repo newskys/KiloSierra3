@@ -115,6 +115,7 @@ interface Props {
   phoneInvalidReason: string
   level: number
   onChangeTime: Function
+  onChangeDuration: Function
   onChangePlace: Function
   onChangeLevel: Function
   onChangePhone: Function
@@ -137,6 +138,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
   placeInvalidReason,
   phoneInvalidReason,
   onChangeTime,
+  onChangeDuration,
   onChangePlace,
   onChangeLevel,
   level,
@@ -197,6 +199,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
 
   const handleChangeHour = (e) => {
     setHour(e.target.value)
+    onChangeDuration(e.target.value)
   }
 
   useEffect(() => {

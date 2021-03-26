@@ -198,7 +198,7 @@ const BookingModal: React.FC<Props> = ({
   const validateTime = async (value: string) => {
     const startDate: Date = moment('22:00:00', 'hh:mm:ss').toDate()
     const endDate: Date = moment('24:00:00', 'hh:mm:ss').toDate()
-    const result = await checkScheduleAvailablility('ramona', startDate, endDate, token)
+    const result = await checkScheduleAvailablility('umlaut', startDate, endDate, token)
     console.log('result', result)
     return true
   }

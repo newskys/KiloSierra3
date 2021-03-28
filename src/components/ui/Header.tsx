@@ -63,22 +63,36 @@ const Header: React.FC<Props> = ({
       onKeyDown={(e) => setDrawerOpened(false)}>
       {drawerItems.map((item, index) => {
         return (
-          <List key={`drawer-list-${index}`}>
-            <ListItem
-              key={`drawer-item-${index}`}
-              button
-              onClick={(e) => item.onClick(e)}>
-              <ListItemIcon key={`drawer-item-icon-${index}`}>
-                {item.component}
-              </ListItemIcon>
-              <ListItemText
-                key={`drawer-item-text-${index}`}
-                primary={item.title}
-              />
-            </ListItem>
-          </List>
+          <>
+            <List key={`drawer-list-${index}`}>
+              <ListItem
+                key={`drawer-item-${index}`}
+                button
+                onClick={(e) => item.onClick(e)}>
+                <ListItemIcon key={`drawer-item-icon-${index}`}>
+                  {item.component}
+                </ListItemIcon>
+                <ListItemText
+                  key={`drawer-item-text-${index}`}
+                  primary={item.title}
+                />
+              </ListItem>
+            </List>
+          </>
         )
       })}
+
+      <List key={`drawer-list-bottom`} style={{ flexGrow: 0  }}>
+        <ListItem
+          key={`drawer-item-bottom`}
+          button
+          onClick={undefined}>
+          <ListItemIcon key={`drawer-item-bottom-icon`}>
+            <AccountCircleIcon />
+          </ListItemIcon>
+          <ListItemText key={`drawer-item-text`} primary={'test'} />
+        </ListItem>
+      </List>
     </div>
   )
 

@@ -27,6 +27,10 @@ const useStyles = makeStyles({
   list: {
     width: 250,
   },
+  list_bottom: {
+    position: 'absolute',
+    bottom: '0',
+  },
 })
 
 interface Props {
@@ -56,44 +60,44 @@ const Header: React.FC<Props> = ({
   const history: History = useHistory()
   const [isDrawerOpened, setDrawerOpened] = useState<boolean>(false)
   const list = (): JSX.Element => (
-    <div
-      className={classes.list}
-      role="presentation"
-      onClick={(e) => setDrawerOpened(false)}
-      onKeyDown={(e) => setDrawerOpened(false)}>
-      {drawerItems.map((item, index) => {
-        return (
-          <>
-            <List key={`drawer-list-${index}`}>
-              <ListItem
-                key={`drawer-item-${index}`}
-                button
-                onClick={(e) => item.onClick(e)}>
-                <ListItemIcon key={`drawer-item-icon-${index}`}>
-                  {item.component}
-                </ListItemIcon>
-                <ListItemText
-                  key={`drawer-item-text-${index}`}
-                  primary={item.title}
-                />
-              </ListItem>
-            </List>
-          </>
-        )
-      })}
-
-      <List key={`drawer-list-bottom`} style={{ flexGrow: 0  }}>
-        <ListItem
-          key={`drawer-item-bottom`}
-          button
-          onClick={undefined}>
-          <ListItemIcon key={`drawer-item-bottom-icon`}>
-            <AccountCircleIcon />
-          </ListItemIcon>
-          <ListItemText key={`drawer-item-text`} primary={'test'} />
-        </ListItem>
+    <>
+      <List
+        className={classes.list}
+        role="presentation"
+        onClick={(e) => setDrawerOpened(false)}
+        onKeyDown={(e) => setDrawerOpened(false)}>
+        {drawerItems.map((item, index) => {
+          return (
+            <>
+                <ListItem
+                component='li'
+                  key={`drawer-item-${index}`}
+                  button
+                  onClick={(e) => item.onClick(e)}>
+                  <ListItemIcon key={`drawer-item-icon-${index}`}>
+                    {item.component}
+                  </ListItemIcon>
+                  <ListItemText
+                    key={`drawer-item-text-${index}`}
+                    primary={item.title}
+                  />
+                </ListItem>
+            </>
+          )
+        })}
       </List>
-    </div>
+      <List className={classes.list_bottom}>
+      <ListItem
+        key={`drawer-item-bottom`}
+        button
+        onClick={undefined}>
+        <ListItemIcon>
+          <AccountCircleIcon />
+        </ListItemIcon>
+        <ListItemText key={`drawer-item-text-bottom`} primary={'test'} />
+      </ListItem>
+      </List>
+    </>
   )
 
   const onClickBack = (e: MouseEvent) => {

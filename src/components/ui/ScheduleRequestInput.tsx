@@ -5,6 +5,7 @@ import {
   Checkbox,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
@@ -39,6 +40,7 @@ import React, {
 import NumberFormat from 'react-number-format'
 import ScheduleIcon from '@material-ui/icons/Schedule'
 import { ReservationBasicInfo } from '@interfaces/storage'
+import { RESERVATION } from '@common/lang'
 
 const useStyles = makeStyles({
   root: {
@@ -149,14 +151,14 @@ const ScheduleRequestInput: React.FC<Props> = ({
   const classes = useStyles()
   const startTimeRef = useRef<HTMLInputElement>()
   const endTimeRef = useRef<HTMLInputElement>()
-  const titleRef = useRef<HTMLInputElement>()
+  const requestRef = useRef<HTMLInputElement>()
   const placeRef = useRef<HTMLInputElement>()
   const levelRef = useRef<HTMLSelectElement>()
   const phoneRef = useRef<HTMLInputElement>()
-  const [isExpanded, setExpanded] = React.useState<boolean>(!isSaveInfo)
+  // const isExpanded: boolean = !isSaveInfo
   // const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(isSaveInfo)
   const [selectedDate, setDate] = useState(moment(initDateTime))
-  const [phoneNumberTimeout, setPhoneNumberTimeout] = useState<number>(null)
+  // const [phoneNumberTimeout, setPhoneNumberTimeout] = useState<number>(null)
   const [hour, setHour] = useState<number>(2)
   // const [level, setLevel] = useState<number>(savedInfo?.level ?? null)
 
@@ -177,14 +179,17 @@ const ScheduleRequestInput: React.FC<Props> = ({
   // console.log('inputValue', inputValue)
   // console.log('selectedDate', selectedDate)
   const onDateChange = (date, value) => {
-    // console.log('date changed', date, value)
+    console.log('date changed', date, value)
     // setDate(date)
     // setInputValue(value)
+    // onChangeTime()
   }
 
   const onAccept = (date) => {
-    setDate(date)
+    const newDate: Date = new Date(date)
+    // setDate(newDate)
     // console.log('onaccept', moment(date).toString())
+    onChangeTime(newDate)
   }
 
   // const selectLocale = (newLocale: any) => {
@@ -206,7 +211,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
     setRef(
       startTimeRef.current,
       endTimeRef.current,
-      titleRef.current,
+      requestRef.current,
       placeRef.current,
       levelRef.current,
       // phoneRef.current,
@@ -255,7 +260,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
               inputRef={startTimeRef}
               fullWidth
               variant="outlined"
-              helperText={'30분 단위로 진행됩니다.'}
+              // helperText={timeInvalidReason || RESERVATION.MINIMUM_TIME_INTERVAL}
               error={!!timeInvalidReason}
               InputProps={{
                 endAdornment: (
@@ -285,7 +290,8 @@ const ScheduleRequestInput: React.FC<Props> = ({
           // maxDate={new Date(0, 0, 31)}
         />
       </LocalizationProvider>
-      <FormControl variant="outlined" fullWidth className={classes.formControl}>
+      <FormControl 
+      variant="outlined" fullWidth className={classes.formControl} error={!!timeInvalidReason}>
         <InputLabel id="demo-simple-select-outlined-label">
           수업 시간
         </InputLabel>
@@ -301,6 +307,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
           <MenuItem value={3}>2시간 30분</MenuItem>
           <MenuItem value={4}>3시간</MenuItem>
         </Select>
+        <FormHelperText>{timeInvalidReason || RESERVATION.MINIMUM_TIME_INTERVAL}</FormHelperText>
       </FormControl>
 
       <TextField
@@ -308,7 +315,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
         fullWidth
         className={classes.login_input}
         variant="outlined"
-        label="장소"
+        label="희망 장소"
         margin="normal"
         // placeholder="수업을 원하는 장소를 입력해주세요."
         helperText={placeInvalidReason}
@@ -325,7 +332,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
         }}
       />
       <TextField
-        inputRef={titleRef}
+        inputRef={requestRef}
         fullWidth
         className={classes.login_input}
         variant="outlined"
@@ -348,11 +355,12 @@ const ScheduleRequestInput: React.FC<Props> = ({
       <FormControlLabel
         style={{ display: 'block', textAlign: 'right' }}
         control={<Checkbox name="recurring_check" />}
+        disabled={true}
         label="이번 달 같은 요일/시간 반복"
       />
       <Accordion
         style={{ marginTop: '16px' }}
-        defaultExpanded={isExpanded}
+        defaultExpanded={!isSaveInfo}
         // onChange={(e, isExpanded) => handleChangeAccordion(e, isExpanded)}
       >
         <AccordionSummary>

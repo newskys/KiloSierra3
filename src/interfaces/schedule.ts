@@ -7,11 +7,10 @@ export interface Schedule {
 }
 
 export interface ScheduleRequest {
-  startDate: Date
-  endDate: Date
-  title: string
+  startDate: number
+  endDate: number
   place: string
-  level: string
+  level: number
   phone: string
-  
+  request?: string
 }

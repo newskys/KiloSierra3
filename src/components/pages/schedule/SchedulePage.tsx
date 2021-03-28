@@ -87,7 +87,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     <Layout>
       {!isLoading && (
         <>
-          <BookingModal isOpen={isModalOpen} setOpen={setModalOpen} initDateTime={initModalDateTime} setSchedule={setSchedule} />
+          <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} initDateTime={initModalDateTime} setSchedule={setSchedule} />
           <SchedulerWrapper schedule={schedulesVO} onClickSchedule={handleClickSchedule} />
           <Fab
             className={classes.fab}

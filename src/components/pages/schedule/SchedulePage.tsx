@@ -38,6 +38,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
+  const [isModalVisible, setModalVisible] = useState<boolean>(false)
   const [initModalDateTime, setInitModalDateTime] = useState<Date>(null)
 
   const getSchedule = async (tutorId: string) => {
@@ -54,6 +55,16 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   useEffect(() => {
     getSchedule(tutorId)
   }, [])
+
+  useEffect(() => {
+    if (isModalOpen) {
+      setModalVisible(true)
+    } else {
+      window.setTimeout(() => {
+        setModalVisible(false)
+      }, 500)
+    }
+  }, [isModalOpen])
 
   const schedulesVO: AppointmentModel[] = schedules?.map((schedule, index) => {
     return {
@@ -87,7 +98,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     <Layout>
       {!isLoading && (
         <>
-          <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} initDateTime={initModalDateTime} setSchedule={setSchedule} />
+          {isModalVisible && <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} initDateTime={initModalDateTime} setSchedule={setSchedule} />}
           <SchedulerWrapper schedule={schedulesVO} onClickSchedule={handleClickSchedule} />
           <Fab
             className={classes.fab}

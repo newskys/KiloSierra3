@@ -154,7 +154,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
   const requestRef = useRef<HTMLInputElement>()
   const placeRef = useRef<HTMLInputElement>()
   const levelRef = useRef<HTMLSelectElement>()
-  const phoneRef = useRef<HTMLInputElement>()
+  // const phoneRef = useRef<HTMLInputElement>()
   // const isExpanded: boolean = !isSaveInfo
   // const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(isSaveInfo)
   const [selectedDate, setDate] = useState(moment(initDateTime))
@@ -213,7 +213,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
       endTimeRef.current,
       requestRef.current,
       placeRef.current,
-      levelRef.current,
+      levelRef.current
       // phoneRef.current,
     )
     // console.log(startTimeRef.current, placeRef.current, phoneRef.current)
@@ -227,18 +227,22 @@ const ScheduleRequestInput: React.FC<Props> = ({
     />
   )
 
-  const phoneNumberInput = (props) => (
-    <NumberFormat
-      {...props}
-      format="01#-####-####"
-      // inputRef={phoneRef}
-      // ref={phoneRef}
-      defaultValue={savedInfo?.phone || undefined}
-      allowEmptyFormatting
-      value={tempPhone}
-      mask="_"
-    />
-  )
+  const phoneNumberInput = (props) => {
+    let inheritProps = {
+      ...props,
+    }
+    delete inheritProps.inputRef
+    
+    return (
+      <NumberFormat
+        {...inheritProps}
+        format="01#-####-####"
+        defaultValue={savedInfo?.phone || undefined}
+        allowEmptyFormatting
+        value={tempPhone}
+        mask="_" />
+    )
+  }
 
   return (
     <>
@@ -290,8 +294,11 @@ const ScheduleRequestInput: React.FC<Props> = ({
           // maxDate={new Date(0, 0, 31)}
         />
       </LocalizationProvider>
-      <FormControl 
-      variant="outlined" fullWidth className={classes.formControl} error={!!timeInvalidReason}>
+      <FormControl
+        variant="outlined"
+        fullWidth
+        className={classes.formControl}
+        error={!!timeInvalidReason}>
         <InputLabel id="demo-simple-select-outlined-label">
           수업 시간
         </InputLabel>
@@ -307,7 +314,9 @@ const ScheduleRequestInput: React.FC<Props> = ({
           <MenuItem value={3}>2시간 30분</MenuItem>
           <MenuItem value={4}>3시간</MenuItem>
         </Select>
-        <FormHelperText>{timeInvalidReason || RESERVATION.MINIMUM_TIME_INTERVAL}</FormHelperText>
+        <FormHelperText>
+          {timeInvalidReason || RESERVATION.MINIMUM_TIME_INTERVAL}
+        </FormHelperText>
       </FormControl>
 
       <TextField
@@ -390,9 +399,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
               Level
             </InputLabel>
             <Select
-              // labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
-              
+              labelId="demo-simple-select-outlined-label"
               value={level}
               onChange={(e) => onChangeLevel(e)}
               label="Level">
@@ -409,7 +416,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
             fullWidth
             className={classes.login_input}
             variant="outlined"
-            inputRef={phoneRef}
+            // inputRef={phoneRef}
             // label="연락처"
             margin="normal"
             helperText={phoneInvalidReason}

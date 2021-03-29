@@ -2,6 +2,7 @@ import { HeaderDrawerVO } from '@components/common/HeaderContainer'
 import {
   AppBar,
   Button,
+  Divider,
   Drawer,
   IconButton,
   List,
@@ -19,6 +20,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import React, { useState, MouseEvent } from 'react'
 import { History, useHistory } from 'react-router-dom'
 import { HeaderType } from '@interfaces/header'
+import FooterContainer from '@components/common/FooterContainer'
 
 const useStyles = makeStyles({
   title: {
@@ -30,6 +32,9 @@ const useStyles = makeStyles({
   list_bottom: {
     position: 'absolute',
     bottom: '0',
+    textAlign: 'center',
+    width: '100%',
+    padding: '16px',
   },
 })
 
@@ -68,35 +73,25 @@ const Header: React.FC<Props> = ({
         onKeyDown={(e) => setDrawerOpened(false)}>
         {drawerItems.map((item, index) => {
           return (
-            <>
-                <ListItem
-                component='li'
-                  key={`drawer-item-${index}`}
-                  button
-                  onClick={(e) => item.onClick(e)}>
-                  <ListItemIcon key={`drawer-item-icon-${index}`}>
-                    {item.component}
-                  </ListItemIcon>
-                  <ListItemText
-                    key={`drawer-item-text-${index}`}
-                    primary={item.title}
-                  />
-                </ListItem>
-            </>
+            <ListItem
+              component="li"
+              key={`drawer-item-${index}`}
+              button
+              onClick={(e) => item.onClick(e)}>
+              <ListItemIcon key={`drawer-item-icon-${index}`}>
+                {item.component}
+              </ListItemIcon>
+              <ListItemText
+                key={`drawer-item-text-${index}`}
+                primary={item.title}
+              />
+            </ListItem>
           )
         })}
       </List>
-      <List className={classes.list_bottom}>
-      <ListItem
-        key={`drawer-item-bottom`}
-        button
-        onClick={undefined}>
-        <ListItemIcon>
-          <AccountCircleIcon />
-        </ListItemIcon>
-        <ListItemText key={`drawer-item-text-bottom`} primary={'test'} />
-      </ListItem>
-      </List>
+      <div className={classes.list_bottom}>
+        <FooterContainer />
+      </div>
     </>
   )
 
@@ -109,8 +104,8 @@ const Header: React.FC<Props> = ({
     if (headerType === HeaderType.TUTOR) {
       return (
         <>
-          <IconButton edge="start" color="inherit" aria-label="tutor's profile">
-            <AccountCircleIcon onClick={(e) => onClickProfile(e)} />
+          <IconButton edge="start" color="inherit" aria-label="tutor's profile" onClick={(e) => onClickProfile(e)}>
+            <AccountCircleIcon />
           </IconButton>
           <Typography component="h1" variant="h6" className={classes.title}>
             {title}
@@ -156,11 +151,11 @@ const Header: React.FC<Props> = ({
         <>
           {isLogin ? (
             <>
-              <IconButton color="inherit" aria-label="my schedule">
-                <EventNoteIcon onClick={(e) => onClickSchedule(e)} />
+              <IconButton color="inherit" aria-label="my schedule" onClick={(e) => onClickSchedule(e)}>
+                <EventNoteIcon />
               </IconButton>
-              <IconButton edge="end" color="inherit" aria-label="menu">
-                <MenuIcon onClick={(e) => setDrawerOpened(true)} />
+              <IconButton edge="end" color="inherit" aria-label="menu" onClick={(e) => setDrawerOpened(true)}>
+                <MenuIcon />
               </IconButton>
               <Drawer
                 anchor={'right'}
@@ -179,8 +174,8 @@ const Header: React.FC<Props> = ({
     } else if (headerType === HeaderType.MY_SCHEDULE) {
       return (
         <>
-          <IconButton edge="end" color="inherit" aria-label="menu">
-            <MenuIcon onClick={(e) => setDrawerOpened(true)} />
+          <IconButton edge="end" color="inherit" aria-label="menu" onClick={(e) => setDrawerOpened(true)}>
+            <MenuIcon />
           </IconButton>
           <Drawer
             anchor={'right'}
@@ -193,8 +188,8 @@ const Header: React.FC<Props> = ({
     } else if (headerType === HeaderType.BOOKING) {
       return (
         <>
-          <IconButton edge="end" color="inherit" aria-label="menu">
-            <MenuIcon onClick={(e) => setDrawerOpened(true)} />
+          <IconButton edge="end" color="inherit" aria-label="menu" onClick={(e) => setDrawerOpened(true)}>
+            <MenuIcon />
           </IconButton>
           <Drawer
             anchor={'right'}
@@ -210,11 +205,11 @@ const Header: React.FC<Props> = ({
       <>
         {isLogin ? (
           <>
-            <IconButton color="inherit" aria-label="my schedule">
-              <EventNoteIcon onClick={(e) => onClickSchedule(e)} />
+            <IconButton color="inherit" aria-label="my schedule" onClick={(e) => onClickSchedule(e)}>
+              <EventNoteIcon />
             </IconButton>
-            <IconButton edge="end" color="inherit" aria-label="menu">
-              <MenuIcon onClick={(e) => setDrawerOpened(true)} />
+            <IconButton edge="end" color="inherit" aria-label="menu" onClick={(e) => setDrawerOpened(true)}>
+              <MenuIcon />
             </IconButton>
             <Drawer
               anchor={'right'}

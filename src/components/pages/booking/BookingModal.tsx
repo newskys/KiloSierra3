@@ -77,7 +77,7 @@ const BookingModal: React.FC<Props> = ({
   const [placeEl, setPlaceEl] = useState<HTMLInputElement>(null)
   const [levelEl, setLevelEl] = useState<HTMLSelectElement>(null)
   const [phoneEl, setPhoneEl] = useState<HTMLInputElement>(null)
-  const [tempLevel, setTempLevel] = useState<number>(null)
+  const [tempLevel, setTempLevel] = useState<number>(0)
   const [tempPhone, setTempPhone] = useState<string>(null)
   const [timeInvalidReason, setTimeInvalidReason] = useState<string>(null)
   const [placeInvalidReason, setPlaceInvalidReason] = useState<string>(null)
@@ -110,11 +110,17 @@ const BookingModal: React.FC<Props> = ({
       return
     }
 
-    setTempTime(initDateTime)
+    initialDataCheck(initDateTime)
+  }, [isOpen])
+
+  const initialDataCheck = async (dateTime: Date) => {
+    setTempTime(dateTime)
     const duration: number = getDurationTimeFromIndex(2)
     setTempDuration(duration)
-    validateTime(initDateTime, duration)
-  }, [isOpen])
+    if (!(await validateTime(dateTime, duration))) {
+      setTimeInvalidReason(RESERVATION.TIME_ERROR)
+    }
+  }
 
   const saveNewInfo = (isSaveInfo: boolean, level: number, phone: string) => {
     const newInfo: ReservationBasicInfo = {
@@ -178,7 +184,6 @@ const BookingModal: React.FC<Props> = ({
       console.log('scheduleRequest', scheduleRequest)
       await putSchedule(tutorId, scheduleRequest, token)
       alert(RESERVATION.OK)
-    } else {
     }
   }
 
@@ -264,28 +269,6 @@ const BookingModal: React.FC<Props> = ({
     return result
   }
 
-  // const requestBooking = async (request: ScheduleRequest) => {
-  //   setBackdropOpen(true)
-  //   let result: boolean = null
-  //   const startDate: Date = tempTime
-  //   const endDate: Date = moment(tempTime).add(tempDuration, 'minute').toDate()
-    
-  //   try {
-  //     result = await putSchedule(
-  //       'umlaut',
-  //       startDate,
-  //       endDate,
-  //       token
-  //     )
-  //   } catch (e) {
-  //     console.error(e)
-  //     result = false
-  //   }
-
-  //   setBackdropOpen(false)
-  //   return result
-  // }
-
   const handleChangePlace = (e: KeyboardEvent<HTMLInputElement>) => {
     const value: string = e.currentTarget.value
     let message: string = null
@@ -328,7 +311,26 @@ const BookingModal: React.FC<Props> = ({
   }
 
   const validateAll = async (): Promise<boolean> => {
-    return (await validateTime(tempTime, tempDuration)) && validatePlace(placeEl.value) && validatePhone(tempPhone)
+    setBackdropOpen(true)
+    let isValid: boolean = true
+    
+    if (!validatePlace(placeEl.value)) {
+      setPlaceInvalidReason(RESERVATION.PLACE_ERROR_REGEX)
+      isValid = false
+    }
+
+    if (!validatePhone(tempPhone)) {
+      setPhoneInvalidReason(RESERVATION.PHONE_ERROR_REGEX)
+      isValid = false
+    }
+
+    if (!(await validateTime(tempTime, tempDuration))) {
+      setTimeInvalidReason(RESERVATION.TIME_ERROR)
+      isValid = false
+    }
+
+    setBackdropOpen(false)
+    return isValid
   }
 
   return (

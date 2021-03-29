@@ -61,7 +61,7 @@ const HeaderContainer: React.FC<Props> = () => {
 
   return (
     <Header
-      isLogin={true}
+      isLogin={isLogin}
       title={headerStore.title}
       onClickProfile={headerStore.onClickProfile}
       profileUrl={headerStore.profileUrl}

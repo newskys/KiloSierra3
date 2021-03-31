@@ -28,4 +28,5 @@ export const RESERVATION = {
   PHONE_ERROR_REGEX: '형식에 맞지 않습니다.',
   OK: '예약 신청되었습니다.',
   MINIMUM_TIME_INTERVAL: '30분 단위로 진행됩니다.',
+  CONTACT: '예약 신청 이후 해당 번호로 연락됩니다.',
 }

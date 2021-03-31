@@ -158,15 +158,30 @@ const ScheduleRequestInput: React.FC<Props> = ({
   // const isExpanded: boolean = !isSaveInfo
   // const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(isSaveInfo)
   const [selectedDate, setDate] = useState(moment(initDateTime))
+  const [isExpanded, setExpanded] = useState<boolean>(null)
   // const [phoneNumberTimeout, setPhoneNumberTimeout] = useState<number>(null)
   const [hour, setHour] = useState<number>(2)
   // const [level, setLevel] = useState<number>(savedInfo?.level ?? null)
 
-  const handleChangeAccordion = (e, isExpanded) => {
-    // e.preventDefault()
-    // e.stopPropagation()
-    // setExpanded(!isExpanded)
-  }
+  // useEffect(() => {
+  //   console.log(isExpanded)
+  // }, [isExpanded])
+
+  // useEffect(() => {
+  //   if (phoneInvalidReason && !isExpanded) {
+  //     setExpanded(true)
+  //   }
+  // }, [phoneInvalidReason])
+
+  // useEffect(() => {
+  //   setExpanded(!isSaveInfo)
+  // }, [isSaveInfo])
+
+  // const handleChangeAccordion = (e, isExpanded) => {
+  //   // e.preventDefault()
+  //   // e.stopPropagation()
+  //   setExpanded(isExpanded)
+  // }
 
   const handleClickInfoSave = (e: MouseEvent) => {
     e.preventDefault()
@@ -232,7 +247,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
       ...props,
     }
     delete inheritProps.inputRef
-    
+
     return (
       <NumberFormat
         {...inheritProps}
@@ -322,6 +337,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
       <TextField
         inputRef={placeRef}
         fullWidth
+        required
         className={classes.login_input}
         variant="outlined"
         label="희망 장소"
@@ -330,6 +346,9 @@ const ScheduleRequestInput: React.FC<Props> = ({
         helperText={placeInvalidReason}
         error={!!placeInvalidReason}
         onChange={(e) => onChangePlace(e)}
+        inputProps={{
+          maxLength: 30,
+        }}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -345,9 +364,12 @@ const ScheduleRequestInput: React.FC<Props> = ({
         fullWidth
         className={classes.login_input}
         variant="outlined"
-        label="요청 사항"
+        label="요청 사항 (선택)"
         margin="normal"
         // placeholder="(선택) 요청 사항을 입력해주세요."
+        inputProps={{
+          maxLength: 30,
+        }}
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
@@ -370,6 +392,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
       <Accordion
         style={{ marginTop: '16px' }}
         defaultExpanded={!isSaveInfo}
+        // expanded={isExpanded}
         // onChange={(e, isExpanded) => handleChangeAccordion(e, isExpanded)}
       >
         <AccordionSummary>
@@ -419,7 +442,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
             // inputRef={phoneRef}
             // label="연락처"
             margin="normal"
-            helperText={phoneInvalidReason}
+            helperText={phoneInvalidReason || RESERVATION.CONTACT}
             // value={tempPhone}
             error={!!phoneInvalidReason}
             onChange={(e) => onChangePhone(e)}

@@ -33,7 +33,7 @@ const ConfirmCodePage: React.FC = () => {
   const [codeRef, setCodeRef] = useState<HTMLInputElement>(null)
 
   useEffect(() => {
-    if (user.status === UserStatus.NORMAL) {
+    if (user.status === UserStatus.CONFIRMED) {
       history.replace(HOME)
     }
   }, [user])

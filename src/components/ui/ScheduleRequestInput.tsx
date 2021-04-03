@@ -387,7 +387,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
         style={{ display: 'block', textAlign: 'right' }}
         control={<Checkbox name="recurring_check" />}
         disabled={true}
-        label="이번 달 같은 요일/시간 반복"
+        label="같은 요일/시간 반복"
       />
       <Accordion
         style={{ marginTop: '16px' }}

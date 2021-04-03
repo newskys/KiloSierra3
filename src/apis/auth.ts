@@ -1,21 +1,45 @@
 import { AUTH } from '@common/lang'
-import { AuthError, UserStatus } from '@interfaces/status'
-import { UserState } from '@recoil/user'
+import { Profile } from '@interfaces/profile'
+import { AuthError, UserRole, UserStatus } from '@interfaces/status'
+import { getRecoilExternalLoadable } from '@recoil/RecoilExternalStatePortal'
+import { userState, UserState } from '@recoil/user'
 import { Auth } from 'aws-amplify'
+import { getMyProfile } from './profile'
+
+export const initUserProfile = async () => {
+  const session = await Auth.currentSession()
+  const token: string = session?.getIdToken()?.getJwtToken()
+  window.__token = token
+
+  const profile: Profile = await getMyProfile()
+  console.log('p', profile)
+  setProfile(profile)
+  const recoilUserState: UserState = getRecoilExternalLoadable(userState).valueMaybe() as UserState
+  console.log(recoilUserState)
+}
+
+export const setProfile = (profile: Profile) => {
+  const { userId, email, userStatus, role } = profile
+  const userState: UserState = {
+    isInit: true,
+    userId,
+    email,
+    status: UserStatus.CONFIRMED,
+    role: UserRole.UNDEFINED,
+  }
+}
 
 export const signIn = async (userId, password): Promise<UserState> => {
   try {
     const result = await Auth.signIn(userId, password)
     const session = await Auth.currentSession()
+
     const userState: UserState = {
       isInit: true,
       userId: result.username,
       email: result.attributes?.email,
-      emailVerified: result.attributes?.email_verified,
-      phone: result.attributes?.phone_number,
-      phoneVerified: result.attributes?.phone_number_verified,
-      status: UserStatus.NORMAL,
-      token: session?.getIdToken()?.getJwtToken(),
+      status: UserStatus.CONFIRMED,
+      role: UserRole.UNDEFINED,
     }
 
     return userState
@@ -27,10 +51,8 @@ export const signIn = async (userId, password): Promise<UserState> => {
         userId,
         password,
         email: null,
-        emailVerified: null,
-        phone: null,
-        phoneVerified: null,
-        status: UserStatus.TEMP,
+        status: UserStatus.NOT_CONFIRMED,
+        role: UserRole.UNDEFINED,
       }
       return userState
       // this.props.onStateChange('confirmSignUp', {})
@@ -47,10 +69,8 @@ export const signIn = async (userId, password): Promise<UserState> => {
         userId,
         password,
         email: null,
-        emailVerified: null,
-        phone: null,
-        phoneVerified: null,
         status: UserStatus.RESET,
+        role: UserRole.UNDEFINED,
       }
       return userState
       // throw new Error(AUTH.RESET_REQUIRED)

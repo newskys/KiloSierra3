@@ -1,8 +1,11 @@
-import { UserStatus } from '@interfaces/status'
+import { initUserProfile } from '@apis/auth'
+import { getMyProfile } from '@apis/profile'
+import { Profile } from '@interfaces/profile'
 import { UserState, userState } from '@recoil/user'
-import { Auth as AwsAuth } from 'aws-amplify'
 import React, { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
+import { Auth as AwsAuth } from 'aws-amplify'
+import { UserRole, UserStatus } from '@interfaces/status'
 
 interface Props {
   children: any
@@ -11,44 +14,37 @@ interface Props {
 const Auth: React.FC<Props> = ({ children }) => {
   const [user, setUserState] = useRecoilState(userState)
 
-  const getCurrentUserInfo = async () => {
+  useEffect(() => {
+    // getCurrentUserInfo()
+    initUserProfile()
+  }, [])
+
+  const initUserProfile = async () => {
     try {
-      const result = await AwsAuth.currentAuthenticatedUser()
       const session = await AwsAuth.currentSession()
-      
-      console.log('result', result)
-      // const result = {username: null, attributes: null}
-      const userState: UserState = {
+      const token: string = session?.getIdToken()?.getJwtToken()
+      window.__token = token
+      const profile: Profile = await getMyProfile()
+      console.log('profile', profile)
+
+      setUserState({
         isInit: true,
-        userId: result.username,
-        email: result.attributes?.email,
-        emailVerified: result.attributes?.email_verified,
-        phone: result.attributes?.phone_number,
-        phoneVerified: result.attributes?.phone_number_verified,
-        token: session?.getIdToken()?.getJwtToken(),
-        status: UserStatus.NORMAL,
-      }
-      console.log(userState)
-      setUserState(userState)
+        userId: profile.userId,
+        email: profile.email,
+        status: profile.userStatus,
+        role: profile.role,
+      })
     } catch (e) {
       console.error(e)
-      const userState: UserState = {
+      setUserState({
         isInit: true,
         userId: null,
         email: null,
-        emailVerified: null,
-        phone: null,
-        phoneVerified: null,
         status: UserStatus.ANONYMOUS,
-      }
-
-      setUserState(userState)
+        role: UserRole.UNDEFINED,
+      })
     }
   }
-
-  useEffect(() => {
-    getCurrentUserInfo()
-  }, [])
 
   return <>{user.isInit && children}</>
 }

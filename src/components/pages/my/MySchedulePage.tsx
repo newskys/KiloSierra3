@@ -32,13 +32,13 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   useHeader(true, HeaderType.MY_SCHEDULE, 'My Schedule')
   const classes = useStyles()
   const history: History = useHistory()
-  const [isLogin, token] = useLogin()
+  const [isLogin] = useLogin()
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
 
   const getSchedule = async (tutorId: string) => {
     try {
-      const result: Schedule[] = await getMySchedule(token)
+      const result: Schedule[] = await getMySchedule()
       setSchedules(result)
     } catch (e) {
       console.error(e)

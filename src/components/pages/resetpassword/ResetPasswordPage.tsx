@@ -1,9 +1,9 @@
-import { signIn } from '@apis/auth'
 import { AUTH, SIGN_UP } from '@common/lang'
 import { checkPassword } from '@common/regex'
 import { HOME, LOGIN } from '@common/routePath'
 import Layout from '@components/ui/Layout'
 import ResetPasswordInput from '@components/ui/ResetPasswordInput'
+import { useHeader } from '@hooks/useHeader'
 import { AuthError, UserStatus } from '@interfaces/status'
 import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -12,7 +12,6 @@ import { Auth } from 'aws-amplify'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { History, useHistory } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
-import { useHeader } from '@hooks/useHeader'
 
 const useStyles = makeStyles({
   root: {
@@ -51,7 +50,7 @@ const ResetPasswordPage: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if (user.status === UserStatus.NORMAL) {
+    if (user.status === UserStatus.CONFIRMED) {
       history.replace(HOME)
     }
   }, [user])

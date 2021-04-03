@@ -3,34 +3,16 @@ import { Schedule, ScheduleRequest } from '@interfaces/schedule'
 import { AxiosResponse } from 'axios'
 import qs from 'query-string'
 
-export const getTutorSchedule = async (tutorId: string, token: string) => {
-  const result: AxiosResponse<Schedule[]> = !!token
-    ? await axios.get(`/tutors/${tutorId}/schedule`, {
-        // withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
-      })
-    : await axios.get(`/tutors/${tutorId}/openschedule`, {
-        // withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-          // Authorization: token,
-        },
-      })
+export const getTutorSchedule = async (tutorId: string) => {
+  const result: AxiosResponse<Schedule[]> = !!window.__token
+    ? await axios.get(`/tutors/${tutorId}/schedule`)
+    : await axios.get(`/tutors/${tutorId}/openschedule`)
 
   return result.data
 }
 
-export const getMySchedule = async (token: string) => {
-  const result: AxiosResponse<Schedule[]> = await axios.get(`/myschedule`, {
-    // withCredentials: true,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: token,
-    },
-  })
+export const getMySchedule = async () => {
+  const result: AxiosResponse<Schedule[]> = await axios.get(`/my/schedule`)
 
   return result.data
 }
@@ -38,22 +20,14 @@ export const getMySchedule = async (token: string) => {
 export const checkScheduleAvailablility = async (
   tutorId: string,
   startDate: Date,
-  endDate: Date,
-  token: string
+  endDate: Date
 ) => {
   const queries: string = qs.stringify({
     startDate: startDate.getTime(),
     endDate: endDate.getTime(),
   })
   const result: AxiosResponse<boolean> = await axios.get(
-    `/tutors/${tutorId}/schedule/check?${queries}`,
-    {
-      // withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token,
-      },
-    }
+    `/tutors/${tutorId}/schedule/check?${queries}`
   )
 
   return result.data
@@ -61,19 +35,11 @@ export const checkScheduleAvailablility = async (
 
 export const putSchedule = async (
   tutorId: string,
-  request: ScheduleRequest,
-  token: string
+  request: ScheduleRequest
 ) => {
   const result: AxiosResponse<boolean> = await axios.put(
     `/tutors/${tutorId}/schedule`,
-    { ...request },
-    {
-      // withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token,
-      },
-    }
+    { ...request }
   )
 
   return result.data

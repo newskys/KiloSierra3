@@ -31,10 +31,10 @@ const LoginContainer: React.FC = () => {
 
   useEffect(() => {
     switch (user.status) {
-      case UserStatus.NORMAL:
+      case UserStatus.CONFIRMED:
         history.replace(HOME)
         break
-      case UserStatus.TEMP:
+      case UserStatus.NOT_CONFIRMED:
         history.replace(CONFIRM_CODE)
         break
       case UserStatus.RESET:

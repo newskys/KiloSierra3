@@ -5,6 +5,7 @@ import { useLogin } from '@hooks/useLogin'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import { headerState, HeaderState } from '@recoil/header'
+import { userState, UserState } from '@recoil/user'
 import { Auth } from 'aws-amplify'
 import React, { ReactNode } from 'react'
 import { History, useHistory } from 'react-router-dom'
@@ -22,6 +23,7 @@ interface Props {
 const HeaderContainer: React.FC<Props> = () => {
   const [isLogin] = useLogin()
   const [headerStore, setHeaderStore] = useRecoilState<HeaderState>(headerState)
+  const [userStore, setUserStore] = useRecoilState<UserState>(userState)
   const history: History = useHistory()
 
   const handleClickHamburger = async (e) => {
@@ -62,6 +64,7 @@ const HeaderContainer: React.FC<Props> = () => {
   return (
     <Header
       isLogin={isLogin}
+      userRole={userStore.role}
       title={headerStore.title}
       onClickProfile={headerStore.onClickProfile}
       profileUrl={headerStore.profileUrl}

@@ -21,6 +21,7 @@ import React, { useState, MouseEvent } from 'react'
 import { History, useHistory } from 'react-router-dom'
 import { HeaderType } from '@interfaces/header'
 import FooterContainer from '@components/common/FooterContainer'
+import { UserRole } from '@interfaces/status'
 
 const useStyles = makeStyles({
   title: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles({
 
 interface Props {
   isLogin: boolean
+  userRole: UserRole
   title: string
   profileUrl: string
   onClickProfile: Function
@@ -52,6 +54,7 @@ interface Props {
 
 const Header: React.FC<Props> = ({
   isLogin,
+  userRole,
   title,
   profileUrl,
   onClickProfile,
@@ -104,7 +107,11 @@ const Header: React.FC<Props> = ({
     if (headerType === HeaderType.TUTOR) {
       return (
         <>
-          <IconButton edge="start" color="inherit" aria-label="tutor's profile" onClick={(e) => onClickProfile(e)}>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="tutor's profile"
+            onClick={(e) => onClickProfile(e)}>
             <AccountCircleIcon />
           </IconButton>
           <Typography component="h1" variant="h6" className={classes.title}>
@@ -151,10 +158,19 @@ const Header: React.FC<Props> = ({
         <>
           {isLogin ? (
             <>
-              <IconButton color="inherit" aria-label="my schedule" onClick={(e) => onClickSchedule(e)}>
-                <EventNoteIcon />
-              </IconButton>
-              <IconButton edge="end" color="inherit" aria-label="menu" onClick={(e) => setDrawerOpened(true)}>
+              {userRole !== UserRole.TUTOR && (
+                <IconButton
+                  color="inherit"
+                  aria-label="my schedule"
+                  onClick={(e) => onClickSchedule(e)}>
+                  <EventNoteIcon />
+                </IconButton>
+              )}
+              <IconButton
+                edge="end"
+                color="inherit"
+                aria-label="menu"
+                onClick={(e) => setDrawerOpened(true)}>
                 <MenuIcon />
               </IconButton>
               <Drawer
@@ -174,7 +190,11 @@ const Header: React.FC<Props> = ({
     } else if (headerType === HeaderType.MY_SCHEDULE) {
       return (
         <>
-          <IconButton edge="end" color="inherit" aria-label="menu" onClick={(e) => setDrawerOpened(true)}>
+          <IconButton
+            edge="end"
+            color="inherit"
+            aria-label="menu"
+            onClick={(e) => setDrawerOpened(true)}>
             <MenuIcon />
           </IconButton>
           <Drawer
@@ -188,9 +208,14 @@ const Header: React.FC<Props> = ({
     } else if (headerType === HeaderType.BOOKING) {
       return (
         <>
-          <IconButton edge="end" color="inherit" aria-label="menu" onClick={(e) => setDrawerOpened(true)}>
-            <MenuIcon />
-          </IconButton>
+          {userRole !== UserRole.TUTOR && (
+            <IconButton
+              color="inherit"
+              aria-label="my schedule"
+              onClick={(e) => onClickSchedule(e)}>
+              <EventNoteIcon />
+            </IconButton>
+          )}
           <Drawer
             anchor={'right'}
             open={isDrawerOpened}
@@ -205,10 +230,17 @@ const Header: React.FC<Props> = ({
       <>
         {isLogin ? (
           <>
-            <IconButton color="inherit" aria-label="my schedule" onClick={(e) => onClickSchedule(e)}>
+            <IconButton
+              color="inherit"
+              aria-label="my schedule"
+              onClick={(e) => onClickSchedule(e)}>
               <EventNoteIcon />
             </IconButton>
-            <IconButton edge="end" color="inherit" aria-label="menu" onClick={(e) => setDrawerOpened(true)}>
+            <IconButton
+              edge="end"
+              color="inherit"
+              aria-label="menu"
+              onClick={(e) => setDrawerOpened(true)}>
               <MenuIcon />
             </IconButton>
             <Drawer

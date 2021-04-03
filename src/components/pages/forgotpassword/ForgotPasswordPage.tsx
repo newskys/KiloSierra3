@@ -2,7 +2,7 @@ import { HOME, RESET } from '@common/routePath';
 import ForgotPasswordInput from '@components/ui/ForgotPasswordInput';
 import Layout from '@components/ui/Layout';
 import { useHeader } from '@hooks/useHeader';
-import { UserStatus } from '@interfaces/status';
+import { UserRole, UserStatus } from '@interfaces/status';
 import { Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { userState, UserState } from '@recoil/user';
@@ -60,10 +60,8 @@ const ForgotPasswordPage: React.FC = () => {
         isInit: true,
         userId,
         email: null,
-        emailVerified: null,
-        phone: null,
-        phoneVerified: null,
         status: UserStatus.RESET,
+        role: UserRole.UNDEFINED,
       }
 
       // 성공 처리

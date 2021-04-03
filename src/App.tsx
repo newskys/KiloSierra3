@@ -2,6 +2,7 @@ import Auth from '@components/common/Auth'
 import Router from '@components/common/Router'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import { RecoilExternalStatePortal } from '@recoil/RecoilExternalStatePortal'
 import React from 'react'
 import { BrowserRouter } from 'react-router-dom'
 import { RecoilRoot } from 'recoil'
@@ -35,8 +36,15 @@ const theme = createMuiTheme({
   },
 })
 
+declare global {
+  interface Window {
+    __token: string
+  }
+}
+
 const App: React.FC = () => (
   <RecoilRoot>
+    <RecoilExternalStatePortal />
     <Auth>
       <BrowserRouter>
         <ThemeProvider theme={theme}>

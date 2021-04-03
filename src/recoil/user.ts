@@ -1,4 +1,4 @@
-import { UserStatus } from '@interfaces/status'
+import { UserRole, UserStatus } from '@interfaces/status'
 import { atom, RecoilState, RecoilValueReadOnly, selector } from 'recoil'
 
 const KEY = {
@@ -11,11 +11,8 @@ export interface UserState {
   userId: string
   password?: string
   email: string
-  emailVerified: boolean
-  phone: string
-  phoneVerified: boolean
   status: UserStatus
-  token?: string
+  role: UserRole
 }
 
 export const userState: RecoilState<UserState> = atom({
@@ -25,10 +22,8 @@ export const userState: RecoilState<UserState> = atom({
     userId: null,
     password: null,
     email: null,
-    emailVerified: false,
-    phone: null,
-    phoneVerified: false,
     status: null,
+    role: null,
   },
 })
 

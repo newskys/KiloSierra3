@@ -1,9 +1,16 @@
 export enum UserStatus {
-  NORMAL,
-  TEMP,
+  CONFIRMED,
+  NOT_CONFIRMED,
   RESET,
   BLOCK,
   ANONYMOUS,
+}
+
+export enum UserRole {
+  ADMIN,
+  TUTOR,
+  STUDENT,
+  UNDEFINED,
 }
 
 export enum AuthError {

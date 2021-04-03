@@ -69,7 +69,7 @@ const BookingModal: React.FC<Props> = ({
   setSchedule,
 }) => {
   const classes = useStyles()
-  const [isLogin, token] = useLogin()
+  const [isLogin] = useLogin()
   // const phoneRef = useRef<HTMLInputElement>()
   const [startTimeEl, setStartTimeEl] = useState<HTMLInputElement>(null)
   const [endTimeEl, setEndTimeEl] = useState<HTMLInputElement>(null)
@@ -159,6 +159,7 @@ const BookingModal: React.FC<Props> = ({
   }
 
   const handleClickSave = async (e) => {
+    setBackdropOpen(true)
     const newSchedule: ScheduleRequest = {
       startDate: null,
       endDate: null,
@@ -182,9 +183,11 @@ const BookingModal: React.FC<Props> = ({
         phone: tempPhone,
       }
       console.log('scheduleRequest', scheduleRequest)
-      await putSchedule(tutorId, scheduleRequest, token)
+      await putSchedule(tutorId, scheduleRequest)
       alert(RESERVATION.OK)
     }
+
+    setBackdropOpen(false)
   }
 
   const DialogTitle = (props) => {
@@ -258,7 +261,6 @@ const BookingModal: React.FC<Props> = ({
         'umlaut',
         startDate,
         endDate,
-        token
       )
     } catch (e) {
       console.error(e)
@@ -311,7 +313,6 @@ const BookingModal: React.FC<Props> = ({
   }
 
   const validateAll = async (): Promise<boolean> => {
-    setBackdropOpen(true)
     let isValid: boolean = true
     
     if (!validatePlace(placeEl.value)) {
@@ -329,7 +330,6 @@ const BookingModal: React.FC<Props> = ({
       isValid = false
     }
 
-    setBackdropOpen(false)
     return isValid
   }
 

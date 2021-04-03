@@ -32,7 +32,6 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
 }) => {
   const tutorId: string = match.params.tutorId
   useHeader(true, HeaderType.TUTOR, 'Ramona')
-  const [isLogin, token] = useLogin()
   const classes = useStyles()
   const history: History = useHistory()
   const [schedules, setSchedules] = useState<Schedule[]>(null)
@@ -43,7 +42,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
 
   const getSchedule = async (tutorId: string) => {
     try {
-      const result: Schedule[] = await getTutorSchedule('umlaut', token)
+      const result: Schedule[] = await getTutorSchedule('umlaut')
       setSchedules(result)
     } catch (e) {
       console.error(e)
@@ -89,14 +88,13 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
       return
     }
 
-    console.log('date', date)
     setInitModalDateTime(date)
     setModalOpen(true)
   }
 
   return (
     <Layout>
-      {!isLoading && (
+      {!isLoading && schedulesVO && (
         <>
           {isModalVisible && <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} initDateTime={initModalDateTime} setSchedule={setSchedule} />}
           <SchedulerWrapper schedule={schedulesVO} onClickSchedule={handleClickSchedule} />

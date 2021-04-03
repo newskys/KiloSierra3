@@ -8,5 +8,5 @@ export const useLogin = (): [boolean, string] => {
   useEffect(() => {
     return () => {}
   }, [])
-  return [!!userStore.token, userStore.token]
+  return [!!userStore.userId, window.__token]
 }

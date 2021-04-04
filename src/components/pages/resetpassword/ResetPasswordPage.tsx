@@ -1,6 +1,6 @@
 import { AUTH, SIGN_UP } from '@common/lang'
 import { checkPassword } from '@common/regex'
-import { HOME, LOGIN } from '@common/routePath'
+import { HOME, LOGIN, TUTORS } from '@common/routePath'
 import Layout from '@components/ui/Layout'
 import ResetPasswordInput from '@components/ui/ResetPasswordInput'
 import { useHeader } from '@hooks/useHeader'
@@ -51,7 +51,7 @@ const ResetPasswordPage: React.FC = () => {
 
   useEffect(() => {
     if (user.status === UserStatus.CONFIRMED) {
-      history.replace(HOME)
+      history.replace(TUTORS)
     }
   }, [user])
 

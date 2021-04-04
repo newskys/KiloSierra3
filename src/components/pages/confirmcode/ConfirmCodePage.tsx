@@ -1,6 +1,6 @@
 import { signIn } from '@apis/auth'
 import { AUTH, SIGN_UP } from '@common/lang'
-import { HOME } from '@common/routePath'
+import { HOME, TUTORS } from '@common/routePath'
 import ConfirmCodeInput from '@components/ui/ConfirmCodeInput'
 import Layout from '@components/ui/Layout'
 import { useHeader } from '@hooks/useHeader'
@@ -34,7 +34,7 @@ const ConfirmCodePage: React.FC = () => {
 
   useEffect(() => {
     if (user.status === UserStatus.CONFIRMED) {
-      history.replace(HOME)
+      history.replace(TUTORS)
     }
   }, [user])
 

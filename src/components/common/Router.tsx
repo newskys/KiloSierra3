@@ -9,6 +9,7 @@ import {
   RESET,
   SCHEDULE,
   SIGN_UP,
+  TUTORS,
 } from '@common/routePath'
 
 import ConfirmCodePage from '@components/pages/confirmcode/ConfirmCodePage'
@@ -23,6 +24,7 @@ import { Route, Switch } from 'react-router-dom'
 import SchedulePage from '@components/pages/schedule/SchedulePage'
 import MySchedulePage from '@components/pages/my/MySchedulePage'
 import ReservationPage from '@components/pages/booking/BookingModal'
+import TutorsPage from '@components/pages/tutors/TutorsPage'
 
 const Router: React.FC = () => (
   <Switch>
@@ -35,6 +37,7 @@ const Router: React.FC = () => (
     <Route exact path={CONFIRM_CODE} component={ConfirmCodePage} />
     <Route exact path={RESET} component={ResetPasswordPage} />
     <Route exact path={FORGOT} component={ForgotPasswordPage} />
+    <Route exact path={TUTORS} component={TutorsPage} />
     {/* <Layout /> */}
   </Switch>
 )

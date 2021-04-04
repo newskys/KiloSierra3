@@ -1,4 +1,4 @@
-import { HOME, RESET } from '@common/routePath';
+import { HOME, RESET, TUTORS } from '@common/routePath';
 import ForgotPasswordInput from '@components/ui/ForgotPasswordInput';
 import Layout from '@components/ui/Layout';
 import { useHeader } from '@hooks/useHeader';
@@ -32,7 +32,7 @@ const ForgotPasswordPage: React.FC = () => {
 
   useEffect(() => {
     if (isNotAllowed) {
-      history.push(HOME)
+      history.push(TUTORS)
     }
   }, [])
 

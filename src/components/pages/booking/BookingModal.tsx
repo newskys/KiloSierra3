@@ -6,7 +6,7 @@ import ScheduleRequestInput from '@components/ui/ScheduleRequestInput'
 import { useHeader } from '@hooks/useHeader'
 import { useLogin } from '@hooks/useLogin'
 import { HeaderType } from '@interfaces/header'
-import { ScheduleRequest } from '@interfaces/schedule'
+import { Schedule, ScheduleRequest } from '@interfaces/schedule'
 import { ReservationBasicInfo } from '@interfaces/storage'
 import {
   Backdrop,
@@ -57,16 +57,18 @@ interface Props {
   tutorId: string
   isOpen: boolean
   setOpen: Function
-  setSchedule: Function
-  initDateTime: Date
+  isEdit?: boolean
+  // setSchedule: Function
+  initSchedule: ScheduleRequest
 }
 
 const BookingModal: React.FC<Props> = ({
   tutorId,
   isOpen,
   setOpen,
-  initDateTime,
-  setSchedule,
+  isEdit = false,
+  initSchedule,
+  // setSchedule,
 }) => {
   const classes = useStyles()
   const [isLogin] = useLogin()
@@ -93,6 +95,7 @@ const BookingModal: React.FC<Props> = ({
       window.localStorage.getItem(SAVED_INFO)
     )
     console.log('savedinfo', savedInfo)
+
     if (
       savedInfo &&
       Number.isInteger(savedInfo.level) &&
@@ -110,14 +113,25 @@ const BookingModal: React.FC<Props> = ({
       return
     }
 
-    initialDataCheck(initDateTime)
+    initialDataCheck(initSchedule)
   }, [isOpen])
 
-  const initialDataCheck = async (dateTime: Date) => {
-    setTempTime(dateTime)
-    const duration: number = getDurationTimeFromIndex(2)
+  const initialDataCheck = async (schedule: ScheduleRequest) => {
+    setTempTime(new Date(schedule.startDate))
+    setTempLevel(schedule.level ?? 0)
+    setTempPhone(schedule.phone ?? null)
+
+    let duration: number = null
+
+    if (isEdit) {
+      duration = getIndexFromTimeGap(schedule.startDate, schedule.endDate)
+      console.log(duration)
+    } else {
+      duration = getDurationTimeFromIndex(2)
+    }
     setTempDuration(duration)
-    if (!(await validateTime(dateTime, duration))) {
+
+    if (!isEdit && !(await validateTime(new Date(schedule.startDate), duration))) {
       setTimeInvalidReason(RESERVATION.TIME_ERROR)
     }
   }
@@ -171,7 +185,7 @@ const BookingModal: React.FC<Props> = ({
 
     if (await validateAll()) {
       saveNewInfo(isSaveInfo, tempLevel, tempPhone)
-      setSchedule(newSchedule)
+      // setSchedule(newSchedule)
       setOpen(false)
 
       const scheduleRequest: ScheduleRequest = {
@@ -234,6 +248,12 @@ const BookingModal: React.FC<Props> = ({
 
   const getDurationTimeFromIndex = (index: number): number => {
     return 60 + (index * 30)
+  }
+
+  const getIndexFromTimeGap = (startDate: number, endDate: number): number => {
+    const duration: number = (endDate - startDate) / 1000 / 60
+    
+    return (duration - 60) / 30
   }
 
   const handleChangeDuration = async (value: number) => {
@@ -347,12 +367,12 @@ const BookingModal: React.FC<Props> = ({
         </DialogTitle>
         <DialogContent dividers>
           <ScheduleRequestInput
-            initDateTime={initDateTime}
+            schedule={initSchedule}
             setRef={setRef}
             setPhoneRef={setPhoneRef}
             // phoneRef={phoneRef}
             onClickClose={handleClose}
-            setSchedule={setSchedule}
+            // setSchedule={setSchedule}
             savedInfo={savedInfo}
             isSaveInfo={isSaveInfo}
             setSaveInfo={handleChangeSaveInfo}

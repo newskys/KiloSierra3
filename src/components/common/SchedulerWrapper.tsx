@@ -24,6 +24,7 @@ import { fade } from '@material-ui/core/styles/colorManipulator'
 import AddIcon from '@material-ui/icons/Add'
 import moment from 'moment'
 import classNames from 'clsx'
+import { ScheduleRequest } from '@interfaces/schedule'
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -253,6 +254,7 @@ const SchedulerWrapper: React.FC<Props> = ({
 
   const WeekTimeTableCell = (props) => {
     const { startDate } = props
+    // console.log('props', props)
     const date = new Date(startDate)
 
     if (date.getDate() === new Date().getDate()) {
@@ -365,9 +367,9 @@ const SchedulerWrapper: React.FC<Props> = ({
     )
   }
 
-  const handleClickDateOnWeekView = (e, onClick: Function, startDate: Date) => {
+  const handleClickDateOnWeekView = (e, onClick: Function, schedule: AppointmentModel) => {
     if (e.data.isMine) {
-      onClick(e)
+      onClick(e, schedule)
     }
   }
 
@@ -390,7 +392,7 @@ const SchedulerWrapper: React.FC<Props> = ({
                 handleClickDateOnWeekView(
                   e,
                   restProps.onClick,
-                  new Date(data.startDate)
+                  data,
                 )
             : (e) => handleClickDateOnMonthView(e, new Date(data.startDate))
         }
@@ -512,7 +514,7 @@ const SchedulerWrapper: React.FC<Props> = ({
         appointmentComponent={Appointment}
         appointmentContentComponent={AppointmentContent}
       />
-      <AppointmentTooltip showCloseButton showDeleteButton showOpenButton />
+      {/* <AppointmentTooltip showCloseButton showDeleteButton showOpenButton /> */}
       {/* <AppointmentForm /> */}
       <CurrentTimeIndicator
         shadePreviousCells={true}

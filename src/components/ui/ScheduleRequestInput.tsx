@@ -1,4 +1,6 @@
+import { RESERVATION } from '@common/lang'
 import { ScheduleRequest } from '@interfaces/schedule'
+import { ReservationBasicInfo } from '@interfaces/storage'
 import {
   Accordion,
   AccordionDetails,
@@ -6,13 +8,13 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
-  Grid,
+
   IconButton,
   InputAdornment,
   InputLabel,
   MenuItem,
   Select,
-  TextField,
+  TextField
 } from '@material-ui/core'
 import MuiAccordionSummary from '@material-ui/core/AccordionSummary'
 import { makeStyles } from '@material-ui/core/styles'
@@ -20,27 +22,19 @@ import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp'
 import ChatIcon from '@material-ui/icons/Chat'
 import LocationOnIcon from '@material-ui/icons/LocationOn'
 import PhoneIcon from '@material-ui/icons/Phone'
+import ScheduleIcon from '@material-ui/icons/Schedule'
 import {
-  MobileDateTimePicker,
-  LocalizationProvider,
+  LocalizationProvider, MobileDateTimePicker
 } from '@material-ui/pickers'
 import MomentAdapter from '@material-ui/pickers/adapter/moment'
 import moment from 'moment'
 import 'moment/locale/ko'
 import React, {
-  useEffect,
+  MouseEvent, useEffect,
   useRef,
-  useState,
-  MouseEvent,
-  ChangeEvent,
-  KeyboardEvent,
-  FormEvent,
-  RefObject,
+  useState
 } from 'react'
 import NumberFormat from 'react-number-format'
-import ScheduleIcon from '@material-ui/icons/Schedule'
-import { ReservationBasicInfo } from '@interfaces/storage'
-import { RESERVATION } from '@common/lang'
 
 const useStyles = makeStyles({
   root: {
@@ -102,13 +96,10 @@ const useStyles = makeStyles({
 })
 
 interface Props {
-  // phoneRef: RefObject<HTMLInputElement>
   onClickClose: Function
   setRef: Function
   setPhoneRef: Function
-  initDateTime: Date
-  schedule?: ScheduleRequest
-  setSchedule: Function
+  schedule: ScheduleRequest
   savedInfo: ReservationBasicInfo
   isSaveInfo: boolean
   setSaveInfo: Function
@@ -126,13 +117,10 @@ interface Props {
 }
 
 const ScheduleRequestInput: React.FC<Props> = ({
-  // phoneRef,
   onClickClose,
   setRef,
   setPhoneRef,
-  initDateTime,
   schedule,
-  setSchedule,
   savedInfo,
   isSaveInfo,
   setSaveInfo,
@@ -157,7 +145,7 @@ const ScheduleRequestInput: React.FC<Props> = ({
   // const phoneRef = useRef<HTMLInputElement>()
   // const isExpanded: boolean = !isSaveInfo
   // const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(isSaveInfo)
-  const [selectedDate, setDate] = useState(moment(initDateTime))
+  const [selectedDate, setDate] = useState(moment(schedule.startDate))
   const [isExpanded, setExpanded] = useState<boolean>(null)
   // const [phoneNumberTimeout, setPhoneNumberTimeout] = useState<number>(null)
   const [hour, setHour] = useState<number>(2)

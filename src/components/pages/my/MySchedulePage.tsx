@@ -6,7 +6,7 @@ import { AppointmentModel } from '@devexpress/dx-react-scheduler'
 import { useHeader } from '@hooks/useHeader'
 import { useLogin } from '@hooks/useLogin'
 import { HeaderType } from '@interfaces/header'
-import { Schedule } from '@interfaces/schedule'
+import { Schedule, ScheduleRequest } from '@interfaces/schedule'
 import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -35,6 +35,9 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   const [isLogin] = useLogin()
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
+  const [isModalOpen, setModalOpen] = useState<boolean>(false)
+  const [isModalVisible, setModalVisible] = useState<boolean>(false)
+  const [initModalSchedule, setInitModalSchedule] = useState<ScheduleRequest>(null)
 
   const getSchedule = async (tutorId: string) => {
     try {
@@ -45,6 +48,24 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     }
 
     setLoading(false)
+  }
+
+  const handleClickSchedule = (e, date: Date) => {
+    console.log('sc')
+    if (date.getTime() < new Date().getTime()) {
+      return
+    }
+
+    const schedule: ScheduleRequest = {
+      startDate: date.getTime(),
+      endDate: null,
+      level: null,
+      phone: null,
+      place: null,
+    }
+
+    setInitModalSchedule(schedule)
+    setModalOpen(true)
   }
 
   useEffect(() => {
@@ -62,25 +83,11 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     }
   })
 
-  const onClickAddSchedule = (e: MouseEvent) => {
-    e.preventDefault()
-    history.push(`ramona/schedule/add`)
-  }
-
   return (
     <Layout>
       {!isLoading && (
         <>
-          <SchedulerWrapper schedule={schedulesVO} onClickSchedule={(e) => console.log('dbk', e)} />
-          <Fab
-            className={classes.fab}
-            variant="extended"
-            color="primary"
-            onClick={(e) => onClickAddSchedule(e)}
-            aria-label="add">
-            <AddIcon />
-            Add Schedule
-          </Fab>
+          <SchedulerWrapper schedule={schedulesVO} onClickSchedule={handleClickSchedule} />
         </>
       )}
     </Layout>

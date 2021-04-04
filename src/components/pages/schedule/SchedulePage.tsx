@@ -5,7 +5,7 @@ import { AppointmentModel } from '@devexpress/dx-react-scheduler'
 import { useHeader } from '@hooks/useHeader'
 import { useLogin } from '@hooks/useLogin'
 import { HeaderType } from '@interfaces/header'
-import { Schedule } from '@interfaces/schedule'
+import { Schedule, ScheduleRequest } from '@interfaces/schedule'
 import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -80,7 +80,6 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   }
 
   const setSchedule = async () => {
-    // setInitModalDateTime()
   }
 
   const handleClickSchedule = (e, date: Date) => {
@@ -92,11 +91,20 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     setModalOpen(true)
   }
 
+  const initSchedule: ScheduleRequest = initModalDateTime ? {
+    startDate: initModalDateTime.getTime(),
+    endDate: null,
+    level: null,
+    phone: null,
+    place: null,
+    request: null,
+  } : null
+
   return (
     <Layout>
       {!isLoading && schedulesVO && (
         <>
-          {isModalVisible && <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} initDateTime={initModalDateTime} setSchedule={setSchedule} />}
+          {isModalVisible && <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} isEdit={false} initSchedule={initSchedule} />}
           <SchedulerWrapper schedule={schedulesVO} onClickSchedule={handleClickSchedule} />
           <Fab
             className={classes.fab}

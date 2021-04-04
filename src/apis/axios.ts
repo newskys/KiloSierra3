@@ -7,9 +7,9 @@ axios.defaults.onUploadProgress = null
 axios.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     config.headers = {
-      'Content-Type': 'application/json',
-      'Authorization': window.__token,
+      'Content-Type': 'application/json'
     }
+    window.__token && (config.headers.Authorization = window.__token)
       
     return config
   },

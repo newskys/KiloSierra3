@@ -7,7 +7,7 @@ import { Box } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { Auth } from 'aws-amplify'
-import axios from 'axios'
+import axios from '@apis/axios'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { useHistory, History } from 'react-router-dom'
 import { useHeader } from '@hooks/useHeader'
@@ -104,7 +104,7 @@ const SignUpPage = () => {
 
   const checkSignUpId = async (value: string) => {
     try {
-      const apiId = await axios.get(`https://hu5mcclx4l.execute-api.ap-northeast-2.amazonaws.com/prod/hasuser?userId=${value}`)
+      const apiId = await axios.get(`/hasuser?userId=${value}`)
   
       console.log(apiId.data);
       // return apiId.data

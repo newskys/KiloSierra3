@@ -3,7 +3,7 @@ import { checkEmail, checkPassword, checkUserId } from '@common/regex'
 import { LOGIN } from '@common/routePath'
 import Layout from '@components/ui/Layout'
 import SignUpInput from '@components/ui/SignUpInput'
-import { Box } from '@material-ui/core'
+import { Box, Backdrop, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import useMediaQuery from '@material-ui/core/useMediaQuery'
 import { Auth } from 'aws-amplify'
@@ -19,6 +19,10 @@ const useStyles = makeStyles({
     flexDirection: 'column',
     justifyContent: 'center',
     height: '100%',
+  },
+  backdrop: {
+    zIndex: 100,
+    color: '#fff',
   },
 })
 
@@ -48,6 +52,7 @@ const SignUpPage = () => {
   const [isSignUpEnabled, setSignUpEnabled] = useState<boolean>(false)
   const [usedUserIds, setUsedUserIds] = useState<string[]>([])
   const [inputIdTimeout, setInputIdTimeout] = useState<number>(null)
+  const [backdropOpen, setBackdropOpen] = useState<boolean>(false)
 
   useEffect(() => {
     if (userIdRef) {
@@ -182,6 +187,8 @@ const SignUpPage = () => {
     email: string,
     phone_number?: string
   ) => {
+    setBackdropOpen(true)
+
     try {
       const { user } = await Auth.signUp({
         username,
@@ -201,6 +208,8 @@ const SignUpPage = () => {
         setUserIdInvalidReason(SIGN_UP.USER_ID_ERROR_USED)
       }
     }
+
+    setBackdropOpen(false)
   }
 
   const validateAll = (): boolean => {
@@ -238,6 +247,9 @@ const SignUpPage = () => {
           isSignUpEnabled={isSignUpEnabled}
         />
       </Box>
+      <Backdrop className={classes.backdrop} open={backdropOpen}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Layout>
   )
 }

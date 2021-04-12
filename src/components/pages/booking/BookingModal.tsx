@@ -1,23 +1,22 @@
-import { checkScheduleAvailablility, putSchedule } from '@apis/schedule'
+import { checkScheduleAvailablility, deleteSchedule, putSchedule } from '@apis/schedule'
 import { RESERVATION } from '@common/lang'
 import { checkPhone } from '@common/regex'
 import { SAVED_INFO } from '@common/storage'
 import ScheduleRequestInput from '@components/ui/ScheduleRequestInput'
-import { useHeader } from '@hooks/useHeader'
 import { useLogin } from '@hooks/useLogin'
-import { HeaderType } from '@interfaces/header'
-import { Schedule, ScheduleRequest } from '@interfaces/schedule'
+import { ScheduleCancelRequest, ScheduleRequest } from '@interfaces/schedule'
+import { ScheduleModalMode } from '@interfaces/status'
 import { ReservationBasicInfo } from '@interfaces/storage'
 import {
   Backdrop,
   Button,
-  Checkbox,
+
   CircularProgress,
   DialogActions,
   DialogContent,
-  FormControlLabel,
+
   IconButton,
-  Typography,
+  Typography
 } from '@material-ui/core'
 import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
@@ -25,11 +24,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import moment from 'moment'
 import React, {
-  useState,
   KeyboardEvent,
-  useEffect,
-  useMemo,
-  useRef,
+  useEffect, useState
 } from 'react'
 
 const useStyles = makeStyles({
@@ -57,7 +53,7 @@ interface Props {
   tutorId: string
   isOpen: boolean
   setOpen: Function
-  isEdit?: boolean
+  mode: ScheduleModalMode
   // setSchedule: Function
   initSchedule: ScheduleRequest
 }
@@ -66,7 +62,7 @@ const BookingModal: React.FC<Props> = ({
   tutorId,
   isOpen,
   setOpen,
-  isEdit = false,
+  mode,
   initSchedule,
   // setSchedule,
 }) => {
@@ -123,7 +119,7 @@ const BookingModal: React.FC<Props> = ({
 
     let duration: number = null
 
-    if (isEdit) {
+    if (mode === ScheduleModalMode.EDIT) {
       duration = getIndexFromTimeGap(schedule.startDate, schedule.endDate)
       console.log(duration)
     } else {
@@ -131,7 +127,10 @@ const BookingModal: React.FC<Props> = ({
     }
     setTempDuration(duration)
 
-    if (!isEdit && !(await validateTime(new Date(schedule.startDate), duration))) {
+    if (
+      mode === ScheduleModalMode.NEW &&
+      !(await validateTime(new Date(schedule.startDate), duration))
+    ) {
       setTimeInvalidReason(RESERVATION.TIME_ERROR)
     }
   }
@@ -170,6 +169,22 @@ const BookingModal: React.FC<Props> = ({
 
   const handleClose = () => {
     setOpen(false)
+  }
+
+  const handleClickCancelSchedule = async (e) => {
+    setBackdropOpen(true)
+
+    const newDeleteSchedule: ScheduleCancelRequest = {
+      startDate: tempTime.getTime(),
+    }
+
+    try {
+      await deleteSchedule(tutorId, newDeleteSchedule)
+    } catch (e) {
+      console.error(e)
+    }
+    alert(RESERVATION.CANCEL)
+    setBackdropOpen(false)
   }
 
   const handleClickSave = async (e) => {
@@ -247,12 +262,12 @@ const BookingModal: React.FC<Props> = ({
   }
 
   const getDurationTimeFromIndex = (index: number): number => {
-    return 60 + (index * 30)
+    return 60 + index * 30
   }
 
   const getIndexFromTimeGap = (startDate: number, endDate: number): number => {
     const duration: number = (endDate - startDate) / 1000 / 60
-    
+
     return (duration - 60) / 30
   }
 
@@ -272,16 +287,12 @@ const BookingModal: React.FC<Props> = ({
   const validateTime = async (time: Date, duration: number) => {
     setBackdropOpen(true)
     let result: boolean = null
-    
+
     try {
       const startDate: Date = time
       const endDate: Date = moment(time).add(duration, 'minute').toDate()
       console.log(startDate, endDate)
-      result = await checkScheduleAvailablility(
-        'umlaut',
-        startDate,
-        endDate,
-      )
+      result = await checkScheduleAvailablility('umlaut', startDate, endDate)
     } catch (e) {
       console.error(e)
       result = false
@@ -334,7 +345,7 @@ const BookingModal: React.FC<Props> = ({
 
   const validateAll = async (): Promise<boolean> => {
     let isValid: boolean = true
-    
+
     if (!validatePlace(placeEl.value)) {
       setPlaceInvalidReason(RESERVATION.PLACE_ERROR_REGEX)
       isValid = false
@@ -351,6 +362,28 @@ const BookingModal: React.FC<Props> = ({
     }
 
     return isValid
+  }
+
+  const actionButtons = () => {
+    switch (mode) {
+      case ScheduleModalMode.NEW:
+        return <Button onClick={handleClickSave}>예약</Button>
+      case ScheduleModalMode.EDIT:
+        return (
+          <>
+            <Button onClick={handleClose}>닫기</Button>
+            <Button onClick={handleClickCancelSchedule}>예약 취소</Button>
+          </>
+        )
+      case ScheduleModalMode.REQUEST:
+        return (
+          <>
+            <Button onClick={handleClickSave}>예약 확정</Button>
+            <Button onClick={handleClickCancelSchedule}>예약 취소</Button>
+            <Button onClick={handleClose}>닫기</Button>
+          </>
+        )
+    }
   }
 
   return (
@@ -390,7 +423,7 @@ const BookingModal: React.FC<Props> = ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClickSave}>예약</Button>
+          {actionButtons()}
         </DialogActions>
       </Dialog>
     </>

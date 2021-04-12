@@ -7,13 +7,15 @@ import {
   Card,
   CardContent,
   CardMedia,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import LockIcon from '@material-ui/icons/Lock'
-import React from 'react'
+import React, { Suspense } from 'react'
 import LoginAccountConfigContainer from './LoginAccountConfigContainer'
-import LoginContainer from './LoginContainer'
+// import LoginContainer from './LoginContainer'
+
+const LoginContainer = React.lazy(() => import('./LoginContainer'))
 
 const useStyles = makeStyles({
   root: {
@@ -80,7 +82,10 @@ const LoginPage: React.FC = () => {
             <LockIcon />
           </Avatar>
         </Box>
-        <LoginContainer />
+
+        <Suspense fallback={<></>}>
+          <LoginContainer />
+        </Suspense>
         <LoginAccountConfigContainer />
       </Box>
     </Layout>

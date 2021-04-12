@@ -20,3 +20,9 @@ export enum AuthError {
   WRONG_CODE = 'CodeMismatchException',
   RESET_REQUIRED = 'PasswordResetRequiredException',
 }
+
+export enum ScheduleModalMode {
+  NEW,
+  EDIT,
+  REQUEST,
+}

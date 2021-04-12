@@ -367,9 +367,11 @@ const SchedulerWrapper: React.FC<Props> = ({
     )
   }
 
-  const handleClickDateOnWeekView = (e, onClick: Function, schedule: AppointmentModel) => {
+  const handleClickDateOnWeekView = (e, schedule: AppointmentModel) => {
     if (e.data.isMine) {
-      onClick(e, schedule)
+      console.log('hc', schedule)
+      onClickSchedule(e, schedule)
+      // onClick?.(e, schedule)
     }
   }
 
@@ -389,11 +391,14 @@ const SchedulerWrapper: React.FC<Props> = ({
         onClick={
           isWeekView
             ? (e) =>
-                handleClickDateOnWeekView(
+                {
+                  console.log('rp', restProps)
+                return handleClickDateOnWeekView(
                   e,
-                  restProps.onClick,
-                  data,
+                  // restProps.onClick,
+                  data
                 )
+              }
             : (e) => handleClickDateOnMonthView(e, new Date(data.startDate))
         }
         draggable={false}

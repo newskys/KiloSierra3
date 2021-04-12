@@ -1,9 +1,14 @@
+import { UserRole } from "./status";
+
 export interface Schedule {
   startDate: Date
   endDate: Date
   title?: string
   place?: string
   isMine?: boolean
+  level?: number
+  phone?: string
+  request?: string
 }
 
 export interface ScheduleRequest {
@@ -13,4 +18,8 @@ export interface ScheduleRequest {
   level: number
   phone: string
   request?: string
+}
+
+export interface ScheduleCancelRequest {
+  startDate: number
 }

@@ -6,6 +6,6 @@ import qs from 'query-string'
 
 export const getTutors = async () => {
   const result: AxiosResponse<Tutor[]> = await axios.get(`/tutors`)
-  
+
   return result.data
 }

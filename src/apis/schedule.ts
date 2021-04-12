@@ -1,5 +1,5 @@
 import axios from '@apis/axios'
-import { Schedule, ScheduleRequest } from '@interfaces/schedule'
+import { Schedule, ScheduleCancelRequest, ScheduleRequest } from '@interfaces/schedule'
 import { AxiosResponse } from 'axios'
 import qs from 'query-string'
 
@@ -40,6 +40,21 @@ export const putSchedule = async (
   const result: AxiosResponse<boolean> = await axios.put(
     `/tutors/${tutorId}/schedule`,
     { ...request }
+  )
+
+  return result.data
+}
+
+
+export const deleteSchedule = async (
+  tutorId: string,
+  request: ScheduleCancelRequest
+) => {
+  const queries: string = qs.stringify({
+    ...request,
+  })
+  const result: AxiosResponse<boolean> = await axios.delete(
+    `/tutors/${tutorId}/schedule?${queries}`,
   )
 
   return result.data

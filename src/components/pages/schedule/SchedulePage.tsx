@@ -83,13 +83,21 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   const setSchedule = async () => {
   }
 
-  const handleClickSchedule = (e, date: Date) => {
-    console.log('k')
-    if (date.getTime() < new Date().getTime()) {
+  const handleClickSchedule = (e, schedule: Schedule | Date) => {
+    console.log('k', schedule)
+
+    let startDate: Date = null
+    if (schedule instanceof Date) {
+      startDate = schedule
+    } else if (schedule instanceof Object) {
+      startDate = schedule.startDate
+    }
+
+    if (startDate.getTime() < new Date().getTime()) {
       return
     }
 
-    setInitModalDateTime(date)
+    setInitModalDateTime(startDate)
     setModalOpen(true)
   }
 

@@ -7,7 +7,7 @@ import { useHeader } from '@hooks/useHeader'
 import { useLogin } from '@hooks/useLogin'
 import { HeaderType } from '@interfaces/header'
 import { Schedule, ScheduleRequest } from '@interfaces/schedule'
-import { ScheduleModalMode } from '@interfaces/status'
+import { ScheduleMode } from '@interfaces/status'
 import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
@@ -41,6 +41,7 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
   const [isModalVisible, setModalVisible] = useState<boolean>(false)
   const [initModalSchedule, setInitModalSchedule] = useState<ScheduleRequest>(null)
+  const scheduleMode: ScheduleMode = ScheduleMode.REQUEST
 
   useEffect(() => {
     if (isModalOpen) {
@@ -71,19 +72,18 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     setLoading(false)
   }
 
-  const handleClickSchedule = (e, scheduleRequest: ScheduleRequest) => {
-    console.log('sc', scheduleRequest)
-    if (scheduleRequest.startDate < new Date().getTime()) {
-      return
+  const handleClickSchedule = (e, appointmentModel: AppointmentModel) => {
+    const scheduleRequest: ScheduleRequest = {
+      userId: appointmentModel.userId,
+      startDate: new Date(appointmentModel.startDate).getTime(),
+      endDate: new Date(appointmentModel.endDate).getTime(),
+      level: appointmentModel.level,
+      phone: appointmentModel.phone,
+      place: appointmentModel.place,
+      request: appointmentModel.request,
     }
 
-    // const schedule: ScheduleRequest = {
-    //   startDate: scheduleRequest.startDate,
-    //   endDate: null,
-    //   level: null,
-    //   phone: null,
-    //   place: null,
-    // }
+    console.log('sc', scheduleRequest)
 
     setInitModalSchedule(scheduleRequest)
     setModalOpen(true)
@@ -91,6 +91,7 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
 
   const schedulesVO: AppointmentModel[] = schedules?.map((schedule, index) => {
     return {
+      userId: schedule.userId,
       startDate: new Date(schedule.startDate),
       endDate: new Date(schedule.endDate),
       title: schedule.title,
@@ -106,8 +107,8 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     <Layout>
       {!isLoading && (
         <>
-        {isModalVisible && <CheckingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} mode={ScheduleModalMode.REQUEST} initSchedule={initModalSchedule} />}
-          <SchedulerWrapper schedule={schedulesVO} onClickSchedule={handleClickSchedule} />
+        {isModalVisible && <CheckingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} mode={scheduleMode} initSchedule={initModalSchedule} />}
+          <SchedulerWrapper schedule={schedulesVO} mode={scheduleMode} onClickSchedule={handleClickSchedule} />
         </>
       )}
     </Layout>

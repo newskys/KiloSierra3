@@ -33,7 +33,7 @@ export const checkScheduleAvailablility = async (
   return result.data
 }
 
-export const putSchedule = async (
+export const putRequestSchedule = async (
   tutorId: string,
   request: ScheduleRequest
 ) => {
@@ -45,6 +45,20 @@ export const putSchedule = async (
   return result.data
 }
 
+export const putSchedule = async (
+  userId: string,
+  startDate: number,
+) => {
+  const queries: string = qs.stringify({
+    userId, startDate,
+  })
+  const result: AxiosResponse<boolean> = await axios.put(
+    `/my/schedule`, 
+    { userId, startDate }
+  )
+
+  return result.data
+}
 
 export const deleteSchedule = async (
   tutorId: string,

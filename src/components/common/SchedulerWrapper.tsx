@@ -25,6 +25,7 @@ import AddIcon from '@material-ui/icons/Add'
 import moment from 'moment'
 import classNames from 'clsx'
 import { ScheduleRequest } from '@interfaces/schedule'
+import { ScheduleMode } from '@interfaces/status'
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -90,6 +91,7 @@ export enum ViewName {
 interface Props {
   schedule: AppointmentModel[]
   onClickSchedule: Function
+  mode: ScheduleMode
 }
 
 interface MonthViewSchedule {
@@ -107,6 +109,7 @@ interface DayScheduleAvailability {
 const SchedulerWrapper: React.FC<Props> = ({
   schedule: rawSchedule,
   onClickSchedule,
+  mode,
 }) => {
   const classes = useStyles()
   const [monthViewSchedule, setMonthViewSchedule] = useState<
@@ -262,7 +265,7 @@ const SchedulerWrapper: React.FC<Props> = ({
         <WeekView.TimeTableCell
           {...props}
           className={classes.todayCell}
-          onClick={(e) => onClickSchedule(e, date)}
+          onClick={(e) => mode === ScheduleMode.NEW ? onClickSchedule(e, date) : undefined}
         />
       )
     }
@@ -271,14 +274,14 @@ const SchedulerWrapper: React.FC<Props> = ({
         <WeekView.TimeTableCell
           {...props}
           className={classes.weekendCell}
-          onClick={(e) => onClickSchedule(e, date)}
+          onClick={(e) => mode === ScheduleMode.NEW ? onClickSchedule(e, date) : undefined}
         />
       )
     }
     return (
       <WeekView.TimeTableCell
         {...props}
-        onClick={(e) => onClickSchedule(e, date)}
+        onClick={(e) => mode === ScheduleMode.NEW ? onClickSchedule(e, date) : undefined}
       />
     )
   }
@@ -370,6 +373,7 @@ const SchedulerWrapper: React.FC<Props> = ({
   const handleClickDateOnWeekView = (e, schedule: AppointmentModel) => {
     if (e.data.isMine) {
       console.log('hc', schedule)
+
       onClickSchedule(e, schedule)
       // onClick?.(e, schedule)
     }

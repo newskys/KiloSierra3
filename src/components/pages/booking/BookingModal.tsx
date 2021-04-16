@@ -1,11 +1,11 @@
-import { checkScheduleAvailablility, deleteSchedule, putSchedule } from '@apis/schedule'
+import { checkScheduleAvailablility, deleteSchedule, putRequestSchedule } from '@apis/schedule'
 import { RESERVATION } from '@common/lang'
 import { checkPhone } from '@common/regex'
 import { SAVED_INFO } from '@common/storage'
 import ScheduleRequestInput from '@components/ui/ScheduleRequestInput'
 import { useLogin } from '@hooks/useLogin'
 import { ScheduleCancelRequest, ScheduleRequest } from '@interfaces/schedule'
-import { ScheduleModalMode } from '@interfaces/status'
+import { ScheduleMode } from '@interfaces/status'
 import { ReservationBasicInfo } from '@interfaces/storage'
 import {
   Backdrop,
@@ -53,7 +53,7 @@ interface Props {
   tutorId: string
   isOpen: boolean
   setOpen: Function
-  mode: ScheduleModalMode
+  mode: ScheduleMode
   // setSchedule: Function
   initSchedule: ScheduleRequest
 }
@@ -119,7 +119,7 @@ const BookingModal: React.FC<Props> = ({
 
     let duration: number = null
 
-    if (mode === ScheduleModalMode.EDIT) {
+    if (mode === ScheduleMode.EDIT) {
       duration = getIndexFromTimeGap(schedule.startDate, schedule.endDate)
       console.log(duration)
     } else {
@@ -128,7 +128,7 @@ const BookingModal: React.FC<Props> = ({
     setTempDuration(duration)
 
     if (
-      mode === ScheduleModalMode.NEW &&
+      mode === ScheduleMode.NEW &&
       !(await validateTime(new Date(schedule.startDate), duration))
     ) {
       setTimeInvalidReason(RESERVATION.TIME_ERROR)
@@ -212,7 +212,7 @@ const BookingModal: React.FC<Props> = ({
         phone: tempPhone,
       }
       console.log('scheduleRequest', scheduleRequest)
-      await putSchedule(tutorId, scheduleRequest)
+      await putRequestSchedule(tutorId, scheduleRequest)
       alert(RESERVATION.OK)
     }
 
@@ -366,16 +366,16 @@ const BookingModal: React.FC<Props> = ({
 
   const actionButtons = () => {
     switch (mode) {
-      case ScheduleModalMode.NEW:
+      case ScheduleMode.NEW:
         return <Button onClick={handleClickSave}>예약</Button>
-      case ScheduleModalMode.EDIT:
+      case ScheduleMode.EDIT:
         return (
           <>
             <Button onClick={handleClose}>닫기</Button>
             <Button onClick={handleClickCancelSchedule}>예약 취소</Button>
           </>
         )
-      case ScheduleModalMode.REQUEST:
+      case ScheduleMode.REQUEST:
         return (
           <>
             <Button onClick={handleClickSave}>예약 확정</Button>

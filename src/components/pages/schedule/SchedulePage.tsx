@@ -14,7 +14,7 @@ import { RouteComponentProps } from 'react-router'
 import { History, useHistory } from 'react-router-dom'
 import BookingModal from '../booking/BookingModal'
 import SchedulerWrapper from '../../common/SchedulerWrapper'
-import { ScheduleModalMode } from '@interfaces/status'
+import { ScheduleMode } from '@interfaces/status'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -106,8 +106,8 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     <Layout>
       {!isLoading && schedulesVO && (
         <>
-          {isModalVisible && <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} mode={ScheduleModalMode.NEW} initSchedule={initSchedule} />}
-          <SchedulerWrapper schedule={schedulesVO} onClickSchedule={handleClickSchedule} />
+          {isModalVisible && <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} mode={ScheduleMode.NEW} initSchedule={initSchedule} />}
+          <SchedulerWrapper schedule={schedulesVO} mode={ScheduleMode.NEW} onClickSchedule={handleClickSchedule} />
           <Fab
             className={classes.fab}
             variant="extended"

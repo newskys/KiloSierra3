@@ -21,7 +21,7 @@ export enum AuthError {
   RESET_REQUIRED = 'PasswordResetRequiredException',
 }
 
-export enum ScheduleModalMode {
+export enum ScheduleMode {
   NEW,
   EDIT,
   REQUEST,

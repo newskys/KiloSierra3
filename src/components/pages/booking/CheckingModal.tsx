@@ -1,4 +1,5 @@
-import { checkScheduleAvailablility, deleteSchedule, putSchedule } from '@apis/schedule'
+import axios from '@apis/axios'
+import { checkScheduleAvailablility, deleteSchedule, putRequestSchedule, putSchedule } from '@apis/schedule'
 import { RESERVATION } from '@common/lang'
 import { checkPhone } from '@common/regex'
 import { SAVED_INFO } from '@common/storage'
@@ -6,7 +7,7 @@ import ScheduleRequestInput from '@components/ui/ScheduleRequestInput'
 import ScheduleViewInput from '@components/ui/ScheduleViewInput'
 import { useLogin } from '@hooks/useLogin'
 import { ScheduleCancelRequest, ScheduleRequest } from '@interfaces/schedule'
-import { ScheduleModalMode } from '@interfaces/status'
+import { ScheduleMode } from '@interfaces/status'
 import { ReservationBasicInfo } from '@interfaces/storage'
 import {
   Backdrop,
@@ -54,7 +55,7 @@ interface Props {
   tutorId: string
   isOpen: boolean
   setOpen: Function
-  mode: ScheduleModalMode
+  mode: ScheduleMode
   initSchedule: ScheduleRequest
 }
 
@@ -78,7 +79,8 @@ const CheckingModal: React.FC<Props> = ({
   }
 
   const handleClickConfirmSchedule = (e) => {
-    
+    console.log('initschedule', initSchedule)
+    const result = putSchedule(initSchedule.userId, initSchedule.startDate)
   }
 
   const DialogTitle = (props) => {
@@ -105,19 +107,20 @@ const CheckingModal: React.FC<Props> = ({
   }
 
   const actionButtons = () => {
+    const isLate: boolean = initSchedule.startDate < new Date().getTime()
     switch (mode) {
-      case ScheduleModalMode.EDIT:
+      case ScheduleMode.EDIT:
         return (
           <>
             <Button onClick={handleClose}>닫기</Button>
-            <Button onClick={handleClickCancelSchedule}>예약 취소</Button>
+            <Button disabled={isLate} onClick={handleClickCancelSchedule}>예약 취소</Button>
           </>
         )
-      case ScheduleModalMode.REQUEST:
+      case ScheduleMode.REQUEST:
         return (
           <>
-            <Button onClick={handleClickConfirmSchedule}>예약 확정</Button>
-            <Button onClick={handleClickCancelSchedule}>예약 취소</Button>
+            <Button disabled={isLate} onClick={handleClickConfirmSchedule}>예약 확정</Button>
+            <Button disabled={isLate} onClick={handleClickCancelSchedule}>예약 취소</Button>
             <Button onClick={handleClose}>닫기</Button>
           </>
         )

@@ -1,6 +1,7 @@
 import { UserRole } from "./status";
 
 export interface Schedule {
+  userId?: string
   startDate: Date
   endDate: Date
   title?: string
@@ -12,6 +13,7 @@ export interface Schedule {
 }
 
 export interface ScheduleRequest {
+  userId?: string
   startDate: number
   endDate: number
   place: string

@@ -12,7 +12,6 @@ export const initUserProfile = async () => {
   window.__token = token
 
   const profile: Profile = await getMyProfile()
-  console.log('p', profile)
   setProfile(profile)
   const recoilUserState: UserState = getRecoilExternalLoadable(userState).valueMaybe() as UserState
   console.log(recoilUserState)
@@ -33,6 +32,8 @@ export const signIn = async (userId, password): Promise<UserState> => {
   try {
     const result = await Auth.signIn(userId, password)
     const session = await Auth.currentSession()
+    const token: string = session?.getIdToken()?.getJwtToken()
+    window.__token = token
 
     const userState: UserState = {
       isInit: true,

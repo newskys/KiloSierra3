@@ -417,17 +417,19 @@ const SchedulerWrapper: React.FC<Props> = ({
     data,
     ...restProps
   }: Appointments.AppointmentContentProps) => {
+    // console.log('data', data.userId)
+    const title: string = data.title || data.userId
     return (
       <Appointments.AppointmentContent {...restProps} data={data}>
         <div className={classes.container}>
           {currentViewName === ViewName.Week ? (
             <>
-              <div className={classes.text}>{data.title || '일정'}</div>
-              <div className={classes.text}>{data.title ? '' : '있음'}</div>
+              <div className={classes.text}>{title || '일정'}</div>
+              <div className={classes.text}>{title ? '' : '있음'}</div>
             </>
           ) : (
             <>
-              <div className={classes.text}>{data.title || '일정'}</div>
+              <div className={classes.text}>{title || '일정'}</div>
             </>
           )}
           {/* <div className={classNames(classes.text, classes.content)}> */}

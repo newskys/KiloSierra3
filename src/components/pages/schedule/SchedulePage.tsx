@@ -15,6 +15,7 @@ import { History, useHistory } from 'react-router-dom'
 import BookingModal from '../booking/BookingModal'
 import SchedulerWrapper from '../../common/SchedulerWrapper'
 import { ScheduleMode } from '@interfaces/status'
+import CheckingModal from '../booking/CheckingModal'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -38,6 +39,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
+  const [isCheckingModalOpen, setCheckingModalOpen] = useState<boolean>(false)
   const [isModalVisible, setModalVisible] = useState<boolean>(false)
   const [initModalDateTime, setInitModalDateTime] = useState<Date>(null)
 
@@ -57,14 +59,14 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   }, [])
 
   useEffect(() => {
-    if (isModalOpen) {
+    if (isModalOpen || isCheckingModalOpen) {
       setModalVisible(true)
     } else {
       window.setTimeout(() => {
         setModalVisible(false)
       }, 500)
     }
-  }, [isModalOpen])
+  }, [isModalOpen, isCheckingModalOpen])
 
   const schedulesVO: AppointmentModel[] = schedules?.map((schedule, index) => {
     return {
@@ -85,20 +87,28 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
 
   const handleClickSchedule = (e, schedule: Schedule | Date) => {
     console.log('k', schedule)
-
-    let startDate: Date = null
-    if (schedule instanceof Date) {
-      startDate = schedule
-    } else if (schedule instanceof Object) {
-      startDate = schedule.startDate
-    }
+    
+    const startDate: Date = (() => {
+      if (schedule instanceof Date) {
+        return schedule
+      } else if (schedule instanceof Object) {
+        return schedule.startDate
+      }
+    })()
+    const isNewMode: boolean = schedule instanceof Date
+    const isMine: boolean = !isNewMode && (schedule as Schedule).isMine
 
     if (startDate.getTime() < new Date().getTime()) {
       return
     }
 
     setInitModalDateTime(startDate)
-    setModalOpen(true)
+
+    if (isNewMode) {
+      setModalOpen(true)
+    } else if (isMine) {
+      setCheckingModalOpen(true)
+    }
   }
 
   const initSchedule: ScheduleRequest = initModalDateTime ? {
@@ -110,11 +120,14 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     request: null,
   } : null
 
+  console.log('isCheckingModalOpen', isCheckingModalOpen)
+
   return (
     <Layout>
       {!isLoading && schedulesVO && (
         <>
-          {isModalVisible && <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} mode={ScheduleMode.NEW} initSchedule={initSchedule} />}
+          {isModalOpen && isModalVisible && <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} mode={ScheduleMode.NEW} initSchedule={initSchedule} />}
+          {isCheckingModalOpen && isModalVisible && <CheckingModal tutorId={'umlaut'} isOpen={isCheckingModalOpen} setOpen={setCheckingModalOpen} mode={ScheduleMode.REQUEST} initSchedule={initSchedule} />}
           <SchedulerWrapper schedule={schedulesVO} mode={ScheduleMode.NEW} onClickSchedule={handleClickSchedule} />
           <Fab
             className={classes.fab}

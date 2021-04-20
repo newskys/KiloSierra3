@@ -26,3 +26,8 @@ export enum ScheduleMode {
   EDIT,
   REQUEST,
 }
+
+export enum ScheduleStatus {
+  REQUEST,
+  CONFIRMED,
+}

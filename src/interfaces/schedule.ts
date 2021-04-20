@@ -1,4 +1,4 @@
-import { UserRole } from "./status";
+import { ScheduleStatus, UserRole } from "./status";
 
 export interface Schedule {
   userId?: string
@@ -10,6 +10,8 @@ export interface Schedule {
   level?: number
   phone?: string
   request?: string
+  isConfirmed: boolean
+  status?: ScheduleStatus
 }
 
 export interface ScheduleRequest {
@@ -20,6 +22,7 @@ export interface ScheduleRequest {
   level: number
   phone: string
   request?: string
+  status?: ScheduleStatus
 }
 
 export interface ScheduleCancelRequest {

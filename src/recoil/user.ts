@@ -3,7 +3,7 @@ import { atom, RecoilState, RecoilValueReadOnly, selector } from 'recoil'
 
 const KEY = {
   STATE: 'userState',
-  GET_USER: 'getUser',
+  GET_USER_ROLE: 'getUserRole',
 }
 
 export interface UserState {
@@ -27,11 +27,11 @@ export const userState: RecoilState<UserState> = atom({
   },
 })
 
-export const getUser: RecoilValueReadOnly<string> = selector({
-  key: KEY.GET_USER,
+export const getUserRole: RecoilValueReadOnly<UserRole> = selector({
+  key: KEY.GET_USER_ROLE,
   get: ({ get }) => {
     const user: UserState = get(userState)
 
-    return user.email
+    return user.role
   },
 })

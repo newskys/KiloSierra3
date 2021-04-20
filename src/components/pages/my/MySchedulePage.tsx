@@ -7,13 +7,15 @@ import { useHeader } from '@hooks/useHeader'
 import { useLogin } from '@hooks/useLogin'
 import { HeaderType } from '@interfaces/header'
 import { Schedule, ScheduleRequest } from '@interfaces/schedule'
-import { ScheduleMode } from '@interfaces/status'
+import { ScheduleMode, ScheduleStatus, UserRole } from '@interfaces/status'
 import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
+import { getUserRole } from '@recoil/user'
 import React, { MouseEvent, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router'
 import { History, useHistory } from 'react-router-dom'
+import { useRecoilValue } from 'recoil'
 import BookingModal from '../booking/BookingModal'
 import CheckingModal from '../booking/CheckingModal'
 
@@ -36,12 +38,13 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   const classes = useStyles()
   const history: History = useHistory()
   const [isLogin] = useLogin()
+  const userRole: UserRole = useRecoilValue(getUserRole)
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
   const [isModalVisible, setModalVisible] = useState<boolean>(false)
   const [initModalSchedule, setInitModalSchedule] = useState<ScheduleRequest>(null)
-  const scheduleMode: ScheduleMode = ScheduleMode.REQUEST
+  const [scheduleMode, setScheduleMode] = useState<ScheduleMode>(ScheduleMode.REQUEST)
 
   useEffect(() => {
     if (isModalOpen) {
@@ -73,6 +76,8 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   }
 
   const handleClickSchedule = (e, appointmentModel: AppointmentModel) => {
+    console.log('ap', appointmentModel)
+
     const scheduleRequest: ScheduleRequest = {
       userId: appointmentModel.userId,
       startDate: new Date(appointmentModel.startDate).getTime(),
@@ -81,11 +86,15 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
       phone: appointmentModel.phone,
       place: appointmentModel.place,
       request: appointmentModel.request,
+      status: appointmentModel.status,
     }
 
-    console.log('sc', scheduleRequest)
-
     setInitModalSchedule(scheduleRequest)
+    if (scheduleRequest.status === ScheduleStatus.CONFIRMED) {
+      setScheduleMode(ScheduleMode.EDIT)
+    } else {
+      setScheduleMode(ScheduleMode.REQUEST)
+    }
     setModalOpen(true)
   }
 
@@ -100,6 +109,7 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
       level: schedule.level,
       request: schedule.request,
       phone: schedule.phone,
+      status: schedule.isConfirmed ? ScheduleStatus.CONFIRMED : ScheduleStatus.REQUEST,
     }
   })
 

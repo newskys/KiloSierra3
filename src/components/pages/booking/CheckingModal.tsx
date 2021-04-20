@@ -68,7 +68,6 @@ const CheckingModal: React.FC<Props> = ({
   // setSchedule,
 }) => {
   const classes = useStyles()
-  const [isLogin] = useLogin()
   const [backdropOpen, setBackdropOpen] = useState<boolean>(false)
 
   useEffect(() => {

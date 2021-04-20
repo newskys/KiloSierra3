@@ -120,14 +120,12 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     request: null,
   } : null
 
-  console.log('isCheckingModalOpen', isCheckingModalOpen)
-
   return (
     <Layout>
       {!isLoading && schedulesVO && (
         <>
           {isModalOpen && isModalVisible && <BookingModal tutorId={'umlaut'} isOpen={isModalOpen} setOpen={setModalOpen} mode={ScheduleMode.NEW} initSchedule={initSchedule} />}
-          {isCheckingModalOpen && isModalVisible && <CheckingModal tutorId={'umlaut'} isOpen={isCheckingModalOpen} setOpen={setCheckingModalOpen} mode={ScheduleMode.REQUEST} initSchedule={initSchedule} />}
+          {isCheckingModalOpen && isModalVisible && <CheckingModal tutorId={'umlaut'} isOpen={isCheckingModalOpen} setOpen={setCheckingModalOpen} mode={ScheduleMode.EDIT} initSchedule={initSchedule} />}
           <SchedulerWrapper schedule={schedulesVO} mode={ScheduleMode.NEW} onClickSchedule={handleClickSchedule} />
           <Fab
             className={classes.fab}

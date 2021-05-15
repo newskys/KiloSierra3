@@ -1,5 +1,10 @@
 import axios from '@apis/axios'
-import { checkScheduleAvailablility, deleteSchedule, putRequestSchedule, putSchedule } from '@apis/schedule'
+import {
+  checkScheduleAvailablility,
+  deleteSchedule,
+  putRequestSchedule,
+  putSchedule,
+} from '@apis/schedule'
 import { RESERVATION } from '@common/lang'
 import { checkPhone } from '@common/regex'
 import { SAVED_INFO } from '@common/storage'
@@ -12,23 +17,18 @@ import { ReservationBasicInfo } from '@interfaces/storage'
 import {
   Backdrop,
   Button,
-
   CircularProgress,
   DialogActions,
   DialogContent,
-
   IconButton,
-  Typography
+  Typography,
 } from '@material-ui/core'
 import Dialog from '@material-ui/core/Dialog'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import { makeStyles } from '@material-ui/core/styles'
 import CloseIcon from '@material-ui/icons/Close'
 import moment from 'moment'
-import React, {
-  KeyboardEvent,
-  useEffect, useState
-} from 'react'
+import React, { KeyboardEvent, useEffect, useState } from 'react'
 
 const useStyles = makeStyles({
   root: {
@@ -70,12 +70,9 @@ const CheckingModal: React.FC<Props> = ({
   const classes = useStyles()
   const [backdropOpen, setBackdropOpen] = useState<boolean>(false)
 
-  useEffect(() => {
-  }, [])
+  useEffect(() => {}, [])
 
-  const handleClickCancelSchedule = (e) => {
-    
-  }
+  const handleClickCancelSchedule = (e) => {}
 
   const handleClickConfirmSchedule = (e) => {
     console.log('initschedule', initSchedule)
@@ -112,19 +109,36 @@ const CheckingModal: React.FC<Props> = ({
         return (
           <>
             <Button onClick={handleClose}>닫기</Button>
-            <Button disabled={isLate} onClick={handleClickCancelSchedule}>예약 취소</Button>
+            <Button disabled={isLate} onClick={handleClickCancelSchedule}>
+              예약 취소
+            </Button>
           </>
         )
       case ScheduleMode.REQUEST:
         return (
           <>
-            <Button disabled={isLate} onClick={handleClickConfirmSchedule}>예약 확정</Button>
-            <Button disabled={isLate} onClick={handleClickCancelSchedule}>예약 취소</Button>
+            <Button disabled={isLate} onClick={handleClickConfirmSchedule}>
+              예약 확정
+            </Button>
+            <Button disabled={isLate} onClick={handleClickCancelSchedule}>
+              예약 취소
+            </Button>
             <Button onClick={handleClose}>닫기</Button>
           </>
         )
     }
   }
+
+  const title: string = (() => {
+    switch (mode) {
+      case ScheduleMode.NEW:
+        return '예약 신청'
+      case ScheduleMode.EDIT:
+        return '예약 확인'
+      case ScheduleMode.REQUEST:
+        return '예약 신청 현황'
+    }
+  })()
 
   return (
     <>
@@ -136,16 +150,12 @@ const CheckingModal: React.FC<Props> = ({
         aria-labelledby="customized-dialog-title"
         open={isOpen}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
-          예약 신청 현황
+          {title}
         </DialogTitle>
         <DialogContent dividers>
-          <ScheduleViewInput
-            schedule={initSchedule}
-          />
+          <ScheduleViewInput schedule={initSchedule} />
         </DialogContent>
-        <DialogActions>
-          {actionButtons()}
-        </DialogActions>
+        <DialogActions>{actionButtons()}</DialogActions>
       </Dialog>
     </>
   )

@@ -1,6 +1,6 @@
 {
   "auth": {
-    "kilosierra399f9ae83": {
+    "kilosierra3a9b72c1d": {
       "service": "Cognito",
       "serviceType": "imported",
       "providerPlugin": "awscloudformation",

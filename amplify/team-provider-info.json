@@ -13,11 +13,11 @@
     },
     "categories": {
       "auth": {
-        "kilosierra399f9ae83": {
-          "userPoolId": "ap-northeast-2_Hd6kKCbPp",
-          "userPoolName": "RomeoMike",
-          "webClientId": "5g5eqgulo7pjnv0q8ethg1tcqp",
-          "nativeClientId": "5g5eqgulo7pjnv0q8ethg1tcqp"
+        "kilosierra3a9b72c1d": {
+          "userPoolId": "ap-northeast-2_4k05ilMvr",
+          "userPoolName": "RomeoMike-SMS",
+          "webClientId": "2jjk1a32065eb0bvvfs92d8tof",
+          "nativeClientId": "2jjk1a32065eb0bvvfs92d8tof"
         }
       }
     }

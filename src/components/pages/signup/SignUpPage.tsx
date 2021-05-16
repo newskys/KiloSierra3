@@ -1,6 +1,6 @@
 import { SIGN_UP } from '@common/lang'
 import { checkEmail, checkPassword, checkUserId } from '@common/regex'
-import { LOGIN } from '@common/routePath'
+import { CONFIRM_CODE, LOGIN } from '@common/routePath'
 import Layout from '@components/ui/Layout'
 import SignUpInput from '@components/ui/SignUpInput'
 import { Box } from '@material-ui/core'
@@ -11,6 +11,7 @@ import axios from '@apis/axios'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
 import { useHistory, History } from 'react-router-dom'
 import { useHeader } from '@hooks/useHeader'
+import { signIn } from '@apis/auth'
 
 const useStyles = makeStyles({
   root: {
@@ -96,8 +97,7 @@ const SignUpPage = () => {
     // const hasUserId: boolean = await checkSignUpId(value)
     // if (hasUserId) {
     //   message = SIGN_UP.USER_ID_ERROR_USED
-    // } 
-    
+    // }
 
     setUserIdInvalidReason(message)
   }
@@ -105,8 +105,8 @@ const SignUpPage = () => {
   const checkSignUpId = async (value: string) => {
     try {
       const apiId = await axios.get(`/hasuser?userId=${value}`)
-  
-      console.log(apiId.data);
+
+      console.log(apiId.data)
       // return apiId.data
 
       if (apiId.data) {
@@ -155,12 +155,14 @@ const SignUpPage = () => {
   }
 
   const handleChangeEmail = (e: KeyboardEvent<HTMLInputElement>): void => {
-    const message: string = !validateEmail(e.currentTarget.value) ? SIGN_UP.EMAIL_ERROR_REGEX : null
+    const message: string = !validateEmail(e.currentTarget.value)
+      ? SIGN_UP.EMAIL_ERROR_REGEX
+      : null
     setEmailInvalidReason(message)
   }
 
   const validateEmail = (value: string): boolean => {
-    return checkEmail(value)
+    return true || checkEmail(value)
   }
 
   const validatePhone = (e: KeyboardEvent<HTMLInputElement>) => {}
@@ -179,21 +181,24 @@ const SignUpPage = () => {
   const signUp = async (
     username: string,
     password: string,
-    email: string,
-    phone_number?: string
+    phone_number: string
   ) => {
     try {
       const { user } = await Auth.signUp({
         username,
         password,
         attributes: {
-          email,
-          // phone_number,   // optional - E.164 number convention
+          // email,
+          phone_number, // optional - E.164 number convention
         },
       })
-      // console.log(user)
+      console.log('user', user.getUsername())
+      // await signIn(user.getUsername(), password)
       alert(SIGN_UP.OK)
-      history.push(LOGIN)
+      history.push({
+        pathname: CONFIRM_CODE,
+        state: { userId: user.getUsername(), password },
+      })
     } catch (e) {
       console.error(e)
       if (e.code === 'UsernameExistsException') {

@@ -139,10 +139,10 @@ const SignUpInput: React.FC<Props> = ({
         error={!!emailInvalidReason}
         className={classes.login_input}
         variant="outlined"
-        label="Email *"
+        label="Phone Number *"
         margin="normal"
-        helperText={emailInvalidReason || SIGN_UP.SEND_EMAIL}
-        type="email"
+        helperText={emailInvalidReason || SIGN_UP.SEND_SMS}
+        
         onChange={(e) => onChangeEmail(e)}
       />
       {/* <TextField

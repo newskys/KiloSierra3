@@ -31,6 +31,7 @@ export const setProfile = (profile: Profile) => {
 export const signIn = async (userId, password): Promise<UserState> => {
   try {
     const result = await Auth.signIn(userId, password)
+    console.log('result', result)
     const session = await Auth.currentSession()
     const token: string = session?.getIdToken()?.getJwtToken()
     window.__token = token

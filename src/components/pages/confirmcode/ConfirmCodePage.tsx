@@ -1,6 +1,6 @@
 import { signIn } from '@apis/auth'
 import { AUTH, SIGN_UP } from '@common/lang'
-import { HOME, TUTORS } from '@common/routePath'
+import { HOME, LOGIN, TUTORS } from '@common/routePath'
 import ConfirmCodeInput from '@components/ui/ConfirmCodeInput'
 import Layout from '@components/ui/Layout'
 import { useHeader } from '@hooks/useHeader'
@@ -10,7 +10,7 @@ import { makeStyles } from '@material-ui/core/styles'
 import { userState, UserState } from '@recoil/user'
 import { Auth } from 'aws-amplify'
 import React, { KeyboardEvent, useEffect, useState } from 'react'
-import { History, useHistory } from 'react-router-dom'
+import { History, Location, useHistory, useLocation } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 
 const useStyles = makeStyles({
@@ -27,16 +27,25 @@ const ConfirmCodePage: React.FC = () => {
   useHeader(false)
   const classes = useStyles()
   const history: History = useHistory()
-  const [user, setUserState] = useRecoilState<UserState>(userState)
+  const location: Location = useLocation()
+  const [userId, setUserId] = useState<string>(null)
+  const [password, setPassword] = useState<string>(null)
   const [invalidReason, setInvalidReason] = useState<string>(null)
   const [isConfirmEnabled, setConfirmEnabled] = useState<boolean>(false)
   const [codeRef, setCodeRef] = useState<HTMLInputElement>(null)
+  const [user, setUserState] = useRecoilState<UserState>(userState)
 
   useEffect(() => {
-    if (user.status === UserStatus.CONFIRMED) {
-      history.replace(TUTORS)
+    const userId: string = location.state?.userId
+    const password: string = location.state?.password
+
+    if (!userId || !password) {
+      history.replace(LOGIN)
     }
-  }, [user])
+
+    setUserId(userId)
+    setPassword(password)
+  }, [])
 
   useEffect(() => {
     if (codeRef) {
@@ -77,14 +86,15 @@ const ConfirmCodePage: React.FC = () => {
   }
 
   const handleClickConfirm = (e: KeyboardEvent<HTMLInputElement>) => {
-    confirmSignUp(user.userId, codeRef.value)
+    console.log('user', userId)
+    confirmSignUp(userId, password, codeRef.value)
   }
 
   const handleClickResend = (e: KeyboardEvent<HTMLInputElement>) => {
-    resendEmail(user.userId)
+    resendEmail(userId)
   }
 
-  const confirmSignUp = async (username, code) => {
+  const confirmSignUp = async (username, password, code) => {
     try {
       await Auth.confirmSignUp(username, code)
     } catch (e) {
@@ -97,8 +107,9 @@ const ConfirmCodePage: React.FC = () => {
     }
 
     try {
-      const userState: UserState = await signIn(username, user.password)
+      const userState: UserState = await signIn(username, password)
       setUserState(userState)
+      history.replace(TUTORS)
     } catch (e) {
       alert(e)
     }

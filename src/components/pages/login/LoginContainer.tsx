@@ -71,7 +71,7 @@ const LoginContainer: React.FC = () => {
 
   return (
     <>
-      <Authenticator hideDefault={false} amplifyConfig={awsconfig}>
+      <Authenticator hideDefault={true} amplifyConfig={awsconfig}>
         <Login setRef={setRef} onClick={handleClick} />
       </Authenticator>
       <Backdrop className={classes.backdrop} open={backdropOpen}>

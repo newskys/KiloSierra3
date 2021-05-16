@@ -1,5 +1,5 @@
 export const SIGN_UP = {
-  SEND_EMAIL: '가입 후 인증메일이 발송됩니다.',
+  SEND_SMS: '가입 후 인증문자가 발송됩니다.',
   SUBMIT_NOT_FILLED: '위 항목을 올바르게 채워주세요.',
   USER_ID_ERROR_REGEX: '6 ~ 20자의 소문자, 숫자로 조합해주세요.',
   USER_ID_ERROR_USED: '사용 중인 ID입니다.',

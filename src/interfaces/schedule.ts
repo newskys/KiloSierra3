@@ -11,6 +11,7 @@ export interface Schedule {
   phone?: string
   request?: string
   isConfirmed: boolean
+  tutorId?: string
   status?: ScheduleStatus
 }
 
@@ -23,6 +24,7 @@ export interface ScheduleRequest {
   phone: string
   request?: string
   status?: ScheduleStatus
+  tutorId?: string
 }
 
 export interface ScheduleCancelRequest {

@@ -7,7 +7,7 @@ const KEY = {
 }
 
 export interface TutorState {
-  id: string
+  tutorId: string
   urlPath: string
   nickname: string
   career: string
@@ -17,7 +17,7 @@ export interface TutorState {
 export const tutorState: RecoilState<TutorState> = atom({
   key: KEY.STATE,
   default: {
-    id: null,
+    tutorId: null,
     urlPath: null,
     nickname: null,
     career: null,

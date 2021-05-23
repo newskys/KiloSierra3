@@ -11,11 +11,11 @@ import { ScheduleMode, ScheduleStatus, UserRole } from '@interfaces/status'
 import { Fab } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import AddIcon from '@material-ui/icons/Add'
-import { getUserRole } from '@recoil/user'
+import { getUserRole, userState } from '@recoil/user'
 import React, { MouseEvent, useEffect, useState } from 'react'
 import { RouteComponentProps } from 'react-router'
 import { History, useHistory } from 'react-router-dom'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import BookingModal from '../booking/BookingModal'
 import CheckingModal from '../booking/CheckingModal'
 
@@ -38,6 +38,7 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   const classes = useStyles()
   const history: History = useHistory()
   const [isLogin] = useLogin()
+  const [user, setUserState] = useRecoilState(userState)
   const userRole: UserRole = useRecoilValue(getUserRole)
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
@@ -57,14 +58,14 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   }, [isModalOpen])
 
   useEffect(() => {
-    getSchedule(match.params.tutorId)
+    getSchedule()
 
     if (!isLogin) {
       history.push(TUTORS)
     }
   }, [])
 
-  const getSchedule = async (tutorId: string) => {
+  const getSchedule = async () => {
     try {
       const result: Schedule[] = await getMySchedule()
       setSchedules(result)
@@ -87,10 +88,11 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
       place: appointmentModel.place,
       request: appointmentModel.request,
       status: appointmentModel.status,
+      tutorId: appointmentModel.tutorId,
     }
 
     setInitModalSchedule(scheduleRequest)
-    if (scheduleRequest.status === ScheduleStatus.CONFIRMED) {
+    if (scheduleRequest.tutorId !== user.userId || scheduleRequest.status === ScheduleStatus.CONFIRMED) {
       setScheduleMode(ScheduleMode.EDIT)
     } else {
       setScheduleMode(ScheduleMode.REQUEST)
@@ -110,6 +112,7 @@ const MySchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
       request: schedule.request,
       phone: schedule.phone,
       status: schedule.isConfirmed ? ScheduleStatus.CONFIRMED : ScheduleStatus.REQUEST,
+      tutorId: schedule.tutorId,
     }
   })
 

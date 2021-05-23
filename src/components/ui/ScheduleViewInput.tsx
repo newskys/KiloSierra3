@@ -82,6 +82,7 @@ interface Props {
 
 const ScheduleViewInput: React.FC<Props> = ({ schedule }) => {
   const classes = useStyles()
+  console.log('schedule', schedule)
 
   const durationStr: string = (() => {
     const timeDiff: number = (schedule.endDate - schedule.startDate) / 1000 / 60
@@ -104,6 +105,28 @@ const ScheduleViewInput: React.FC<Props> = ({ schedule }) => {
 
   return (
     <>
+      {schedule.userId && <TextField
+        disabled
+        fullWidth
+        required
+        className={classes.login_input}
+        variant="outlined"
+        label="예약신청자 ID"
+        margin="normal"
+        value={schedule.userId}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="user name"
+                disabled={true}
+                edge="end">
+                <ScheduleIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />}
       <TextField
         disabled
         fullWidth
@@ -180,42 +203,6 @@ const ScheduleViewInput: React.FC<Props> = ({ schedule }) => {
                 disabled={true}
                 edge="end">
                 <ChatIcon />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-      <FormControl fullWidth variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">Level</InputLabel>
-        <Select
-          disabled={true}
-          labelId="demo-simple-select-outlined-label"
-          value={schedule.level}
-          label="Level">
-          <MenuItem value={0}>Test</MenuItem>
-          <MenuItem value={1}>A1 (Beginner)</MenuItem>
-          <MenuItem value={2}>A2</MenuItem>
-          <MenuItem value={3}>B1</MenuItem>
-          <MenuItem value={4}>B2</MenuItem>
-          <MenuItem value={5}>C1</MenuItem>
-          <MenuItem value={6}>C2 (Native)</MenuItem>
-        </Select>
-      </FormControl>
-      <TextField
-        disabled
-        fullWidth
-        className={classes.login_input}
-        variant="outlined"
-        margin="normal"
-        value={schedule.phone}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                aria-label="input location"
-                disabled={true}
-                edge="end">
-                <PhoneIcon />
               </IconButton>
             </InputAdornment>
           ),

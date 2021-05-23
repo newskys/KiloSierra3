@@ -69,7 +69,7 @@ const TutorsPage: FC = () => {
   const handleClickTutor = (e: MouseEvent, tutor: Tutor) => {
     e.preventDefault()
     const tutorState: TutorState = {
-      id: tutor.id,
+      tutorId: tutor.tutorId,
       urlPath: tutor.urlpath,
       image: tutor.image,
       nickname: tutor.nickname,

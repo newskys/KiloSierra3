@@ -60,21 +60,23 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   }
 
   const init = async () => {
-    if (!tutor.urlPath) {
-       const tutor: Tutor = await getTutor(urlpath)
+    if (tutor.urlPath) {
+      getSchedule(tutor.tutorId)
+      return
+    } 
 
-       const tutorState: TutorState = {
-        id: tutor.id,
-        urlPath: tutor.urlpath,
-        image: tutor.image,
-        nickname: tutor.nickname,
-        career: tutor.career,
-      }
-  
-      setTutorState(tutorState)
+    const newTutor: Tutor = await getTutor(urlpath)
+
+    const tutorState: TutorState = {
+      tutorId: newTutor.tutorId,
+      urlPath: newTutor.urlpath,
+      image: newTutor.image,
+      nickname: newTutor.nickname,
+      career: newTutor.career,
     }
 
-    getSchedule(tutor.id)
+    setTutorState(tutorState)
+    getSchedule(newTutor.tutorId)
   }
 
   useEffect(() => {
@@ -98,6 +100,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
       title: schedule.title,
       place: schedule.place,
       isMine: schedule.isMine,
+      tutorId: schedule.tutorId,
     }
   })
 

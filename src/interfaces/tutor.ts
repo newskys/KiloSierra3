@@ -1,5 +1,5 @@
 export interface Tutor {
-  id: string
+  tutorId: string
   urlpath: string
   nickname: string
   career: string

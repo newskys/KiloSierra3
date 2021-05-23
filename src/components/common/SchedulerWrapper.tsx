@@ -111,6 +111,7 @@ const SchedulerWrapper: React.FC<Props> = ({
   onClickSchedule,
   mode,
 }) => {
+  console.log('sss',rawSchedule)
   const classes = useStyles()
   const [monthViewSchedule, setMonthViewSchedule] = useState<
     AppointmentModel[]

@@ -100,20 +100,11 @@ interface Props {
   setRef: Function
   setPhoneRef: Function
   schedule: ScheduleRequest
-  savedInfo: ReservationBasicInfo
-  isSaveInfo: boolean
-  setSaveInfo: Function
   timeInvalidReason: string
   placeInvalidReason: string
-  phoneInvalidReason: string
-  level: number
   onChangeTime: Function
   onChangeDuration: Function
   onChangePlace: Function
-  onChangeLevel: Function
-  onChangePhone: Function
-  onBlurPhone: Function
-  tempPhone: string
 }
 
 const ScheduleRequestInput: React.FC<Props> = ({
@@ -121,60 +112,24 @@ const ScheduleRequestInput: React.FC<Props> = ({
   setRef,
   setPhoneRef,
   schedule,
-  savedInfo,
-  isSaveInfo,
-  setSaveInfo,
   timeInvalidReason,
   placeInvalidReason,
-  phoneInvalidReason,
   onChangeTime,
   onChangeDuration,
   onChangePlace,
-  onChangeLevel,
-  level,
-  onChangePhone,
-  onBlurPhone,
-  tempPhone,
 }) => {
   const classes = useStyles()
   const startTimeRef = useRef<HTMLInputElement>()
   const endTimeRef = useRef<HTMLInputElement>()
   const requestRef = useRef<HTMLInputElement>()
   const placeRef = useRef<HTMLInputElement>()
-  const levelRef = useRef<HTMLSelectElement>()
-  // const phoneRef = useRef<HTMLInputElement>()
-  // const isExpanded: boolean = !isSaveInfo
-  // const [saveInfoOn, setSaveInfoOn] = React.useState<boolean>(isSaveInfo)
   const [selectedDate, setDate] = useState(moment(schedule.startDate))
-  const [isExpanded, setExpanded] = useState<boolean>(null)
-  // const [phoneNumberTimeout, setPhoneNumberTimeout] = useState<number>(null)
   const [hour, setHour] = useState<number>(2)
-  // const [level, setLevel] = useState<number>(savedInfo?.level ?? null)
-
-  // useEffect(() => {
-  //   console.log(isExpanded)
-  // }, [isExpanded])
-
-  // useEffect(() => {
-  //   if (phoneInvalidReason && !isExpanded) {
-  //     setExpanded(true)
-  //   }
-  // }, [phoneInvalidReason])
-
-  // useEffect(() => {
-  //   setExpanded(!isSaveInfo)
-  // }, [isSaveInfo])
-
-  // const handleChangeAccordion = (e, isExpanded) => {
-  //   // e.preventDefault()
-  //   // e.stopPropagation()
-  //   setExpanded(isExpanded)
-  // }
 
   const handleClickInfoSave = (e: MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    setSaveInfo()
+    // setSaveInfo()
     // setSaveInfoOn(!saveInfoOn)
   }
   // const [inputValue, setInputValue] = useState(moment().format('YYYY-MM-DD'))
@@ -216,36 +171,35 @@ const ScheduleRequestInput: React.FC<Props> = ({
       endTimeRef.current,
       requestRef.current,
       placeRef.current,
-      levelRef.current
       // phoneRef.current,
     )
     // console.log(startTimeRef.current, placeRef.current, phoneRef.current)
   }, [])
 
-  const AccordionSummary = (props) => (
-    <MuiAccordionSummary
-      expandIcon={<ArrowForwardIosSharpIcon style={{ fontSize: '0.9rem' }} />}
-      {...props}
-      className={classes.accordion_summary}
-    />
-  )
+  // const AccordionSummary = (props) => (
+  //   <MuiAccordionSummary
+  //     expandIcon={<ArrowForwardIosSharpIcon style={{ fontSize: '0.9rem' }} />}
+  //     {...props}
+  //     className={classes.accordion_summary}
+  //   />
+  // )
 
-  const phoneNumberInput = (props) => {
-    let inheritProps = {
-      ...props,
-    }
-    delete inheritProps.inputRef
+  // const phoneNumberInput = (props) => {
+  //   let inheritProps = {
+  //     ...props,
+  //   }
+  //   delete inheritProps.inputRef
 
-    return (
-      <NumberFormat
-        {...inheritProps}
-        format="01#-####-####"
-        defaultValue={savedInfo?.phone || undefined}
-        allowEmptyFormatting
-        value={tempPhone}
-        mask="_" />
-    )
-  }
+  //   return (
+  //     <NumberFormat
+  //       {...inheritProps}
+  //       format="01#-####-####"
+  //       defaultValue={savedInfo?.phone || undefined}
+  //       allowEmptyFormatting
+  //       value={tempPhone}
+  //       mask="_" />
+  //   )
+  // }
 
   return (
     <>
@@ -377,80 +331,6 @@ const ScheduleRequestInput: React.FC<Props> = ({
         disabled={true}
         label="같은 요일/시간 반복"
       />
-      <Accordion
-        style={{ marginTop: '16px' }}
-        defaultExpanded={!isSaveInfo}
-        // expanded={isExpanded}
-        // onChange={(e, isExpanded) => handleChangeAccordion(e, isExpanded)}
-      >
-        <AccordionSummary>
-          기본 정보
-          <FormControlLabel
-            onClick={handleClickInfoSave}
-            className={classes.saveinfo_label}
-            control={
-              <Checkbox
-                checked={isSaveInfo}
-                // onChange={(e) => {
-                //   console.log(e)
-                // }}
-                name="saveInfoCheck"
-                color="primary"
-              />
-            }
-            label="다음에도 사용"
-          />
-        </AccordionSummary>
-        <AccordionDetails className={classes.accordion_details}>
-          <FormControl
-            fullWidth
-            variant="outlined"
-            className={classes.formControl}>
-            <InputLabel id="demo-simple-select-outlined-label">
-              Level
-            </InputLabel>
-            <Select
-              labelId="demo-simple-select-outlined-label"
-              value={level}
-              onChange={(e) => onChangeLevel(e)}
-              label="Level">
-              <MenuItem value={0}>Test</MenuItem>
-              <MenuItem value={1}>A1 (Beginner)</MenuItem>
-              <MenuItem value={2}>A2</MenuItem>
-              <MenuItem value={3}>B1</MenuItem>
-              <MenuItem value={4}>B2</MenuItem>
-              <MenuItem value={5}>C1</MenuItem>
-              <MenuItem value={6}>C2 (Native)</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            fullWidth
-            className={classes.login_input}
-            variant="outlined"
-            // inputRef={phoneRef}
-            // label="연락처"
-            margin="normal"
-            helperText={phoneInvalidReason || RESERVATION.CONTACT}
-            // value={tempPhone}
-            error={!!phoneInvalidReason}
-            onChange={(e) => onChangePhone(e)}
-            onBlur={(e) => onBlurPhone(e)}
-            InputProps={{
-              inputComponent: phoneNumberInput,
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="input location"
-                    disabled={true}
-                    edge="end">
-                    <PhoneIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        </AccordionDetails>
-      </Accordion>
     </>
   )
 }

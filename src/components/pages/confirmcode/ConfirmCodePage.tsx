@@ -117,7 +117,7 @@ const ConfirmCodePage: React.FC = () => {
 
   const resendEmail = async (userId) => {
     await Auth.resendSignUp(userId)
-    alert(SIGN_UP.RESENT_EMAIL)
+    alert(SIGN_UP.RESENT_SMS)
   }
 
   return (

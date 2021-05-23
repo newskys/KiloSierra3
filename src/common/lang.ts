@@ -9,8 +9,8 @@ export const SIGN_UP = {
   ERROR_INVALID_FORMAT: '형식에 맞지 않는 항목이 있습니다.',
   ERROR_INVALID_CODE: '형식에 맞지 않는 항목이 있습니다.',
   OK: '가입되었습니다.',
-  CONFIRM_CODE: '이메일로 발송된 코드를 적어주세요.',
-  RESENT_EMAIL: '이메일을 재전송했습니다. 메일함을 확인해주세요.'
+  CONFIRM_CODE: 'SMS로 발송된 코드를 적어주세요.',
+  RESENT_SMS: 'SMS을 재전송했습니다. 확인해주세요.'
 }
 
 export const AUTH = {

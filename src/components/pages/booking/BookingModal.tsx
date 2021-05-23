@@ -75,11 +75,11 @@ const BookingModal: React.FC<Props> = ({
   const [placeEl, setPlaceEl] = useState<HTMLInputElement>(null)
   const [levelEl, setLevelEl] = useState<HTMLSelectElement>(null)
   const [phoneEl, setPhoneEl] = useState<HTMLInputElement>(null)
-  const [tempLevel, setTempLevel] = useState<number>(0)
-  const [tempPhone, setTempPhone] = useState<string>(null)
+  // const [tempLevel, setTempLevel] = useState<number>(0)
+  // const [tempPhone, setTempPhone] = useState<string>(null)
   const [timeInvalidReason, setTimeInvalidReason] = useState<string>(null)
   const [placeInvalidReason, setPlaceInvalidReason] = useState<string>(null)
-  const [phoneInvalidReason, setPhoneInvalidReason] = useState<string>(null)
+  // const [phoneInvalidReason, setPhoneInvalidReason] = useState<string>(null)
   const [savedInfo, setSavedInfo] = useState<ReservationBasicInfo>(null)
   const [isSaveInfo, setSaveInfo] = useState<boolean>(null)
   const [tempTime, setTempTime] = useState<Date>(null)
@@ -94,13 +94,13 @@ const BookingModal: React.FC<Props> = ({
 
     if (
       savedInfo &&
-      Number.isInteger(savedInfo.level) &&
-      validatePhone(savedInfo.phone)
+      Number.isInteger(savedInfo.level)
+      // validatePhone(savedInfo.phone)
     ) {
       setSavedInfo(savedInfo)
       setSaveInfo(true)
-      setTempLevel(savedInfo.level)
-      setTempPhone(savedInfo.phone)
+      // setTempLevel(savedInfo.level)
+      // setTempPhone(savedInfo.phone)
     }
   }, [])
 
@@ -114,8 +114,8 @@ const BookingModal: React.FC<Props> = ({
 
   const initialDataCheck = async (schedule: ScheduleRequest) => {
     setTempTime(new Date(schedule.startDate))
-    setTempLevel(schedule.level ?? 0)
-    setTempPhone(schedule.phone ?? null)
+    // setTempLevel(schedule.level ?? 0)
+    // setTempPhone(schedule.phone ?? null)
 
     let duration: number = null
 
@@ -135,17 +135,17 @@ const BookingModal: React.FC<Props> = ({
     }
   }
 
-  const saveNewInfo = (isSaveInfo: boolean, level: number, phone: string) => {
-    const newInfo: ReservationBasicInfo = {
-      level,
-      phone,
-    }
+  // const saveNewInfo = (isSaveInfo: boolean) => {
+  //   const newInfo: ReservationBasicInfo = {
+  //     level,
+  //     phone,
+  //   }
 
-    window.localStorage.setItem(
-      SAVED_INFO,
-      isSaveInfo ? JSON.stringify(newInfo) : null
-    )
-  }
+  //   window.localStorage.setItem(
+  //     SAVED_INFO,
+  //     isSaveInfo ? JSON.stringify(newInfo) : null
+  //   )
+  // }
 
   const setRef = (
     startTimeEl,
@@ -199,7 +199,7 @@ const BookingModal: React.FC<Props> = ({
     }
 
     if (await validateAll()) {
-      saveNewInfo(isSaveInfo, tempLevel, tempPhone)
+      // saveNewInfo(isSaveInfo)
       // setSchedule(newSchedule)
       setOpen(false)
 
@@ -208,8 +208,8 @@ const BookingModal: React.FC<Props> = ({
         endDate: moment(tempTime).add(tempDuration, 'minute').valueOf(),
         request: requestEl.value,
         place: placeEl.value,
-        level: tempLevel,
-        phone: tempPhone,
+        level: null,
+        phone: null,
       }
       console.log('scheduleRequest', scheduleRequest)
       await putRequestSchedule(tutorId, scheduleRequest)
@@ -238,14 +238,14 @@ const BookingModal: React.FC<Props> = ({
     )
   }
 
-  const handleChangeSaveInfo = (e) => {
-    setSaveInfo(!isSaveInfo)
-  }
+  // const handleChangeSaveInfo = (e) => {
+  //   setSaveInfo(!isSaveInfo)
+  // }
 
-  const handleChangeLevel = (e: React.ChangeEvent) => {
-    const value: number = parseInt(e.currentTarget.getAttribute('data-value'))
-    setTempLevel(value)
-  }
+  // const handleChangeLevel = (e: React.ChangeEvent) => {
+  //   const value: number = parseInt(e.currentTarget.getAttribute('data-value'))
+  //   setTempLevel(value)
+  // }
 
   const handleChangeTime = async (value: string) => {
     let message: string = null
@@ -317,31 +317,31 @@ const BookingModal: React.FC<Props> = ({
     return value.trim() !== ''
   }
 
-  const handleChangePhone = (e: KeyboardEvent<HTMLInputElement>) => {
-    const value: string = e.currentTarget.value
-    if (validatePhone(value)) {
-      setTempPhone(value)
-      setPhoneInvalidReason(null)
+  // const handleChangePhone = (e: KeyboardEvent<HTMLInputElement>) => {
+  //   const value: string = e.currentTarget.value
+  //   if (validatePhone(value)) {
+  //     setTempPhone(value)
+  //     setPhoneInvalidReason(null)
 
-      // phoneEl.blur()
-    }
-  }
+  //     // phoneEl.blur()
+  //   }
+  // }
 
-  const handleBlurPhone = (e: KeyboardEvent<HTMLInputElement>) => {
-    const value: string = e.currentTarget.value
-    let message: string = null
+  // const handleBlurPhone = (e: KeyboardEvent<HTMLInputElement>) => {
+  //   const value: string = e.currentTarget.value
+  //   let message: string = null
 
-    if (!validatePhone(value)) {
-      message = RESERVATION.PHONE_ERROR_REGEX
-    }
+  //   if (!validatePhone(value)) {
+  //     message = RESERVATION.PHONE_ERROR_REGEX
+  //   }
 
-    setTempPhone(value)
-    setPhoneInvalidReason(message)
-  }
+  //   setTempPhone(value)
+  //   setPhoneInvalidReason(message)
+  // }
 
-  const validatePhone = (value: string) => {
-    return checkPhone(value)
-  }
+  // const validatePhone = (value: string) => {
+  //   return checkPhone(value)
+  // }
 
   const validateAll = async (): Promise<boolean> => {
     let isValid: boolean = true
@@ -351,10 +351,10 @@ const BookingModal: React.FC<Props> = ({
       isValid = false
     }
 
-    if (!validatePhone(tempPhone)) {
-      setPhoneInvalidReason(RESERVATION.PHONE_ERROR_REGEX)
-      isValid = false
-    }
+    // if (!validatePhone(tempPhone)) {
+    //   setPhoneInvalidReason(RESERVATION.PHONE_ERROR_REGEX)
+    //   isValid = false
+    // }
 
     if (!(await validateTime(tempTime, tempDuration))) {
       setTimeInvalidReason(RESERVATION.TIME_ERROR)
@@ -406,20 +406,20 @@ const BookingModal: React.FC<Props> = ({
             // phoneRef={phoneRef}
             onClickClose={handleClose}
             // setSchedule={setSchedule}
-            savedInfo={savedInfo}
-            isSaveInfo={isSaveInfo}
-            setSaveInfo={handleChangeSaveInfo}
+            // savedInfo={savedInfo}
+            // isSaveInfo={isSaveInfo}
+            // setSaveInfo={handleChangeSaveInfo}
             timeInvalidReason={timeInvalidReason}
             placeInvalidReason={placeInvalidReason}
-            phoneInvalidReason={phoneInvalidReason}
-            level={tempLevel}
-            onChangeLevel={handleChangeLevel}
+            // phoneInvalidReason={phoneInvalidReason}
+            // level={tempLevel}
+            // onChangeLevel={handleChangeLevel}
             onChangeDuration={handleChangeDuration}
             onChangeTime={handleChangeTime}
             onChangePlace={handleChangePlace}
-            onChangePhone={handleChangePhone}
-            onBlurPhone={handleBlurPhone}
-            tempPhone={tempPhone}
+            // onChangePhone={handleChangePhone}
+            // onBlurPhone={handleBlurPhone}
+            // tempPhone={tempPhone}
           />
         </DialogContent>
         <DialogActions>

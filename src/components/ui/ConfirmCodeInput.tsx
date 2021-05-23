@@ -81,7 +81,7 @@ const ConfirmCodeInput: React.FC<Props> = ({
         gutterBottom
         variant="h4"
         component="h2">
-        EMAIL CHECK
+        SMS CHECK
       </Typography>
       <Box className={classes.avatar_wrap}>
         <Avatar className={classes.avatar}>

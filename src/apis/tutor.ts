@@ -9,3 +9,9 @@ export const getTutors = async () => {
 
   return result.data
 }
+
+export const getTutor = async (urlPath: string) => {
+  const result: AxiosResponse<Tutor> = await axios.get(`/tutors/${urlPath}`, noTokenConfig)
+
+  return result.data
+}

@@ -16,6 +16,10 @@ import BookingModal from '../booking/BookingModal'
 import SchedulerWrapper from '../../common/SchedulerWrapper'
 import { ScheduleMode } from '@interfaces/status'
 import CheckingModal from '../booking/CheckingModal'
+import { useRecoilState } from 'recoil'
+import { TutorState, tutorState } from '@recoil/tutor'
+import { getTutor } from '@apis/tutor'
+import { Tutor } from '@interfaces/tutor'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -32,10 +36,11 @@ interface MatchParams {
 const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   match,
 }) => {
-  const tutorId: string = match.params.tutorId
+  const urlpath: string = match.params.tutorId
   useHeader(true, HeaderType.TUTOR, 'Ramona')
   const classes = useStyles()
   const history: History = useHistory()
+  const [tutor, setTutorState] = useRecoilState(tutorState)
   const [schedules, setSchedules] = useState<Schedule[]>(null)
   const [isLoading, setLoading] = useState<boolean>(true)
   const [isModalOpen, setModalOpen] = useState<boolean>(false)
@@ -45,7 +50,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
 
   const getSchedule = async (tutorId: string) => {
     try {
-      const result: Schedule[] = await getTutorSchedule('umlaut')
+      const result: Schedule[] = await getTutorSchedule(tutorId)
       setSchedules(result)
     } catch (e) {
       console.error(e)
@@ -54,9 +59,27 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
     setLoading(false)
   }
 
+  const init = async () => {
+    if (!tutor.urlPath) {
+       const tutor: Tutor = await getTutor(urlpath)
+
+       const tutorState: TutorState = {
+        id: tutor.id,
+        urlPath: tutor.urlpath,
+        image: tutor.image,
+        nickname: tutor.nickname,
+        career: tutor.career,
+      }
+  
+      setTutorState(tutorState)
+    }
+
+    getSchedule(tutor.id)
+  }
+
   useEffect(() => {
-    getSchedule(tutorId)
-  }, [])
+    init()
+    }, [])
 
   useEffect(() => {
     if (isModalOpen || isCheckingModalOpen) {

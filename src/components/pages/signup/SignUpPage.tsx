@@ -194,7 +194,7 @@ const SignUpPage = () => {
       })
       console.log('user', user.getUsername())
       // await signIn(user.getUsername(), password)
-      alert(SIGN_UP.OK)
+      alert(SIGN_UP.CONFIRM_CODE)
       history.push({
         pathname: CONFIRM_CODE,
         state: { userId: user.getUsername(), password },

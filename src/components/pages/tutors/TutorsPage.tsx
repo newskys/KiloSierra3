@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core/styles'
 import { getTutors } from '@apis/tutor'
 import { History, useHistory } from 'react-router-dom';
 import { Tutor } from '@interfaces/tutor'
+import { TutorState, tutorState } from '@recoil/tutor'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 
 const useStyles = makeStyles({
   avatar_wrap: {
@@ -43,6 +45,7 @@ const TutorsPage: FC = () => {
   const [tutorsList, setTutorsList] = useState<Tutor[]>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [init, setInit] = useState<boolean>(false)
+  const setTutorState = useSetRecoilState(tutorState)
   const history: History = useHistory()
 
   useEffect(() => {
@@ -63,10 +66,19 @@ const TutorsPage: FC = () => {
     setLoading(false)
   }
 
-  const handleClickTutor = (e: MouseEvent, pathUrl: string) => {
+  const handleClickTutor = (e: MouseEvent, tutor: Tutor) => {
     e.preventDefault()
+    const tutorState: TutorState = {
+      id: tutor.id,
+      urlPath: tutor.urlpath,
+      image: tutor.image,
+      nickname: tutor.nickname,
+      career: tutor.career,
+    }
 
-    history.push(`/${pathUrl}/schedule`)
+    setTutorState(tutorState)
+
+    history.push(`/${tutor.urlpath}/schedule`)
   }
 
   const classes = useStyles()
@@ -78,7 +90,7 @@ const TutorsPage: FC = () => {
           <Box
             key={`${item.nickname}`}
             className={classes.avatar_wrap}
-            onClick={(e) => handleClickTutor(e, item.urlpath)}
+            onClick={(e) => handleClickTutor(e, item)}
             >
             <Avatar
               className={classes.avatar}

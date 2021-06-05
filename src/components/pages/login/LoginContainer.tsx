@@ -6,8 +6,8 @@ import { useRecoilState } from 'recoil'
 import Login from '../../ui/LoginInput'
 import awsconfig from '../../../aws-exports'
 import { useHistory, History } from 'react-router-dom'
-import { CONFIRM_CODE, TUTORS } from '@common/routePath'
-import { UserStatus } from '@interfaces/status'
+import { CONFIRM_CODE, MY_SCHEDULE, TUTORS } from '@common/routePath'
+import { UserRole, UserStatus } from '@interfaces/status'
 import { signIn } from '@apis/auth'
 import { Backdrop, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -32,7 +32,7 @@ const LoginContainer: React.FC = () => {
   useEffect(() => {
     switch (user.status) {
       case UserStatus.CONFIRMED:
-        history.replace(TUTORS)
+        user.role === UserRole.TUTOR ? history.replace(MY_SCHEDULE) : history.replace(TUTORS)
         break
       case UserStatus.NOT_CONFIRMED:
         history.replace(CONFIRM_CODE)

@@ -76,7 +76,7 @@ const CheckingModal: React.FC<Props> = ({
 
   const handleClickConfirmSchedule = (e) => {
     console.log('initschedule', initSchedule)
-    const result = putSchedule(initSchedule.userId, initSchedule.startDate)
+    const result = putSchedule(initSchedule.tutorId, initSchedule.userId, initSchedule.startDate)
   }
 
   const DialogTitle = (props) => {

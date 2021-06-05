@@ -127,6 +127,28 @@ const ScheduleViewInput: React.FC<Props> = ({ schedule }) => {
           ),
         }}
       />}
+      {schedule.phone && <TextField
+        disabled
+        fullWidth
+        required
+        className={classes.login_input}
+        variant="outlined"
+        label="핸드폰번호"
+        margin="normal"
+        value={schedule.phone}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="user name"
+                disabled={true}
+                edge="end">
+                <ScheduleIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />}
       <TextField
         disabled
         fullWidth

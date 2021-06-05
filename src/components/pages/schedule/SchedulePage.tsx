@@ -1,5 +1,5 @@
 import { getTutorSchedule } from '@apis/schedule'
-import { ADD_SCHEDULE } from '@common/routePath'
+import { ADD_SCHEDULE, LOGIN } from '@common/routePath'
 import Layout from '@components/ui/Layout'
 import { AppointmentModel } from '@devexpress/dx-react-scheduler'
 import { useHeader } from '@hooks/useHeader'
@@ -20,6 +20,7 @@ import { useRecoilState } from 'recoil'
 import { TutorState, tutorState } from '@recoil/tutor'
 import { getTutor } from '@apis/tutor'
 import { Tutor } from '@interfaces/tutor'
+import { ContactsRounded } from '@material-ui/icons'
 
 const useStyles = makeStyles((theme) => ({
   fab: {
@@ -39,6 +40,7 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
   const urlpath: string = match.params.tutorId
   useHeader(true, HeaderType.TUTOR, 'Ramona')
   const classes = useStyles()
+  const [isLogin] = useLogin()
   const history: History = useHistory()
   const [tutor, setTutorState] = useRecoilState(tutorState)
   const [schedules, setSchedules] = useState<Schedule[]>(null)
@@ -113,6 +115,12 @@ const SchedulePage: React.FC<RouteComponentProps<MatchParams>> = ({
 
   const handleClickSchedule = (e, schedule: Schedule | Date) => {
     console.log('k', schedule)
+    if (!isLogin) {
+      if (window.confirm('로그인이 필요합니다. 로그인하시겠어요?')) {
+        history.push(LOGIN)
+      }
+      return
+    }
     
     const startDate: Date = (() => {
       if (schedule instanceof Date) {

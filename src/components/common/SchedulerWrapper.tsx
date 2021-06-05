@@ -25,7 +25,7 @@ import AddIcon from '@material-ui/icons/Add'
 import moment from 'moment'
 import classNames from 'clsx'
 import { ScheduleRequest } from '@interfaces/schedule'
-import { ScheduleMode } from '@interfaces/status'
+import { ScheduleMode, ScheduleStatus } from '@interfaces/status'
 
 const useStyles = makeStyles((theme) => ({
   todayCell: {
@@ -111,7 +111,7 @@ const SchedulerWrapper: React.FC<Props> = ({
   onClickSchedule,
   mode,
 }) => {
-  console.log('sss',rawSchedule)
+  console.log('sss', rawSchedule)
   const classes = useStyles()
   const [monthViewSchedule, setMonthViewSchedule] = useState<
     AppointmentModel[]
@@ -266,7 +266,9 @@ const SchedulerWrapper: React.FC<Props> = ({
         <WeekView.TimeTableCell
           {...props}
           className={classes.todayCell}
-          onClick={(e) => mode === ScheduleMode.NEW ? onClickSchedule(e, date) : undefined}
+          onClick={(e) =>
+            mode === ScheduleMode.NEW ? onClickSchedule(e, date) : undefined
+          }
         />
       )
     }
@@ -275,14 +277,18 @@ const SchedulerWrapper: React.FC<Props> = ({
         <WeekView.TimeTableCell
           {...props}
           className={classes.weekendCell}
-          onClick={(e) => mode === ScheduleMode.NEW ? onClickSchedule(e, date) : undefined}
+          onClick={(e) =>
+            mode === ScheduleMode.NEW ? onClickSchedule(e, date) : undefined
+          }
         />
       )
     }
     return (
       <WeekView.TimeTableCell
         {...props}
-        onClick={(e) => mode === ScheduleMode.NEW ? onClickSchedule(e, date) : undefined}
+        onClick={(e) =>
+          mode === ScheduleMode.NEW ? onClickSchedule(e, date) : undefined
+        }
       />
     )
   }
@@ -384,9 +390,29 @@ const SchedulerWrapper: React.FC<Props> = ({
     data,
     ...restProps
   }: Appointments.AppointmentProps) => {
+    console.log('data', data)
     const isWeekView: boolean = currentViewName === ViewName.Week
+    console.log('mode', mode)
+    const color: string = (() => {
+      switch (mode) {
+        case ScheduleMode.NEW:
+          return !data.isMine ? '#ffd400' : 'rgb(100, 181, 246)'
+        case ScheduleMode.REQUEST:
+          return data.status !== ScheduleStatus.CONFIRMED
+            ? '#ffd400'
+            : 'rgb(100, 181, 246)'
+        case ScheduleMode.EDIT:
+          return data.status !== ScheduleStatus.CONFIRMED ? '#ffd400' : 'rgb(100, 181, 246)'
+        default:
+          return 'rgb(100, 181, 246)'
+      }
+    })()
     const style: React.CSSProperties = isWeekView
-      ? { width: '130%' }
+      ? {
+          width: '130%',
+          background: color,
+          // background: 'linear-gradient(45deg, rgb(100, 181, 246) 25%, transparent 50%, white 0, transparent 50%, white 50%, transparent 50%, rgb(100, 181, 246) 0, rgb(100, 181, 246) 75%, white 0, transparent 100%, transparent)'
+        }
       : data.availability
       ? { opacity: '0%' }
       : undefined
@@ -395,9 +421,8 @@ const SchedulerWrapper: React.FC<Props> = ({
         {...restProps}
         onClick={
           isWeekView
-            ? (e) =>
-                {
-                  console.log('rp', restProps)
+            ? (e) => {
+                console.log('rp', restProps)
                 return handleClickDateOnWeekView(
                   e,
                   // restProps.onClick,

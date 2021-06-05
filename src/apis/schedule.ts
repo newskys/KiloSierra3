@@ -46,15 +46,16 @@ export const putRequestSchedule = async (
 }
 
 export const putSchedule = async (
+  tutorId: string,
   userId: string,
   startDate: number,
 ) => {
   const queries: string = qs.stringify({
-    userId, startDate,
+    tutorId, userId, startDate,
   })
   const result: AxiosResponse<boolean> = await axios.put(
     `/my/schedule`, 
-    { userId, startDate }
+    { tutorId, userId, startDate }
   )
 
   return result.data
